@@ -20,6 +20,13 @@
 			} else {
 				alert("최소한 하나의 취향을 선택해 주세요.");
 			}
+			
+			if(selectedInterests.length > 5){
+				$(this).prop("checked", false);
+				alert("취향은 다섯 개 까지 선택가능해요.");
+				selectedInterests = [];
+				return;
+			}
 		});
 		
 		$('#nextStep2').click(function(){
