@@ -13,5 +13,5 @@ public class HomeController {
 	public String home() {
 		return "Main";
 	}
-	//ㅔㅈ발
+	// 제발
 }

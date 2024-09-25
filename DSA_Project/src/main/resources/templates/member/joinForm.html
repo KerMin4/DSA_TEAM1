@@ -3,7 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <title>회원가입</title>
-<script th:src = "/js/jquery-3.7.1.min.js"></script>
+<script th:src = "@{/js/jquery-3.7.1.min.js}"></script>
+<style>
+	.step{
+		display : none; 
+	}
+	.step.active {
+		display : block;
+	}
+
+</style>
 <script>
 	$(document).ready(function(){
 		var formData = {};
@@ -13,20 +22,18 @@
 				selectedInterests.push($(this).val());
 			});
 			
-			if(selectedInterests.length > 0){
+			if(selectedInterests.length > 0 && selectedInterests.length <= 5){
 				formData.interests = selectedInterests;
 				$('#step1').removeClass('active');
 				$('#step2').addClass('active');
-			} else {
+			} else if(selectedInterests.length == 0){
 				alert("최소한 하나의 취향을 선택해 주세요.");
-			}
-			
-			if(selectedInterests.length > 5){
+			} else {
 				alert("취향은 다섯 개 까지 선택가능해요.");
 				selectedInterests = [];
 				return;
-				//updating 				
 			}
+			// alert(selectedInterests);	 testing for array
 		});
 		
 		$('#nextStep2').click(function(){
