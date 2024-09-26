@@ -61,7 +61,7 @@ public class SocialGroupEntity {
     @OneToMany(mappedBy = "socialGroup")
     private Set<TrendEntity> trends;
 
-    @OneToMany(mappedBy = "group")
+    @OneToMany(mappedBy = "socialGroup")
     private Set<TransactionEntity> transactions;
 
     // Getters and Setters
