@@ -14,5 +14,5 @@ public class HomeController {
         return "Main";
     }
     
-    //테스트
+    // 사이고노 테스트
 }
