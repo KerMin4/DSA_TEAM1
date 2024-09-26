@@ -13,6 +13,4 @@ public class HomeController {
     public String home() {
         return "Main";
     }
-    
-    // 사이고노 테스트
 }
