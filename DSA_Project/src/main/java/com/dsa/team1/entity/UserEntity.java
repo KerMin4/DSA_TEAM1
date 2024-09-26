@@ -16,7 +16,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 /*
- * Table for user information
+ * user information
  */
 
 @Entity
@@ -63,7 +63,7 @@ public class UserEntity {
     private Set<UserGroupEntity> userGroups;
 
     @OneToMany(mappedBy = "user")
-    private Set<Notification> notifications;
+    private Set<NotificationEntity> notifications;
 
     @OneToMany(mappedBy = "vendor")
     private Set<PlaceEntity> places;
