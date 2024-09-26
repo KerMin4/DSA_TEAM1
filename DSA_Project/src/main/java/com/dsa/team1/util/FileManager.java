@@ -1,4 +1,4 @@
-package com.dsa.team.util;
+package com.dsa.team1.util;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
