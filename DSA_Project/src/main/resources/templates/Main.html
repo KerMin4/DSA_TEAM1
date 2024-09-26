@@ -1,18 +1,103 @@
 <!DOCTYPE html>
-<html xmlns:th = "thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>Kkiri Kkiri</title>
+    <meta charset="UTF-8">
+    <title>Kkiri Kkiri</title>
+    <style>
+    
+        @font-face {
+            font-family: 'S-CoreDream-3Light';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'S-CoreDream-6Bold';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-6Bold.woff') format('woff');
+            font-weight: bold;
+            font-style: normal;
+        }
 
-<style>
+       
         body {
-            background-color: #f5f5f5;
-        }            
- </style>
+            font-family: 'S-CoreDream-3Light', sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+        nav ul li {
+            margin: 0 15px;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            font-size: 18px;
+            font-family: 'S-CoreDream-6Bold', sans-serif; 
+            color: #333;
+        }
+        main {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        
+        main h1 {
+            font-family: 'S-CoreDream-3Light', sans-serif;
+            font-size: 48px;
+            color: #ff69b4;
+        }
+
+        .join-btn {
+            background-color: #3498db;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            padding: 20px;
+            background-color: #eee;
+        }
+    </style>
 </head>
 <body>
-	<h1>Kkiri Kkiri</h1>
-	<a th:href = "@{/member/join}">회원가입</a>
-	
+   
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#">소셜링</a></li>
+                <li><a href="#">트렌드</a></li>
+                <li><a href="#">플레이스</a></li>
+                <li><a th:href="@{/member/login}">Login</a></li>
+                <li><a th:href="@{/member/join}">Join</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+   
+    <main>
+        <h1>Kkiri Kkiri</h1>
+        <p>혼자가 아닌, 함께하는 즐거움! 끼리끼리에서!</p>
+    </main>
+    
+    <footer>
+        <p>© 2024 Kkiri Kkiri. All Rights Reserved.</p>
+    </footer>
 </body>
 </html>

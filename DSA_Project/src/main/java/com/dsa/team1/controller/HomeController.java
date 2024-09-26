@@ -13,9 +13,5 @@ public class HomeController {
 	public String home() {
 		return "Main";
 	}
-	// 제발
-	//sdfsfㄴㅇㄹㄴㅇㄹ
-	// 112ㅈ나라ㅓㄴㅇㄹㅇㄹㄴㅇㄹㄴㅇㄹ
-	//ㄴㅇㄹ
-	//ㅇㅇㅇ
+	
 }
