@@ -49,7 +49,7 @@ public class WebSecurityConfig {
 			
 		return http.build();
 	}
-	
+	// 1
 	@Bean
 	public BCryptPasswordEncoder getPasswordEncoder() {
 		return new BCryptPasswordEncoder();
