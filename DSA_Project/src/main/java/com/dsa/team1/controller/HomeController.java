@@ -13,5 +13,5 @@ public class HomeController {
     public String home() {
         return "Main";
     }
-    //안녕하세요? 이 편지는 영국에서 시작되어
+    //안녕하세요? 이 편지는 영국에서 시작되어...
 }
