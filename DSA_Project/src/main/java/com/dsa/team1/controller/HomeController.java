@@ -1,3 +1,4 @@
+
 package com.dsa.team1.controller;
 
 import org.springframework.stereotype.Controller;
@@ -13,5 +14,7 @@ public class HomeController {
 	public String home() {
 		return "Main";
 	}
-	
+
+
+
 }
