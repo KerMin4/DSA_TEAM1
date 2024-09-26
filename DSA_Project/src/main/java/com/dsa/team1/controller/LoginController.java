@@ -22,5 +22,6 @@ public class LoginController{
 	public String joinForm() {
 		log.debug("회원가입 진입시도.");
 		return "member/joinForm";
+		///주석 추가함!!!
 	}
 }
