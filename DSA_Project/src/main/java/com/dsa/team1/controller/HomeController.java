@@ -15,7 +15,4 @@ public class HomeController {
 		return "Main";
 	}
 	// 제발
-	//sdfsfㄴㅇㄹㄴㅇㄹ
-	// 112ㅈ나라ㅓㄴㅇㄹㅇㄹㄴㅇㄹㄴㅇㄹ
-	//ㄴㅇㄹ
 }
