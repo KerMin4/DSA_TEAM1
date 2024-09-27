@@ -4,15 +4,8 @@
 <meta charset="UTF-8">
 <title>회원가입</title>
 <script th:src = "@{/js/jquery-3.7.1.min.js}"></script>
-<style>
-	.step{
-		display : none; 
-	}
-	.step.active {
-		display : block;
-	}
-
-</style>
+<link rel="stylesheet" type="text/css" href="/kkirikkiri/css/joinForm.css"> 
+<link rel="stylesheet" type="text/css" href="/kkirikkiri/css/main.css">
 <script>
 	$(document).ready(function(){
 		var formData = {};
@@ -26,14 +19,14 @@
 				formData.interests = selectedInterests;
 				$('#step1').removeClass('active');
 				$('#step2').addClass('active');
+				updateStepper(2);
 			} else if(selectedInterests.length == 0){
 				alert("최소한 하나의 취향을 선택해 주세요.");
 			} else {
-				alert("취향은 다섯 개 까지 선택가능해요.");
+				alert("취향은 다섯 개까지 선택 가능해요.");
 				selectedInterests = [];
 				return;
 			}
-			// alert(selectedInterests);	 testing for array
 		});
 		
 		$('#nextStep2').click(function(){
@@ -42,6 +35,7 @@
 				formData.location = location;
 				$('#step2').removeClass('active');
 				$('#step3').addClass('active');
+				updateStepper(3);
 			} else{
 				alert("관심 지역을 입력해 주세요.");
 			}
@@ -69,10 +63,51 @@
 			formData.phone = phone;
 			formData.email = email;
 		});
+		
+		function updateStepper(step) {
+			$('.step-circle').removeClass('active');
+			$('.line').removeClass('active');
+			if(step === 2) {
+				$('#step-circle-1').addClass('active');
+				$('#line-1').addClass('active');
+				$('#step-circle-2').addClass('active');
+			} else if(step === 3) {
+				$('#step-circle-1').addClass('active');
+				$('#line-1').addClass('active');
+				$('#step-circle-2').addClass('active');
+				$('#line-2').addClass('active');
+				$('#step-circle-3').addClass('active');
+			}
+		}
 	});
 </script>
 </head>
 <body>
+  <header>
+        <nav>
+            <ul>
+                <div class="center-menu">
+                    <li><a href="#">소셜링</a></li>
+                    <li><a href="#">트렌드</a></li>
+                    <li><a href="#">플레이스</a></li>
+                </div>
+                <div class="right-menu">
+                    <li><a th:href="@{/member/login}">Login</a></li>
+                    <li><a th:href="@{/member/join}">Join</a></li>
+                </div>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- 스텝바 -->
+    <div class="stepper">
+        <div class="step-circle active" id="step-circle-1">1</div>
+        <div class="line active" id="line-1"></div>
+        <div class="step-circle" id="step-circle-2">2</div>
+        <div class="line" id="line-2"></div>
+        <div class="step-circle" id="step-circle-3">3</div>
+    </div>
+
     <div class="step active" id="step1">
         <h2>요즘 뭐에 빠져있나요? 당신의 취향을 알려주세요!</h2>
         <p style = "color: gray;">(관심사는 최대 5개까지 선택 가능해요.)</p>
