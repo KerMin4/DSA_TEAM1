@@ -1,0 +1,115 @@
+@charset "UTF-8";
+
+@font-face {
+    font-family: 'S-CoreDream-5Medium';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-5Medium.woff') format('woff'); 
+    font-weight: normal;
+    font-style: normal;  
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; 
+}
+
+/* 로그인 폼 */
+.login-container {
+    width: 350px; 
+    height: 350px; 
+    background-color: #FFFFFF; 
+    border: 1px solid rgba(0, 0, 0.0, 0.5); /* 외곽선 투명도 설정 */
+    border-radius: 10px; 
+    padding: 20px; 
+    margin: 120px auto; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+}
+
+/* welcome! */
+.welcome-text {
+    font-family: 'Luckiest Guy', cursive; 
+    font-size: 24px;
+    color: #000000;
+    margin-bottom: 20px; 
+    text-shadow: none;
+    margin-top: 20px; 
+}
+
+/* 입력 박스 스타일 */
+.input-box {
+    width: 87%; /* 전체 너비 */
+    background-color: rgba(248, 177, 163, 0.3); 
+    border-radius: 15px; 
+    padding: 0; 
+    border: 1px solid rgba(0, 0, 0, 0.5); 
+    margin-top: 20px; 
+    
+}
+
+/* 아이디 입력 필드 스타일 */
+.username-input {
+    width: 100%; 
+    padding: 10px; 
+    padding-top: 20px;
+    margin-top: 0; 
+    border: none;
+    border-radius: 5px; 
+    font-size: 16px; 
+    color: #000000; 
+    background-color: transparent; 
+    font-family: 'S-CoreDream-5Medium', sans-serif; 
+    height: 40px; 
+    line-height: 40px;
+}
+
+/* 비밀번호 입력 필드 스타일 */
+.password-input {
+    width: 100%; 
+    padding: 10px;
+    padding-top: 0px; 
+    margin-top: 0; 
+    border: none; 
+    border-radius: 5px; 
+    font-size: 16px;
+    color: #000000; 
+    background-color: transparent; 
+    font-family: 'S-CoreDream-5Medium', sans-serif;
+    height: 40px; 
+    line-height: 40px; 
+}
+
+/* 구분선 스타일 */
+.divider {
+    border: none; 
+    border-top: 1px solid rgba(0, 0, 0, 0.5); 
+    margin: 10px 0; 
+}
+
+/* 입력 필드 포커스 효과 제거 */
+.input-box input:focus {
+    outline: none; 
+    background-color: transparent; 
+}
+
+/* 로그인 버튼 스타일 */
+.login-button {
+    width: 90px; 
+    height: 35px; 
+    background-color: #FFFFFF; 
+    border: 1px solid #81BBF6; 
+    border-radius: 20px; 
+    color: #81BBF6;
+    font-family: 'S-CoreDream-5Medium', sans-serif; 
+    font-size: 14px;
+    cursor: pointer; 
+    margin-top: 20px; 
+}
+
+/* 버튼 포커스 스타일 */
+.login-button:focus {
+    border-color: #81BBF6; 
+    background-color: #FFFFFF; 
+    color: #81BBF6; 
+}

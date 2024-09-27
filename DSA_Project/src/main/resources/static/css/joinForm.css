@@ -1,0 +1,60 @@
+@charset "UTF-8";
+
+@font-face {
+    font-family: 'S-CoreDream-5Medium';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-5Medium.woff') format('woff'); 
+    font-weight: normal;
+    font-style: normal;  
+}
+
+
+
+.stepper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 30px;
+    margin-top: 40px;
+}
+
+/* 동그라미... 관련임*/
+.step-circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: white;
+    border: 2px solid #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: bold;
+    color: #ccc;
+    font-family: 'S-CoreDream-5Medium', sans-serif;
+    
+}
+
+.step-circle.active {
+    background-color: black;
+    color: white;
+    border-color: black;
+}
+
+.line {
+    width: 100px;
+    height: 2px;
+    background-color: #ccc;
+    margin: 0 10px;
+}
+
+.line.active {
+    background-color: black;
+}
+
+.step {
+    display: none;
+}
+
+.step.active {
+    display: block;
+}
