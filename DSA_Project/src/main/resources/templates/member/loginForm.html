@@ -1,10 +1,39 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+    <meta charset="UTF-8">
+    <title>Kkiri Kkiri</title>
+    <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/kkirikkiri/css/main.css">
+    <link rel="stylesheet" type="text/css" href="/kkirikkiri/css/loginForm.css"> 
 </head>
 <body>
+    <header>
+        <nav>
+            <ul>
+                <div class="center-menu">
+                    <li><a href="#">소셜링</a></li>
+                    <li><a href="#">트렌드</a></li>
+                    <li><a href="#">플레이스</a></li>
+                </div>
+                <div class="right-menu">
+                    <li><a th:href="@{/member/login}">Login</a></li>
+                    <li><a th:href="@{/member/join}">Join</a></li>
+                </div>
+            </ul>
+        </nav>
+    </header>
 
+    <main>
+        <div class="login-container">
+            <h1 class="welcome-text">welcome!</h1>
+            <div class="input-box">
+                <input type="text" id="username" placeholder="아이디" class="username-input" required>
+                <hr class="divider"> <!-- 구분선 -->
+                <input type="password" id="password" placeholder="비밀번호" class="password-input" required>
+            </div>
+            <button class="login-button">로그인</button> 
+        </div>
+    </main>
 </body>
 </html>
