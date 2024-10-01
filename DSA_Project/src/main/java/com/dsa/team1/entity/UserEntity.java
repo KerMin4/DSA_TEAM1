@@ -1,9 +1,12 @@
 package com.dsa.team1.entity;
 
-import java.sql.Timestamp;
-import java.util.Set;
+import java.time.LocalDateTime;
 
-import javax.management.Notification;
+import org.hibernate.usertype.UserType;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+
+import com.dsa.team1.entity.enums.JoinMethod;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,79 +15,62 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-
-/*
- * user information
- */
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "User")
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    @Column(name = "user_id")
+    private Integer userId;
 
+    // Real name
+    @Column(name = "username", nullable = false)
     private String username;
+    
+    @Column(name = "password", nullable = false)
     private String password;
+    
+    //Nickname
+    @Column(name = "name", nullable = false, length = 50)
     private String name;
-
-    @Column(name = "phone_number")
+    
+    @Column(name = "phone_number", length = 20)
     private String phoneNumber;
-
     private String email;
+    
+    @Column(columnDefinition = "text")
     private String interests;
-
+    
     @Column(name = "preferred_location")
     private String preferredLocation;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "registration_type")
-    private RegistrationType registrationType;
+    @Column(name = "join_method", nullable = false)
+    private JoinMethod joinMethod;
 
     @Column(name = "profile_image")
     private String profileImage;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "user_type")
+    @Column(name = "user_type", nullable = false)
     private UserType userType;
 
-    @Column(name = "created_at", updatable = false)
-    private Timestamp createdAt;
+    @CreatedDate
+	@Column(name = "created_at", columnDefinition = "timestamp default current_timestamp")
+    private LocalDateTime createdAt;
+    
+    @LastModifiedDate
+	@Column(name = "updated_at", columnDefinition = "timestamp default current_timestamp")
+    private LocalDateTime updatedAt;
 
-    @Column(name = "updated_at")
-    private Timestamp updatedAt;
-
-    @OneToMany(mappedBy = "groupLeader")
-    private Set<SocialGroupEntity> socialGroups;
-
-    @OneToMany(mappedBy = "user")
-    private Set<UserGroupEntity> userGroups;
-
-    @OneToMany(mappedBy = "user")
-    private Set<NotificationEntity> notifications;
-
-    @OneToMany(mappedBy = "vendor")
-    private Set<PlaceEntity> places;
-
-    @OneToMany(mappedBy = "user")
-    private Set<UserPlaceEntity> userPlaces;
-
-    @OneToMany(mappedBy = "user")
-    private Set<MemberHashtagEntity> memberHashtags;
-
-    @OneToMany(mappedBy = "leader")
-    private Set<TransactionEntity> transactions;
-
-    // Getters and Setters
-
-    public enum UserType {
-        USER, VENDOR
-    }
-
-    public enum RegistrationType {
-        WEBSITE, KAKAO
-    }
 }
-
