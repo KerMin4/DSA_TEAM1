@@ -34,7 +34,7 @@ import lombok.NoArgsConstructor;
 public class BookmarkEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "bookmakr_id")
+    @Column(name = "bookmark_id")
     private Integer bookmarkId;
 
     @ManyToOne

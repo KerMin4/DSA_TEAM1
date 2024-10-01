@@ -15,7 +15,7 @@
 
               
                 <div class="center-menu">
-                    <li><a href="#">소셜링</a></li>
+                    <li><a th:href="@{/socialgroup/socialing}">소셜링</a></li>
                     <li><a href="#">트렌드</a></li>
                     <li><a href="#">플레이스</a></li>
                 </div>
@@ -30,11 +30,12 @@
     </header>
     
     <main>
-        <h1>Kkiri Kkiri</h1>
-        <p class="center-text">
-            <span>혼자가 아닌, 함께하는 즐거움!</span><br>
-            <span>끼리끼리에서!</span>
-        </p>
+    <h1>Kkiri Kkiri</h1>
+    <p class="center-text">
+        <span>혼자가 아닌, 함께하는 즐거움!</span><br>
+        <span>끼리끼리에서!</span>
+    </p>
+    <a th:href="@{/socialgroup/create}">그룹 생성</a>
     </main>
     
     <footer>
