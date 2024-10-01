@@ -20,7 +20,8 @@ public class WebSecurityConfig {
 			"/css/**",
 			"/js/**",
 			"/member/join",
-			"/member/login"
+			"/member/login",
+			"/socialgroup/**"
 	};
 	
 	@Bean

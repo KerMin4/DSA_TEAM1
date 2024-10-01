@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>그룹 생성 게시판</title>
+    <link th:href="@{/css/createForm.css}" rel="stylesheet">
+    <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+    <script th:src="@{/js/createForm.js}"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar Section -->
+        <div class="sidebar">
+            <h1>[ 그룹 생성 ]</h1>
+            <h2>그룹 생성 팁</h2>
+            <ul>
+                <li>적절한 관심사를 선택하세요.</li>
+                <li>그룹명을 간단하게 작성하세요.</li>
+                <li>그룹에 대한 명확한 설명을 작성하세요.</li>
+                <li>활동 시간과 날짜를 확실히 정하세요.</li>
+                <li>인원은 최소 2명부터입니다.</li>
+                <li>태그를 적극 활용하세요.</li>
+            </ul>
+        </div>
+
+        <!-- Form Section -->
+        <div class="form-section">
+            <form id="createForm" th:action="@{/socialgroup/create}" method="post" enctype="multipart/form-data">
+                <div class="category-container">
+                    <input type="button" class="button" name="interest" value="취미">
+                    <input type="button" class="button" name="interest" value="자기계발">
+                    <input type="button" class="button" name="interest" value="푸드">
+                    <input type="button" class="button" name="interest" value="액티비티">
+                    <input type="button" class="button" name="interest" value="반려동물">
+                    <input type="button" class="button" name="interest" value="문화">
+                    <input type="button" class="button" name="interest" value="재테크">
+                    <input type="button" class="button" name="interest" value="연애">
+                    <input type="button" class="button" name="interest" value="게임">
+                    <input type="button" class="button" name="interest" value="여행">
+                </div>
+
+                <table>
+                    <tr>
+                        <td colspan="2">
+                            <!-- 빈 이미지 미리보기 표시 -->
+                            <img id="imagePreview" src="/path/to/placeholder.png" alt="이미지 미리보기" style="display:block; width: 300px; height: 200px;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="text" name="groupName" id="groupName" placeholder="그룹이름을 입력하세요.">
+                        </td>
+                        <td>
+                            <input type="date" name="eventDate" id="eventDate">
+                            <input type="time" name="eventTime" id="eventTime">
+                        </td>
+                        <td>인원 수
+                            <div class="person-counter">
+                                <button type="button" id="decreaseCount"><</button>
+                                <span id="memberLimit">2</span>
+                                <button type="button" id="increaseCount">></button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <textarea name="description" id="description" placeholder="그룹에 대해 소개해보세요! ex. 취미계발 모임입니다."></textarea>
+                        </td>
+                        <!-- 파일 선택 버튼에 마우스를 올렸을 때 툴팁 표시 -->
+                        <td>
+                            <input type="file" name="profileImage" id="fileInput" class="tooltip-target">
+                            <button type="button" id="removeFile">파일 삭제</button> <!-- 파일 삭제 버튼 추가 -->
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>위치 설정</td>
+                        <td>
+                            <input type="text" name="location" id="location" placeholder="구 단위만 선택 가능해요">
+                        </td>
+                        <td>가입 권한</td>
+                        <td>
+                            <input type="button" name="joinMethod" id="autoJoin" value="바로 가입">
+                            <input type="button" name="joinMethod" id="approvalJoin" value="승인 후 가입">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="text" name="hashtag" id="hashtag" placeholder="해쉬태그 입력">
+                            <input type="button" id="addHashtag" value="등록">
+                            <div id="hashtagContainer">
+                                <!-- 해시태그가 여기에 추가됨 -->
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="submit" id="submitForm" value="그룹 생성">
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+
+    <!-- 툴팁 -->
+    <div id="tooltip" class="tooltip">그룹 헤더 이미지를 설정하세요.<br>이미지를 설정하지 않을시, 디폴트 이미지가 적용됩니다.</div>
+</body>
+</html>
