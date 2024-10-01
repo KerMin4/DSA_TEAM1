@@ -1,6 +1,12 @@
 package com.dsa.team1.entity;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
+import org.hibernate.usertype.UserType;
+import org.springframework.data.annotation.CreatedDate;
+
+import com.dsa.team1.entity.enums.JoinMethod;
+import com.dsa.team1.entity.enums.UserGroupStatus;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,19 +18,27 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-/*
- * User - SocialGroup Mapping Table
- * Managing ManyToMany Relationship between User and SocialGroup
- * Managing Role of each members
+/**
+ * Page		Socialing
+ * Function	Mapping User and Group
+ * @version CreateTables_6
  */
-
 @Entity
+@Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "UserGroup")
 public class UserGroupEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userGroupId;
+    @Column(name = "user_group_id")
+    private Integer userGroupId;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -32,17 +46,14 @@ public class UserGroupEntity {
 
     @ManyToOne
     @JoinColumn(name = "group_id")
-    private SocialGroupEntity socialGroup;
+    private SocialGroupEntity group;
 
-    @Column(name = "joined_at")
-    private Timestamp joinedAt;
-
+    @CreatedDate
+	@Column(name = "joined_at", columnDefinition = "timestamp default current_timestamp")
+    private LocalDateTime joinedAt;
+    
     @Enumerated(EnumType.STRING)
-    private Status status;
+    @Column(name = "status", nullable = false)
+    private UserGroupStatus status;
 
-    // Getters and Setters
-
-    public enum Status {
-        PENDING, APPROVED, REJECTED
-    }
 }
