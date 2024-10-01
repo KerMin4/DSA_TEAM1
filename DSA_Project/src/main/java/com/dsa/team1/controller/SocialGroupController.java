@@ -28,9 +28,9 @@ public class SocialGroupController {
 		return "socialgroup/createForm";
 	}
 
-	@GetMapping("list")
-	public String list() {
-		return "socialgroup/list";
+	@GetMapping("socialing")
+	public String socialing() {
+		return "socialgroup/socialing";
 	}
 
 }
