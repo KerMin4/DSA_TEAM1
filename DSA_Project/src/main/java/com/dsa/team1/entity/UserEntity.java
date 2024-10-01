@@ -2,11 +2,11 @@ package com.dsa.team1.entity;
 
 import java.time.LocalDateTime;
 
-import org.hibernate.usertype.UserType;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import com.dsa.team1.entity.enums.JoinMethod;
+import com.dsa.team1.entity.enums.UserType;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
