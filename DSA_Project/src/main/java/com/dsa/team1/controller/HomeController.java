@@ -14,5 +14,5 @@ public class HomeController {
         return "Main";
     }
     //안녕하세요? 이 편지는 영국에서 시작되어.............ㅇㅇddd
-    // 제발
+    // 진짜 인생 마지막 제발 한탕 화성 갈끄니까
 }
