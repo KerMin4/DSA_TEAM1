@@ -13,6 +13,7 @@ public class HomeController {
     public String home() {
         return "Main";
     }
-    //안녕하세요? 이 편지는 영국에서 시작되어.............ㅇㅇddd
-    // 진짜 인생 마지막 제발 한탕 화성 갈끄니까
+    // GIT 행동강령
+    // 제 1원칙 : 하루 시작과 함께 sts에서 pull을 한 후, 자신이 작성한 파일을 push 한다.
+    // 제 2원칙 : 제 1원칙을 준수한다.
 }
