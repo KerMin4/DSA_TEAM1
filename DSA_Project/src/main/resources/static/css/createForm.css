@@ -1,0 +1,43 @@
+@charset "UTF-8";
+
+.container {
+    display: flex;
+    margin: 0 auto;
+}
+
+.sidebar {
+    width: 20%;
+    border-right: 1px solid #e0e0e0;
+}
+
+#imagePreview {
+    display: block;
+    margin-bottom: 10px;
+    max-width: 100%;
+    max-height: 200px;
+}
+
+.active-button {
+    background-color: #000000;
+    color: white;
+}
+
+button, input[type="button"], input[type="submit"] {
+    cursor: pointer;
+}
+
+.person-counter {
+    display: inline-flex;
+}
+
+.tooltip {
+    display: none;
+    position: absolute;
+    background-color: #333;
+    color: #fff;
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 12px;
+    z-index: 1000;
+    white-space: nowrap;
+}

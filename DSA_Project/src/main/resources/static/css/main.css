@@ -20,12 +20,12 @@ h1 {
     font-size: 72px; 
     color: #F8B1A3; 
     text-shadow: 
-        1px 1px 0 #666666,  
-        -1px 1px 0 #666666,
-        1px -1px 0 #666666,
-        -1px -1px 0 #666666, 
-        30px 20px 0 #E8F2F5; 
-        margin-bottom: 10px; 
+                 1px 1px 0 #666666,  
+                 -1px 1px 0 #666666,
+                 1px -1px 0 #666666,
+                 -1px -1px 0 #666666, 
+                 30px 20px 0 #E8F2F5; 
+    margin-bottom: 10px; 
 }
 
 body {
@@ -98,7 +98,6 @@ main {
     left: 20px; 
 }
 
-
 /* 끼리끼리에서! */
 .center-text span:last-child {
     display: inline-block;
@@ -116,3 +115,4 @@ footer {
     font-size: 10px;
     width: 100%;
 }
+
