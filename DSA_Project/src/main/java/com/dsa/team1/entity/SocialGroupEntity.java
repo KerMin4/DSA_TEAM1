@@ -65,10 +65,10 @@ public class SocialGroupEntity {
     @Column(name = "member_limit", nullable = false)
     private Integer memberLimit;
     
-    @Column(name = "view_count", columnDefinition = "integer defualt 0")
+    @Column(name = "view_count", columnDefinition = "integer default 0")
     private Integer viewCount = 0;
     
-    @Column(name = "bookmark_count", columnDefinition = "integer defualt 0")
+    @Column(name = "bookmark_count", columnDefinition = "integer default 0")
     private Integer bookmarkCount = 0;
     
     @Column(name = "event_date", nullable = false)
