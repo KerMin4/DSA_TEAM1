@@ -7,8 +7,6 @@
     font-style: normal;  
 }
 
-
-
 .stepper {
     display: flex;
     align-items: center;
@@ -17,7 +15,7 @@
     margin-top: 40px;
 }
 
-/* 동그라미... 관련임*/
+/* 동그라미... 관련임 */
 .step-circle {
     width: 20px;
     height: 20px;
@@ -31,20 +29,23 @@
     font-weight: bold;
     color: #ccc;
     font-family: 'S-CoreDream-5Medium', sans-serif;
-    
+    margin-top: -30px;
 }
+
+.line {
+    width: 100px; 
+    height: 2px; 
+    background-color: #ccc; 
+    margin: -10px 10px; 
+    top: -15px; 
+    position: relative; 
+}
+
 
 .step-circle.active {
     background-color: black;
     color: white;
     border-color: black;
-}
-
-.line {
-    width: 100px;
-    height: 2px;
-    background-color: #ccc;
-    margin: 0 10px;
 }
 
 .line.active {
@@ -57,4 +58,173 @@
 
 .step.active {
     display: block;
+}
+
+
+.interests-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.interests-row {
+    display: flex;
+    justify-content: center;
+    margin-bottom: -10px; /* 각 행 */
+}
+
+
+.interest-option {
+    width: 150px;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 16px;
+    margin: -20px; 
+    position: relative;
+    margin-top: 6px; 
+
+}
+
+
+.interest-option input[type="checkbox"] {
+    display: none; 
+}
+
+.interest-text {
+    width: 60px; 
+    height: 25px;
+    background-color: rgba(255, 255, 255, 0.8); 
+    border: 1px solid rgba(0, 0, 0, 0.5); 
+    border-radius: 20px; 
+    color: #000000; 
+    font-family: 'S-CoreDream-5Medium', sans-serif; 
+    font-size: 13px; 
+    text-align: center; 
+    line-height: 25px; 
+    cursor: pointer; 
+    margin-bottom: -13px; 
+    transition: background-color 0.3s; 
+}
+
+.interest-text:hover {
+    background-color: #E48F85; 
+}
+
+.interest-option input[type="checkbox"]:checked + .interest-text {
+    background-color: #E48F85; 
+    color: #000000;
+}
+
+
+/* 취미 부터 */
+.hobby {
+    background-image: url('../images/hobby.png');
+    background-size: 70px 70px;
+    background-repeat: no-repeat;
+    background-position: top center;
+}
+
+.development {
+    background-image: url('../images/books.png');
+    background-size: 60px 60px;
+    background-repeat: no-repeat;
+    background-position: top center;
+}
+
+.food {
+    background-image: url('../images/food.png');
+    background-size: 60px 60px;
+    background-repeat: no-repeat;
+    background-position: top center;
+}
+
+.activity {
+    background-image: url('../images/activity.png');
+    background-size: 60px 60px;
+    background-repeat: no-repeat;
+    background-position: top center;
+}
+
+.pets {
+    background-image: url('../images/puppy.png');
+    background-size: 60px 60px;
+    background-repeat: no-repeat;
+    background-position: top center;
+}
+
+.culture {
+    background-image: url('../images/art.png');
+    background-size: 60px 60px;
+    background-repeat: no-repeat;
+    background-position: top center;
+}
+
+.money {
+    background-image: url('../images/money.png');
+    background-size: 60px 60px;
+    background-repeat: no-repeat;
+    background-position: top center;
+}
+
+.love {
+    background-image: url('../images/date.png');
+    background-size: 60px 60px;
+    background-repeat: no-repeat;
+    background-position: top center;
+}
+
+.game {
+    background-image: url('../images/game.png');
+    background-size: 60px 60px;
+    background-repeat: no-repeat;
+    background-position: top center;
+}
+
+.travel {
+    background-image: url('../images/travel.png');
+    background-size: 60px 60px;
+    background-repeat: no-repeat;
+    background-position: top center;
+}
+
+/* 다음 페이지 버튼 */
+#nextStep1, #nextStep2, #submitForm {
+    width: 100px; 
+    height: 35px; 
+    background-color: #FFFFFF; 
+    border: 1px solid #81BBF6; 
+    border-radius: 20px; 
+    color: #81BBF6;
+    font-family: 'S-CoreDream-5Medium', sans-serif; 
+    font-size: 14px;
+    cursor: pointer; 
+    display: block; 
+    text-align: center;
+    margin: 17px auto; 
+}
+
+
+.center-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: -15px;
+}
+
+.center-content h2 {
+    font-size: 20px;
+    margin: 0; 
+}
+
+.center-content p {
+    font-size: 16px;
+    color: #777;
+    margin-top: 20px;
 }
