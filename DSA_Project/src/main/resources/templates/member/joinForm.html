@@ -1,89 +1,97 @@
 <!DOCTYPE html>
 <html xmlns:th="thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>회원가입</title>
-<script th:src = "@{/js/jquery-3.7.1.min.js}"></script>
-<link rel="stylesheet" type="text/css" href="/kkirikkiri/css/joinForm.css"> 
-<link rel="stylesheet" type="text/css" href="/kkirikkiri/css/main.css">
-<script>
-	$(document).ready(function(){
-		var formData = {};
-		$('#nextStep1').click(function(){
-			var selectedInterests = [];
-			$('input[name="interests"]:checked').each(function(){
-				selectedInterests.push($(this).val());
-			});
-			
-			if(selectedInterests.length > 0 && selectedInterests.length <= 5){
-				formData.interests = selectedInterests;
-				$('#step1').removeClass('active');
-				$('#step2').addClass('active');
-				updateStepper(2);
-			} else if(selectedInterests.length == 0){
-				alert("최소한 하나의 취향을 선택해 주세요.");
-			} else {
-				alert("취향은 다섯 개까지 선택 가능해요.");
-				selectedInterests = [];
-				return;
-			}
-		});
-		
-		$('#nextStep2').click(function(){
-			var location = $('#location').val();
-			if(location){
-				formData.location = location;
-				$('#step2').removeClass('active');
-				$('#step3').addClass('active');
-				updateStepper(3);
-			} else{
-				alert("관심 지역을 입력해 주세요.");
-			}
-		});
-		
-		$('#submitForm').click(function(){
-			var userid = $('#userid').val();
-			var password = $('#password').val();
-			var password2 = $('#password2').val();
-			var phone = $('#phone').val();
-			var email = $('#email').val();
-			
-			if(!userid || !password || !password2 || !phone || !email){
-				alert("모든 정보를 입력해 주세요.");
-				return;
-			}
-			
-			if(password !== password2){
-				alert("비밀번호가 일치하지 않습니다.");
-				return;
-			}
-			
-			formData.userid = userid;
-			formData.password = password;
-			formData.phone = phone;
-			formData.email = email;
-		});
-		
-		function updateStepper(step) {
-			$('.step-circle').removeClass('active');
-			$('.line').removeClass('active');
-			if(step === 2) {
-				$('#step-circle-1').addClass('active');
-				$('#line-1').addClass('active');
-				$('#step-circle-2').addClass('active');
-			} else if(step === 3) {
-				$('#step-circle-1').addClass('active');
-				$('#line-1').addClass('active');
-				$('#step-circle-2').addClass('active');
-				$('#line-2').addClass('active');
-				$('#step-circle-3').addClass('active');
-			}
-		}
-	});
-</script>
+    <meta charset="UTF-8">
+    <title>회원가입</title>
+    <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+    <link rel="stylesheet" type="text/css" href="/kkirikkiri/css/joinForm.css"> 
+    <link rel="stylesheet" type="text/css" href="/kkirikkiri/css/main.css">
+    <script>
+        $(document).ready(function() {
+            var formData = {};
+            $('#nextStep1').click(function() {
+                var selectedInterests = [];
+                $('input[name="interests"]:checked').each(function() {
+                    selectedInterests.push($(this).val());
+                });
+                
+                if (selectedInterests.length > 0 && selectedInterests.length <= 5) {
+                    formData.interests = selectedInterests;
+                    $('#step1').css('display', 'none'); 
+                    $('#step2').css('display', 'block'); 
+                    updateStepper(2);
+                } else if (selectedInterests.length == 0) {
+                    alert("최소한 하나의 취향을 선택해 주세요.");
+                } else {
+                    alert("취향은 다섯 개까지 선택 가능해요.");
+                }
+            });
+            
+            $('#nextStep2').click(function() {
+                var location = $('#location').val();
+                if (location) {
+                    formData.location = location;
+                    $('#step2').css('display', 'none'); 
+                    $('#step3').css('display', 'block'); 
+                    updateStepper(3);
+                } else {
+                    alert("관심 지역을 입력해 주세요.");
+                }
+            });
+            
+            $('#submitForm').click(function() {
+                var userid = $('#userid').val();
+                var password = $('#password').val();
+                var password2 = $('#password2').val();
+                var phone = $('#phone').val();
+                var email = $('#email').val();
+                
+                if (!userid || !password || !password2 || !phone || !email) {
+                    alert("모든 정보를 입력해 주세요.");
+                    return;
+                }
+                
+                if (password !== password2) {
+                    alert("비밀번호가 일치하지 않습니다.");
+                    return;
+                }
+                
+                formData.userid = userid;
+                formData.password = password;
+                formData.phone = phone;
+                formData.email = email;
+
+                
+            });
+            
+            $('input[name="interests"]').change(function() {
+                
+                $('.interest-text').css('background-color', '#FFFFFF').css('color', '#000000'); 
+                $('input[name="interests"]:checked').each(function() {
+                    $(this).siblings('.interest-text').css('background-color', '#F8B1A3').css('color', '#000000');
+                });
+            });
+
+            function updateStepper(step) {
+                $('.step-circle').removeClass('active');
+                $('.line').removeClass('active');
+                if (step === 2) {
+                    $('#step-circle-1').addClass('active');
+                    $('#line-1').addClass('active');
+                    $('#step-circle-2').addClass('active');
+                } else if (step === 3) {
+                    $('#step-circle-1').addClass('active');
+                    $('#line-1').addClass('active');
+                    $('#step-circle-2').addClass('active');
+                    $('#line-2').addClass('active');
+                    $('#step-circle-3').addClass('active');
+                }
+            }
+        });
+    </script>    
 </head>
 <body>
-  <header>
+    <header>
         <nav>
             <ul>
                 <div class="center-menu">
@@ -99,7 +107,7 @@
         </nav>
     </header>
 
-    <!-- 스텝바 -->
+   
     <div class="stepper">
         <div class="step-circle active" id="step-circle-1">1</div>
         <div class="line active" id="line-1"></div>
@@ -109,32 +117,87 @@
     </div>
 
     <div class="step active" id="step1">
-        <h2>요즘 뭐에 빠져있나요? 당신의 취향을 알려주세요!</h2>
-        <p style = "color: gray;">(관심사는 최대 5개까지 선택 가능해요.)</p>
-        <form id="form-step1">
-            <input type="checkbox" name="interests" value="취미"> 취미<br>
-            <input type="checkbox" name="interests" value="자기계발"> 자기계발<br>
-            <input type="checkbox" name="interests" value="푸드"> 푸드<br>
-            <input type="checkbox" name="interests" value="액티비티"> 액티비티<br>
-            <input type="checkbox" name="interests" value="반려동물"> 반려동물<br>
-            <input type="checkbox" name="interests" value="문화"> 문화<br>
-            <input type="checkbox" name="interests" value="재테크"> 재테크<br>
-            <input type="checkbox" name="interests" value="연애"> 연애<br>
-            <input type="checkbox" name="interests" value="게임"> 게임<br>
-            <input type="checkbox" name="interests" value="여행"> 여행<br>
-            <button type="button" id="nextStep1">다음 페이지</button>
+        <div class="center-content">
+            <h2>요즘 뭐에 빠져있나요?</h2>
+            <h2>당신의 취향을 알려주세요!</h2>
+            <p>(관심사는 최대 5개까지 선택 가능해요.)</p>
+        </div> 
+        
+        <form id="form-step1" class="interest-container">
+            <div class="interests-container">
+               
+                <div class="interests-row">
+                    <label class="interest-option hobby">
+                        <input type="checkbox" name="interests" value="취미">
+                        <span class="interest-text">취미</span>
+                    </label>
+                    <label class="interest-option development">
+                        <input type="checkbox" name="interests" value="자기계발">
+                        <span class="interest-text">자기계발</span>
+                    </label>
+                    <label class="interest-option food">
+                        <input type="checkbox" name="interests" value="푸드">
+                        <span class="interest-text">푸드</span>
+                    </label>
+                </div>
+
+
+              
+                <div class="interests-row">
+                    <label class="interest-option activity">
+                        <input type="checkbox" name="interests" value="액티비티">
+                        <span class="interest-text">액티비티</span>
+                    </label>
+                    <label class="interest-option pets">
+                        <input type="checkbox" name="interests" value="반려동물">
+                        <span class="interest-text">반려동물</span>
+                    </label>
+                    <label class="interest-option culture">
+                        <input type="checkbox" name="interests" value="문화">
+                        <span class="interest-text">문화</span>
+                    </label>
+                    <label class="interest-option money">
+                        <input type="checkbox" name="interests" value="재테크">
+                        <span class="interest-text">재테크</span>
+                    </label>
+                </div>
+
+              
+                <div class="interests-row">
+                    <label class="interest-option love">
+                        <input type="checkbox" name="interests" value="연애">
+                        <span class="interest-text">연애</span>
+                    </label>
+                    <label class="interest-option game">
+                        <input type="checkbox" name="interests" value="게임">
+                        <span class="interest-text">게임</span>
+                    </label>
+                    <label class="interest-option travel">
+                        <input type="checkbox" name="interests" value="여행">
+                        <span class="interest-text">여행</span>
+                    </label>
+                </div>
+            </div>
+
+            <button type="button" id="nextStep1">다음 페이지 > </button>
         </form>
     </div>
 
-    <div class="step" id="step2">
-        <h2>어디에서 살펴볼까요? 관심 지역을 선택해주세요!</h2>
-        <form id="form-step2">
+    <div class="step" id="step2" style="display: none;">
+    <div class="center-content">
+        <h2>어디에서 살펴볼까요?</h2>
+        <h2>관심 지역을 선택해주세요!</h2>
+    </div>
+    <form id="form-step2">
+        <div class="interests-container">
             <input type="text" id="location" name="location" placeholder="관심 지역 입력"><br>
-            <button type="button" id="nextStep2">다음 페이지</button>
-        </form>
+        </div>
+        <button type="button" id="nextStep2">다음 페이지</button>
+    </form>
     </div>
 
-    <div class="step" id="step3">
+
+    <div class="step" id="step3" style="display: none;">
         <h2>이제 거의 다 왔어요!</h2>
         <form id="form-step3">
             <input type="text" id="userid" name="userid" placeholder="아이디"><br>
@@ -145,4 +208,4 @@
         </form>
     </div>
 </body>
-</html>
+</html> 
