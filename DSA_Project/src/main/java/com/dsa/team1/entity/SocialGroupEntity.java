@@ -1,7 +1,12 @@
 package com.dsa.team1.entity;
 
-import java.sql.Timestamp;
-import java.util.Set;
+import java.time.LocalDateTime;
+
+import org.hibernate.usertype.UserType;
+import org.springframework.data.annotation.CreatedDate;
+
+import com.dsa.team1.entity.enums.GroupJoinMethod;
+import com.dsa.team1.entity.enums.JoinMethod;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,61 +17,65 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.transaction.Transaction;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-/*
- * Table for SocialGroup of Socialing
+/**
+ * Page		Socialing
+ * Function	Group CRUD
+ * @version CreateTable_6
  */
-
 @Entity
+@Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "SocialGroup")
 public class SocialGroupEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long groupId;
+    @Column(name = "group_id")
+    private Integer groupId;
 
-    @Column(name = "group_name")
+    @Column(name = "group_name", nullable = false)
     private String groupName;
-
+    
+    @Column(columnDefinition = "text")
     private String description;
-
+    
     @Column(name = "profile_image")
     private String profileImage;
-
+    
+    @Column(columnDefinition = "text")
     private String interest;
     private String location;
-
-    @Column(name = "created_at", updatable = false)
-    private Timestamp createdAt;
 
     @ManyToOne
     @JoinColumn(name = "group_leader_id")
     private UserEntity groupLeader;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "join_method")
-    private JoinMethod joinMethod;
+    @Column(name = "group_join_method")
+    private GroupJoinMethod groupJoinMethod;
 
-    @Column(name = "member_limit")
+    // Maximum number of members
+    @Column(name = "member_limit", nullable = false)
     private Integer memberLimit;
+    
+    @Column(name = "view_count", columnDefinition = "integer defualt 0")
+    private Integer viewCount = 0;
+    
+    @Column(name = "bookmark_count", columnDefinition = "integer defualt 0")
+    private Integer bookmarkCount = 0;
+    
+    @Column(name = "event_date", nullable = false)
+    private LocalDateTime eventDate;
+    
+    @CreatedDate
+	@Column(name = "create_date", columnDefinition = "timestamp default current_timestamp")
+    private LocalDateTime createdAt;
 
-    @Column(name = "event_date")
-    private Timestamp eventDate;
-
-    @OneToMany(mappedBy = "socialGroup")
-    private Set<UserGroupEntity> userGroups;
-
-    @OneToMany(mappedBy = "socialGroup")
-    private Set<TrendEntity> trends;
-
-    @OneToMany(mappedBy = "socialGroup")
-    private Set<TransactionEntity> transactions;
-
-    // Getters and Setters
-
-    public enum JoinMethod {
-        AUTO, APPROVAL
-    }
 }
