@@ -32,5 +32,10 @@ public class SocialGroupController {
 	public String socialing() {
 		return "socialgroup/socialing";
 	}
+	
+	@GetMapping("board")
+	public String board() {
+		return "socialgroup/board";
+	}
 
 }

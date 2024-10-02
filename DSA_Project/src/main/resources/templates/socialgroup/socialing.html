@@ -1,91 +1,94 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<meta charset="UTF-8">
-	<title>소셜링 페이지</title>
-	<link th:href="@{/css/socialing.css}" rel="stylesheet">
-	<script th:src="@{/js/jquery-3.7.1.min.js}"></script>
-	<script th:src="@{/js/socialing.js}"></script>
+    <meta charset="UTF-8">
+    <title>소셜링 페이지</title>
+    <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+    <link th:href="@{/css/socialing.css}" rel="stylesheet">
+    <script th:src="@{/js/socialing.js}"></script>
 </head>
 <body>
-	<!-- Main Container -->
     <div class="container">
 
         <!-- Sidebar Section -->
         <div class="sidebar">
-            <h2>해시태그로 검색</h2>
-            <div class="hashtag-search">
-                <input type="text" placeholder="검색어를 입력하세요...">
+            <h2>검색어로 내게 맞는 그룹 찾기</h2>
+            <div class="search">
+                <input type="text" id="searchInput" placeholder="검색어를 입력하세요...">
+                <button id="searchButton">검색</button>
             </div>
 
             <!-- 카테고리 필터 -->
             <div class="category-filters">
-                <h3 id="category-toggle" style="cursor: pointer;">
-                    카테고리별
-                </h3>
-                <!-- 카테고리 버튼 목록 (초기에는 숨겨져 있음) -->
+                <h3 id="category-toggle" style="cursor: pointer;">카테고리별</h3>
                 <div id="category-container" style="display: none;">
-                    <input type="button" class="button" name="interest" value="취미">
-                    <input type="button" class="button" name="interest" value="자기계발">
-                    <input type="button" class="button" name="interest" value="푸드">
-                    <input type="button" class="button" name="interest" value="액티비티">
-                    <input type="button" class="button" name="interest" value="반려동물">
-                    <input type="button" class="button" name="interest" value="문화">
-                    <input type="button" class="button" name="interest" value="재테크">
-                    <input type="button" class="button" name="interest" value="연애">
-                    <input type="button" class="button" name="interest" value="게임">
-                    <input type="button" class="button" name="interest" value="여행">
+                    <label><input type="radio" name="interest" value="취미"> 취미</label>
+                    <label><input type="radio" name="interest" value="자기계발"> 자기계발</label>
+                    <label><input type="radio" name="interest" value="푸드"> 푸드</label>
+                    <label><input type="radio" name="interest" value="액티비티"> 액티비티</label>
+                    <label><input type="radio" name="interest" value="반려동물"> 반려동물</label>
+                    <label><input type="radio" name="interest" value="문화"> 문화</label>
+                    <label><input type="radio" name="interest" value="재테크"> 재테크</label>
+                    <label><input type="radio" name="interest" value="연애"> 연애</label>
+                    <label><input type="radio" name="interest" value="게임"> 게임</label>
+                    <label><input type="radio" name="interest" value="여행"> 여행</label>
                 </div>
             </div>
 
+            <!-- 지역별 필터 -->
             <div class="location-filters">
                 <h3 id="location-toggle" style="cursor: pointer;">지역별</h3>
-                <!-- Location filters can be listed here -->
+                <div id="location-container" class="hidden">
+                    <!-- 상위 지역 버튼들이 여기에 동적으로 생성됨 -->
+                    <div id="region-container" class="region-container"></div>
+
+                    <!-- 세부 지역 버튼들이 여기에 동적으로 표시됨 -->
+                    <div id="sub-region-container" class="sub-region-container hidden"></div>
+                </div>
             </div>
+            
             <div class="sort-filters">
                 <h3 id="sort-toggle" style="cursor: pointer;">정렬 기준</h3>
-			    <div id="sort-options" style="display: none;">
-			        <input type="button" class="sort-btn" value="인기 순 (북마크 많은 수)" data-sort="popular">
-				    <input type="button" class="sort-btn" value="이벤트 날짜 순" data-sort="eventDate">
-				    <input type="button" class="sort-btn" value="최신 순" data-sort="latest">
-			    </div>
+                <div id="sort-options" style="display: none;">
+                    <input type="radio" class="sort-btn" name="sort" value="popular" data-sort="popular"> 인기 순 (북마크 많은 수)
+                    <input type="radio" class="sort-btn" name="sort" value="eventDate" data-sort="eventDate"> 이벤트 날짜 순
+                    <input type="radio" class="sort-btn" name="sort" value="latest" data-sort="latest"> 최신 순
+                </div>
             </div>
         </div>
 
         <!-- Main Content Section -->
         <div class="main-content">
-			<!-- Hashtag filter buttons -->
+            <!-- Hashtag filter buttons -->
             <div class="hashtags" id="hashtag-container">
                 <!-- 해시태그 버튼들이 여기에 추가됨 -->
             </div>
 
-			<h2 th:text="'[[${name}]]님의 관심사에 맞는 그룹들을 만나보세요!'"></h2>
-			
+            <h2 th:text="'[[${name}]]님의 관심사에 맞는 그룹들을 만나보세요!'"></h2>
+            
             <!-- Group Listings -->
             <div class="group-listing">
                 <div class="group-card">
-                    <img src="path/to/group-image.png" alt="그룹 사진" class="group-image">
-                    <div class="group-info">
-                        <h3>산리오 친구 모임</h3>
-                        <p>광산구</p>
-                        <p>9.17(월) 오후 6:30</p>
-                        <p>인원 2/6명</p>
-                    </div>
-                    <button class="join-btn">그룹 참여</button>
+                <div class="group-info">
+                    <table>
+                        <tr>
+                            <td>
+                                <img src="path/to/group-image.png" alt="그룹 사진" class="group-image" style="width:100%;">
+                            </td>
+                            <td>
+                                <h3>산리오 친구 모임</h3>
+                                <p>위치: 광산구</p>
+                                <p>날짜: 9.17(월) 오후 6:30</p>
+                                <p>인원: 2/6명</p>
+                            </td>
+                            <td>
+                                <a th:href="@{/socialgroup/board}" class="join-btn">그룹 참여</a>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         </div>
-
     </div>
-
-    <!-- Optional: Add your script logic -->
-    <script>
-        $(function() {
-            // 카테고리 제목 클릭 시 카테고리 목록 보이기/숨기기
-            $('#category-toggle').on('click', function() {
-                $('#category-container').toggle();  // 클릭 시 토글로 보여주기/숨기기
-            });
-        });
-    </script>
 </body>
 </html>

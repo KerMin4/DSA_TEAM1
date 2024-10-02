@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>그룹 게시판</title>
+    <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+    <link th:href="@{/css/board.css}" rel="stylesheet">
+    <script th:src="@{/js/board.js}"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar Section -->
+        <div class="sidebar">
+            <h2>그룹 게시판</h2>
+            <ul class="members-list">
+                <li>가입 멤버</li>
+                <li><img src="/path/to/member1.jpg" alt="오구"> 오구</li>
+                <li><img src="/path/to/member2.jpg" alt="복이"> 복이</li>
+            </ul>
+        </div>
+
+        <!-- Main Content Section -->
+        <!-- !!!!!!방장인 경우/ 방장이 아닌 경우 따로 분리할 것입니다!!!!!!! -->
+        <div class="main-content">
+            <nav class="tabs">
+                <a href="#" class="tab" data-content="announcement">공지사항</a>
+                <a href="#" class="tab" data-content="schedule">일정</a>
+                <a href="#" class="tab" data-content="album">앨범</a>
+                <a href="#" class="tab" data-content="settings">설정</a>
+            </nav>
+
+            <!-- Content Box -->
+            <div class="content-box">
+                <div id="announcement" class="content-section">
+                    <h3>📢 공지사항</h3>
+                    <p>이번 주 모임 일정과 장소입니다!!</p>
+                    <p>한 시간 전에 피자 10판 도착, 장소는 지원님 집으로 변경됐습니다</p>
+                    <div class="announcement-controls">
+                        <button>수정하기</button>
+                        <button>삭제하기</button>
+                    </div>
+                    
+                    <!-- 댓글 섹션 -->
+                    <div class="comments-section">
+                        <h4>댓글 4</h4>
+                        <div class="comment">
+                            <img src="/path/to/comment1.jpg" alt="복이" class="comment-avatar">
+                            <p><strong>복이</strong> 글레이 님 딱 도노</p>
+                        </div>
+                        <div class="comment">
+                            <img src="/path/to/comment2.jpg" alt="오구" class="comment-avatar">
+                            <p><strong>오구</strong> 이번 주 모임 기대돼요!</p>
+                        </div>
+                        <!-- 추가 댓글 예시 -->
+                        <div class="comment">
+                            <img src="/path/to/comment3.jpg" alt="멤버1" class="comment-avatar">
+                            <p><strong>멤버1</strong> 재미있겠네요!</p>
+                        </div>
+                        <div class="comment">
+                            <img src="/path/to/comment4.jpg" alt="멤버2" class="comment-avatar">
+                            <p><strong>멤버2</strong> 모두 준비됐나요?</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="schedule" class="content-section hidden">
+                    <h3>📅 일정</h3>
+                    <p>여기에 일정 관련 정보를 표시합니다.</p>
+                </div>
+
+                <div id="album" class="content-section hidden">
+                    <h3>📸 앨범</h3>
+                    <p>앨범과 사진들을 여기에 표시합니다.</p>
+                </div>
+
+                <div id="settings" class="content-section hidden">
+                    <h3>⚙️ 설정</h3>
+                    <p>그룹 설정 내용을 여기에 표시합니다.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
