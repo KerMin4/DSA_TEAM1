@@ -7,39 +7,55 @@
     <script>
         $(document).ready(function(){
             var formData = new FormData();
-            $('#nextStep1').click(function(){
+
+            $('#submitForm').click(function(){
                 var selectedInterests = [];
                 $('input[name="interests"]:checked').each(function(){
                     selectedInterests.push($(this).val());
                 });
-                
-                if(selectedInterests.length > 0){
-                    formData.append('interests', selectedInterests);
-                    $('#step1').removeClass('active');
-                    $('#step2').addClass('active');
-                } else {
-                    alert("최소한 하나의 취향을 선택해 주세요.");
-                }
-                
-                if(selectedInterests.length > 5){
-                    alert("취향은 다섯 개까지 선택 가능해요.");
-                    selectedInterests = [];
+
+                var location = $('#location').val();
+                var phone = $('#phone').val();
+                var email = $('#email').val();
+                var profileImage = $('#profileImage')[0].files[0];
+
+                // 유효성 검사
+                if(selectedInterests.length === 0 || selectedInterests.length > 5){
+                    alert("최소한 하나의 취향을 선택해 주세요. (최대 5개)");
                     return;
                 }
-            });
-            
-            $('#nextStep2').click(function(){
-                var location = $('#location').val();
-                if(location){
-                    formData.append('location', location);
-                    $('#step2').removeClass('active');
-                    $('#step3').addClass('active');
-                } else{
-                    alert("관심 지역을 선택해 주세요.");
+                if(!location){
+                    alert("관심 지역을 입력해 주세요.");
+                    return;
                 }
+                if(!phone || !email || !profileImage){
+                    alert("모든 정보를 입력해 주세요.");
+                    return;
+                }
+
+                // FormData에 정보 추가
+                formData.append('interests', selectedInterests);
+                formData.append('location', location);
+                formData.append('phone', phone);
+                formData.append('email', email);
+                formData.append('profileImage', profileImage);
+              
+                // AJAX 요청
+                $.ajax({
+                    url: '/upload', 
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(response) {
+                        alert("정보가 성공적으로 업데이트되었습니다.");
+                    },
+                    error: function(error) {
+                        alert("업데이트 실패: " + error.responseText);
+                    }
+                });
             });
-            
-            // ui할때 카메라 아이콘 넣어야댐
+
             $('#cameraIcon').click(function(){
                 $('#profileImage').click(); 
             });
@@ -48,31 +64,16 @@
                 var fileName = $(this).val().split('\\').pop(); 
                 $('#fileNameDisplay').text(fileName);
             });
-
-            $('#submitForm').click(function(){
-                var phone = $('#phone').val();
-                var email = $('#email').val();
-                var profileImage = $('#profileImage')[0].files[0];
-                
-                if(!phone || !email || !profileImage){
-                    alert("모든 정보를 입력해 주세요.");
-                    return;
-                }
-                
-                formData.append('phone', phone);
-                formData.append('email', email);
-                formData.append('profileImage', profileImage);
-              
-                $('#form-step3').submit();
-            });
         });
     </script>
 </head>
 <body>
-    <div class="step active" id="step1">
-        <h2>취향을 업데이트하세요!</h2>
-        <p style="color: gray;">(관심사는 최대 5개까지 선택 가능해요.)</p>
-        <form id="form-step1">
+    <h2>프로필을 수정하세요!</h2>
+    <p style="color: gray;">(관심사는 최대 5개까지 선택 가능해요.)</p>
+    
+    <form id="form-profile-edit">
+        <div>
+            <h3>취향 설정</h3>
             <input type="checkbox" name="interests" value="취미"> 취미<br>
             <input type="checkbox" name="interests" value="자기계발"> 자기계발<br>
             <input type="checkbox" name="interests" value="푸드"> 푸드<br>
@@ -83,21 +84,15 @@
             <input type="checkbox" name="interests" value="연애"> 연애<br>
             <input type="checkbox" name="interests" value="게임"> 게임<br>
             <input type="checkbox" name="interests" value="여행"> 여행<br>
-            <button type="button" id="nextStep1">다음 페이지</button>
-        </form>
-    </div>
-
-    <div class="step" id="step2">
-        <h2>관심 지역을 설정하세요!</h2>
-        <form id="form-step2">
+        </div>
+        
+        <div>
+            <h3>관심 지역</h3>
             <input type="text" id="location" name="location" placeholder="관심 지역 입력"><br>
-            <button type="button" id="nextStep2">다음 페이지</button>
-        </form>
-    </div>
-
-    <div class="step" id="step3">
-        <h2>이제 거의 다 왔어요!</h2>
-        <form id="form-step3" action="/upload" method="post" enctype="multipart/form-data">
+        </div>
+        
+        <div>
+            <h3>연락처 정보</h3>
             <input type="text" id="phone" name="phone" placeholder="휴대전화"><br>
             <input type="email" id="email" name="email" placeholder="이메일"><br>
             <div>
@@ -105,8 +100,9 @@
                 <input type="file" id="profileImage" name="profileImage" accept="image/*" style="display:none;"> <!-- 숨겨진 파일 입력 -->
                 <span id="fileNameDisplay">파일을 선택하세요.</span> 
             </div>
-            <button type="button" id="submitForm">수정하기</button>
-        </form>
-    </div>
+        </div>
+        
+        <button type="button" id="submitForm">수정하기</button>
+    </form>
 </body>
 </html>

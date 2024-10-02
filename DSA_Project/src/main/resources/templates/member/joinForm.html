@@ -9,6 +9,13 @@
     <script>
         $(document).ready(function() {
             var formData = {};
+
+            function showStep(step) {
+                $('.step').css('display', 'none'); 
+                $('#step' + step).css('display', 'block'); 
+                updateStepper(step);
+            }
+
             $('#nextStep1').click(function() {
                 var selectedInterests = [];
                 $('input[name="interests"]:checked').each(function() {
@@ -17,9 +24,7 @@
                 
                 if (selectedInterests.length > 0 && selectedInterests.length <= 5) {
                     formData.interests = selectedInterests;
-                    $('#step1').css('display', 'none'); 
-                    $('#step2').css('display', 'block'); 
-                    updateStepper(2);
+                    showStep(2);
                 } else if (selectedInterests.length == 0) {
                     alert("최소한 하나의 취향을 선택해 주세요.");
                 } else {
@@ -31,9 +36,7 @@
                 var location = $('#location').val();
                 if (location) {
                     formData.location = location;
-                    $('#step2').css('display', 'none'); 
-                    $('#step3').css('display', 'block'); 
-                    updateStepper(3);
+                    showStep(3);
                 } else {
                     alert("관심 지역을 입력해 주세요.");
                 }
@@ -63,9 +66,8 @@
 
                 
             });
-            
+
             $('input[name="interests"]').change(function() {
-                
                 $('.interest-text').css('background-color', '#FFFFFF').css('color', '#000000'); 
                 $('input[name="interests"]:checked').each(function() {
                     $(this).siblings('.interest-text').css('background-color', '#F8B1A3').css('color', '#000000');
@@ -75,18 +77,20 @@
             function updateStepper(step) {
                 $('.step-circle').removeClass('active');
                 $('.line').removeClass('active');
-                if (step === 2) {
-                    $('#step-circle-1').addClass('active');
-                    $('#line-1').addClass('active');
-                    $('#step-circle-2').addClass('active');
-                } else if (step === 3) {
-                    $('#step-circle-1').addClass('active');
-                    $('#line-1').addClass('active');
-                    $('#step-circle-2').addClass('active');
-                    $('#line-2').addClass('active');
-                    $('#step-circle-3').addClass('active');
+
+                for (var i = 1; i <= step; i++) {
+                    $('#step-circle-' + i).addClass('active');
+                    if (i < step) {
+                        $('#line-' + i).addClass('active');
+                    }
                 }
             }
+
+           
+            $('.step-circle').click(function() {
+                var step = $(this).text();
+                showStep(step);
+            });
         });
     </script>    
 </head>
@@ -95,7 +99,7 @@
         <nav>
             <ul>
                 <div class="center-menu">
-                    <li><a href="#">소셜링</a></li>
+                    <li><a th:href="@{/socialgroup/socialing}">소셜링</a></li>
                     <li><a href="#">트렌드</a></li>
                     <li><a href="#">플레이스</a></li>
                 </div>
@@ -107,7 +111,6 @@
         </nav>
     </header>
 
-   
     <div class="stepper">
         <div class="step-circle active" id="step-circle-1">1</div>
         <div class="line active" id="line-1"></div>
@@ -125,7 +128,6 @@
         
         <form id="form-step1" class="interest-container">
             <div class="interests-container">
-               
                 <div class="interests-row">
                     <label class="interest-option hobby">
                         <input type="checkbox" name="interests" value="취미">
@@ -140,9 +142,6 @@
                         <span class="interest-text">푸드</span>
                     </label>
                 </div>
-
-
-              
                 <div class="interests-row">
                     <label class="interest-option activity">
                         <input type="checkbox" name="interests" value="액티비티">
@@ -161,8 +160,6 @@
                         <span class="interest-text">재테크</span>
                     </label>
                 </div>
-
-              
                 <div class="interests-row">
                     <label class="interest-option love">
                         <input type="checkbox" name="interests" value="연애">
@@ -178,24 +175,22 @@
                     </label>
                 </div>
             </div>
-
             <button type="button" id="nextStep1">다음 페이지 > </button>
         </form>
     </div>
 
     <div class="step" id="step2" style="display: none;">
-    <div class="center-content">
-        <h2>어디에서 살펴볼까요?</h2>
-        <h2>관심 지역을 선택해주세요!</h2>
-    </div>
-    <form id="form-step2">
-        <div class="interests-container">
-            <input type="text" id="location" name="location" placeholder="관심 지역 입력"><br>
+        <div class="center-content">
+            <h2>어디에서 살펴볼까요?</h2>
+            <h2>관심 지역을 선택해주세요!</h2>
         </div>
-        <button type="button" id="nextStep2">다음 페이지</button>
-    </form>
+        <form id="form-step2">
+            <div class="interests-container">
+                <input type="text" id="location" name="location" placeholder="관심 지역 입력"><br>
+            </div>
+            <button type="button" id="nextStep2">다음 페이지</button>
+        </form>
     </div>
-
 
     <div class="step" id="step3" style="display: none;">
         <h2>이제 거의 다 왔어요!</h2>
@@ -208,4 +203,4 @@
         </form>
     </div>
 </body>
-</html> 
+</html>
