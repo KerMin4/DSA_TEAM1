@@ -113,3 +113,8 @@
     background-color: #FFFFFF; 
     color: #81BBF6; 
 }
+
+/* 클릭할 수 있는 버튼에 마우스 올리면 커서 변경 */
+button {
+    cursor: pointer;
+}

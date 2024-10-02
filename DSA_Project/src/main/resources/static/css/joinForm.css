@@ -41,7 +41,6 @@
     position: relative; 
 }
 
-
 .step-circle.active {
     background-color: black;
     color: white;
@@ -60,20 +59,17 @@
     display: block;
 }
 
-
 .interests-container {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-
 .interests-row {
     display: flex;
     justify-content: center;
     margin-bottom: -10px; /* 각 행 */
 }
-
 
 .interest-option {
     width: 150px;
@@ -86,9 +82,7 @@
     margin: -20px; 
     position: relative;
     margin-top: 6px; 
-
 }
-
 
 .interest-option input[type="checkbox"] {
     display: none; 
@@ -118,7 +112,6 @@
     background-color: #E48F85; 
     color: #000000;
 }
-
 
 /* 취미 부터 */
 .hobby {
@@ -191,20 +184,21 @@
     background-position: top center;
 }
 
-/* 다음 페이지 버튼 */
-#nextStep1, #nextStep2, #submitForm {
-    width: 100px; 
-    height: 35px; 
+/* 버튼 스타일 */
+#nextStep1, #nextStep2, #submitForm, #prevStep1, #prevStep2, #prevStep3 {
+    width: 80x; 
+    height: 23px;
     background-color: #FFFFFF; 
     border: 1px solid #81BBF6; 
     border-radius: 20px; 
     color: #81BBF6;
     font-family: 'S-CoreDream-5Medium', sans-serif; 
-    font-size: 14px;
+    font-size: 13px;
     cursor: pointer; 
-    display: block; 
-    text-align: center;
-    margin: 17px auto; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    margin: 17px 1px; 
 }
 
 
@@ -228,3 +222,10 @@
     color: #777;
     margin-top: 20px;
 }
+
+button {
+    cursor: pointer; 
+    padding: 10px 15px; 
+    font-size: 14px; 
+    margin-right: 10px;
+}  

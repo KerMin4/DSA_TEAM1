@@ -128,6 +128,7 @@ $(function() {
 	// 폼 제출 시 데이터 검증 및 제출 처리
 	$('#createForm').on('submit', function(e) {
 	    e.preventDefault();
+	    
 	    formData.set('groupName', $('#groupName').val());
 	    formData.set('eventDate', $('#eventDate').val());
 	    formData.set('eventTime', $('#eventTime').val());
@@ -149,7 +150,8 @@ $(function() {
 	
 	    // 서버로 전송
 	    $.ajax({
-	        url: $('#createForm').attr('action'),
+			url: '/socialgroup/create',	// 서버의 그룹 생성 엔드포인트
+	        //url: $('#createForm').attr('action'),
 	        type: 'POST',
 	        data: formData,
 	        processData: false,

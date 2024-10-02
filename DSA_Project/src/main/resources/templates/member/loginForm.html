@@ -11,8 +11,11 @@
     <header>
         <nav>
             <ul>
+                <li class="left-logo">
+                    <a th:href="@{/}">Kkiri</a>  
+                </li>
                 <div class="center-menu">
-                    <li><a href="#">소셜링</a></li>
+                    <li><a th:href="@{/socialgroup/socialing}">소셜링</a></li>
                     <li><a href="#">트렌드</a></li>
                     <li><a href="#">플레이스</a></li>
                 </div>
@@ -26,10 +29,10 @@
 
     <main>
         <div class="login-container">
-            <h1 class="welcome-text">welcome!</h1>
+            <h1 class="welcome-text">Welcome!</h1>
             <div class="input-box">
                 <input type="text" id="username" placeholder="아이디" class="username-input" required>
-                <hr class="divider"> <!-- 구분선 -->
+                <hr class="divider"> 
                 <input type="password" id="password" placeholder="비밀번호" class="password-input" required>
             </div>
             <button class="login-button">로그인</button> 

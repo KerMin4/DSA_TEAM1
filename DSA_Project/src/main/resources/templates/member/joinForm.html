@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>회원가입</title>
@@ -9,36 +9,61 @@
     <script>
         $(document).ready(function() {
             var formData = {};
-            $('#nextStep1').click(function() {
-                var selectedInterests = [];
-                $('input[name="interests"]:checked').each(function() {
-                    selectedInterests.push($(this).val());
-                });
-                
-                if (selectedInterests.length > 0 && selectedInterests.length <= 5) {
-                    formData.interests = selectedInterests;
-                    $('#step1').css('display', 'none'); 
-                    $('#step2').css('display', 'block'); 
-                    updateStepper(2);
-                } else if (selectedInterests.length == 0) {
+
+            function showStep(step) {
+                $('.step').css('display', 'none'); 
+                $('#step' + step).css('display', 'block'); 
+                updateStepper(step);
+            }
+
+            function validateStep1() {
+                var selectedInterests = $('input[name="interests"]:checked').length;
+                if (selectedInterests === 0) {
                     alert("최소한 하나의 취향을 선택해 주세요.");
-                } else {
+                    return false;
+                } else if (selectedInterests > 5) {
                     alert("취향은 다섯 개까지 선택 가능해요.");
+                    return false;
                 }
-            });
-            
-            $('#nextStep2').click(function() {
+                return true;
+            }
+
+            function validateStep2() {
                 var location = $('#location').val();
-                if (location) {
-                    formData.location = location;
-                    $('#step2').css('display', 'none'); 
-                    $('#step3').css('display', 'block'); 
-                    updateStepper(3);
-                } else {
+                if (!location) {
                     alert("관심 지역을 입력해 주세요.");
+                    return false;
+                }
+                return true;
+            }
+
+            $('#nextStep1').click(function() {
+                if (validateStep1()) {
+                    var selectedInterests = [];
+                    $('input[name="interests"]:checked').each(function() {
+                        selectedInterests.push($(this).val());
+                    });
+                    formData.interests = selectedInterests;
+                    showStep(2);
                 }
             });
-            
+
+            $('#prevStep1').click(function() {
+                window.location.href = '/kkirikkiri/'; // 홈으로 리다이렉트
+            });
+
+            $('#nextStep2').click(function() {
+                if (validateStep2()) {
+                    var location = $('#location').val();
+                    formData.location = location;
+                    showStep(3);
+                }
+            });
+
+            $('#prevStep2').click(function() {
+                showStep(1); 
+            });
+
             $('#submitForm').click(function() {
                 var userid = $('#userid').val();
                 var password = $('#password').val();
@@ -60,12 +85,17 @@
                 formData.password = password;
                 formData.phone = phone;
                 formData.email = email;
-
-                
+                // 여기에 가입 요청을 처리하는 코드 추가
             });
-            
+
             $('input[name="interests"]').change(function() {
+                var selectedInterests = $('input[name="interests"]:checked').length;
                 
+                if (selectedInterests > 5) {
+                    alert("취향은 다섯 개까지 선택 가능해요.");
+                    $(this).prop('checked', false);  
+                }
+
                 $('.interest-text').css('background-color', '#FFFFFF').css('color', '#000000'); 
                 $('input[name="interests"]:checked').each(function() {
                     $(this).siblings('.interest-text').css('background-color', '#F8B1A3').css('color', '#000000');
@@ -75,18 +105,21 @@
             function updateStepper(step) {
                 $('.step-circle').removeClass('active');
                 $('.line').removeClass('active');
-                if (step === 2) {
-                    $('#step-circle-1').addClass('active');
-                    $('#line-1').addClass('active');
-                    $('#step-circle-2').addClass('active');
-                } else if (step === 3) {
-                    $('#step-circle-1').addClass('active');
-                    $('#line-1').addClass('active');
-                    $('#step-circle-2').addClass('active');
-                    $('#line-2').addClass('active');
-                    $('#step-circle-3').addClass('active');
+
+                for (var i = 1; i <= step; i++) {
+                    $('#step-circle-' + i).addClass('active');
+                    if (i < step) {
+                        $('#line-' + i).addClass('active');
+                    }
                 }
             }
+
+            $('.step-circle').click(function() {
+                var step = $(this).text();
+                if (step == 2 && !validateStep1()) return; // 1번 동그라미에서 2번 동그라미 클릭 시 유효성 검사
+                if (step == 3 && !validateStep2()) return; // 2번 동그라미에서 3번 동그라미 클릭 시 유효성 검사
+                showStep(step);
+            });
         });
     </script>    
 </head>
@@ -94,8 +127,11 @@
     <header>
         <nav>
             <ul>
+                <li class="left-logo">
+                    <a th:href="@{/}">Kkiri</a>
+                </li>
                 <div class="center-menu">
-                    <li><a href="#">소셜링</a></li>
+                    <li><a th:href="@{/socialgroup/socialing}">소셜링</a></li>
                     <li><a href="#">트렌드</a></li>
                     <li><a href="#">플레이스</a></li>
                 </div>
@@ -107,7 +143,6 @@
         </nav>
     </header>
 
-   
     <div class="stepper">
         <div class="step-circle active" id="step-circle-1">1</div>
         <div class="line active" id="line-1"></div>
@@ -125,7 +160,6 @@
         
         <form id="form-step1" class="interest-container">
             <div class="interests-container">
-               
                 <div class="interests-row">
                     <label class="interest-option hobby">
                         <input type="checkbox" name="interests" value="취미">
@@ -140,9 +174,6 @@
                         <span class="interest-text">푸드</span>
                     </label>
                 </div>
-
-
-              
                 <div class="interests-row">
                     <label class="interest-option activity">
                         <input type="checkbox" name="interests" value="액티비티">
@@ -161,8 +192,6 @@
                         <span class="interest-text">재테크</span>
                     </label>
                 </div>
-
-              
                 <div class="interests-row">
                     <label class="interest-option love">
                         <input type="checkbox" name="interests" value="연애">
@@ -178,24 +207,28 @@
                     </label>
                 </div>
             </div>
-
-            <button type="button" id="nextStep1">다음 페이지 > </button>
+            <div style="display: flex; justify-content: center; width: 100%;">
+                <button type="button" id="prevStep1" style="margin-right: 10px;"> < 이전</button>
+                <button type="button" id="nextStep1"> 다음 > </button>
+            </div>
         </form>
     </div>
 
     <div class="step" id="step2" style="display: none;">
-    <div class="center-content">
-        <h2>어디에서 살펴볼까요?</h2>
-        <h2>관심 지역을 선택해주세요!</h2>
-    </div>
-    <form id="form-step2">
-        <div class="interests-container">
-            <input type="text" id="location" name="location" placeholder="관심 지역 입력"><br>
+        <div class="center-content">
+            <h2>어디에서 살펴볼까요?</h2>
+            <h2>관심 지역을 선택해주세요!</h2>
         </div>
-        <button type="button" id="nextStep2">다음 페이지</button>
-    </form>
+        <form id="form-step2">
+            <div class="interests-container">
+                <input type="text" id="location" name="location" placeholder="관심 지역 입력"><br>
+            </div>
+            <div style="display: flex; justify-content: center; width: 100%;">
+                <button type="button" id="prevStep2" style="margin-right: 10px;"> < 이전 </button>
+                <button type="button" id="nextStep2"> 다음 > </button>
+            </div>
+        </form>
     </div>
-
 
     <div class="step" id="step3" style="display: none;">
         <h2>이제 거의 다 왔어요!</h2>
@@ -204,8 +237,11 @@
             <input type="password" id="password" name="password" placeholder="비밀번호"><br>
             <input type="password" id="password2" name="password2" placeholder="비밀번호 확인"><br>
             <input type="text" id="phone" name="phone" placeholder="휴대전화"><br>
-            <button type="button" id="submitForm">가입하기</button>
+            <div style="display: flex; justify-content: center; width: 100%;">
+                <button type="button" id="prevStep3" style="margin-right: 10px;"> < 이전</button>
+                <button type="button" id="submitForm">가입하기</button>
+            </div>
         </form>
     </div>
 </body>
-</html> 
+</html>
