@@ -1,15 +1,13 @@
 $(function() {
 
-	// FormData 객체를 사용하여 파일과 데이터를 함께 전송
 	var formData = new FormData();
 	var memberLimit = 2;
-	var fileUploaded = false; // 파일이 업로드되었는지 여부를 확인하는 변수
+	var fileUploaded = false; 
 	
-	// 관심사 선택 이벤트
-	$('input[name="interest"]').on('click', function() {
-	    $('input[name="interest"]').removeClass('active-button');
-	    $(this).addClass('active-button');
-	    formData.set('interest', $(this).val());
+	// 관심사 라디오 버튼 선택 이벤트
+	$('input[type="radio"][name="interest"]').on('change', function() {
+	    var selectedInterest = $('input[type="radio"][name="interest"]:checked').val();
+	    formData.set('interest', selectedInterest);  // 선택한 관심사를 FormData에 저장
 	});
 	
 	// 인원 수 감소
@@ -40,9 +38,8 @@ $(function() {
 	            $('#imagePreview').attr('src', e.target.result).show();
 	        };
 	        reader.readAsDataURL(file);
-	        fileUploaded = true; // 파일이 업로드되었음을 표시
+	        fileUploaded = true;
 	        
-	        // 파일 업로드 시 삭제 버튼을 보여줌
 	        $('#removeFile').show();
 	    }
 	});
@@ -50,29 +47,23 @@ $(function() {
 	// 파일 삭제 기능 추가
 	$('#removeFile').on('click', function() {
 	    if (fileUploaded) {
-	        // 미리보기 이미지를 기본 이미지로 되돌림
 	        $('#imagePreview').attr('src', '/path/to/placeholder.png');
-	        // FormData에서 파일 제거
 	        formData.delete('profileImage');
 	        fileUploaded = false;
-	        // 파일 입력 필드 초기화
 	        $('#fileInput').val('');
 	        
-	        // 파일 삭제 후 삭제 버튼 숨김
 	        $('#removeFile').hide();
 	    } else {
 	        alert('업로드된 파일이 없습니다.');
 	    }
 	});
 	
-	// 페이지 로드시 파일 삭제 버튼을 숨김 (초기 상태)
 	$('#removeFile').hide();
 	
-	// 가입 권한 선택 이벤트
-	$('input[name="joinMethod"]').on('click', function() {
-	    $('input[name="joinMethod"]').removeClass('active-button');
-	    $(this).addClass('active-button');
-	    formData.set('joinMethod', $(this).val());
+	// 가입 권한 라디오 버튼 선택 이벤트
+	$('input[type="radio"][name="joinMethod"]').on('change', function() {
+	    var selectedJoinMethod = $('input[type="radio"][name="joinMethod"]:checked').val();
+	    formData.set('joinMethod', selectedJoinMethod);  // 선택한 가입 권한을 FormData에 저장
 	});
 	
 	// 해시태그 등록
@@ -104,7 +95,7 @@ $(function() {
 	    $(this).parent().remove();
 	});
 	
-	// 툴팁을 위한 마우스 이벤트 처리
+	// 툴팁 이벤트 처리
 	var tooltip = $('#tooltip');
 	$('#fileInput').on('mouseenter', function(event) {
 	    if (!fileUploaded) {
@@ -125,7 +116,7 @@ $(function() {
 	    tooltip.css('display', 'none');
 	});
 	
-	// 폼 제출 시 데이터 검증 및 제출 처리
+	// 폼 제출 처리
 	$('#createForm').on('submit', function(e) {
 	    e.preventDefault();
 	    
@@ -137,35 +128,28 @@ $(function() {
 	    if (!formData.get('memberLimit')) {
 	        formData.set('memberLimit', memberLimit);
 	    }
-	
-	    // 검증
+
 	    if (!formData.get('interest')) return alert('관심사를 선택해주세요.');
 	    if (!formData.get('groupName')) return alert('그룹명을 입력해주세요.');
 	    if (!formData.get('eventDate')) return alert('활동 날짜를 선택해주세요.');
 	    if (!formData.get('eventTime')) return alert('활동 시간을 선택해주세요.');
-	    if (memberLimit < 2) return alert('인원 수는 최소 2명이어야 합니다.');
 	    if (!formData.get('description')) return alert('그룹 소개를 작성해주세요.');
 	    if (!formData.get('location')) return alert('위치를 선택해주세요.');
 	    if (!formData.get('joinMethod')) return alert('가입 권한을 선택해주세요.');
 	
-	    // 서버로 전송
 	    $.ajax({
-			url: '/socialgroup/create',	// 서버의 그룹 생성 엔드포인트
-	        //url: $('#createForm').attr('action'),
+			url: '/socialgroup/create',
 	        type: 'POST',
 	        data: formData,
 	        processData: false,
 	        contentType: false,
 	        success: function(response) {
-	            console.log(response);
 	            alert('그룹이 성공적으로 생성되었습니다.');
 	        },
 	        error: function(err) {
-	            console.log(err);
 	            alert('그룹 생성에 실패했습니다. 다시 시도해주세요.');
 	        }
 	    });
-	
 	});
 
 });
