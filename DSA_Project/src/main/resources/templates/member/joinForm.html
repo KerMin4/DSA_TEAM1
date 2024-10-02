@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>회원가입</title>
@@ -16,32 +16,54 @@
                 updateStepper(step);
             }
 
+            function validateStep1() {
+                var selectedInterests = $('input[name="interests"]:checked').length;
+                if (selectedInterests === 0) {
+                    alert("최소한 하나의 취향을 선택해 주세요.");
+                    return false;
+                } else if (selectedInterests > 5) {
+                    alert("취향은 다섯 개까지 선택 가능해요.");
+                    return false;
+                }
+                return true;
+            }
+
+            function validateStep2() {
+                var location = $('#location').val();
+                if (!location) {
+                    alert("관심 지역을 입력해 주세요.");
+                    return false;
+                }
+                return true;
+            }
+
             $('#nextStep1').click(function() {
-                var selectedInterests = [];
-                $('input[name="interests"]:checked').each(function() {
-                    selectedInterests.push($(this).val());
-                });
-                
-                if (selectedInterests.length > 0 && selectedInterests.length <= 5) {
+                if (validateStep1()) {
+                    var selectedInterests = [];
+                    $('input[name="interests"]:checked').each(function() {
+                        selectedInterests.push($(this).val());
+                    });
                     formData.interests = selectedInterests;
                     showStep(2);
-                } else if (selectedInterests.length == 0) {
-                    alert("최소한 하나의 취향을 선택해 주세요.");
-                } else {
-                    alert("취향은 다섯 개까지 선택 가능해요.");
                 }
             });
-            
+
+            $('#prevStep1').click(function() {
+                window.location.href = '/kkirikkiri/'; // 홈으로 리다이렉트
+            });
+
             $('#nextStep2').click(function() {
-                var location = $('#location').val();
-                if (location) {
+                if (validateStep2()) {
+                    var location = $('#location').val();
                     formData.location = location;
                     showStep(3);
-                } else {
-                    alert("관심 지역을 입력해 주세요.");
                 }
             });
-            
+
+            $('#prevStep2').click(function() {
+                showStep(1); 
+            });
+
             $('#submitForm').click(function() {
                 var userid = $('#userid').val();
                 var password = $('#password').val();
@@ -63,11 +85,17 @@
                 formData.password = password;
                 formData.phone = phone;
                 formData.email = email;
-
-                
+                // 여기에 가입 요청을 처리하는 코드 추가
             });
 
             $('input[name="interests"]').change(function() {
+                var selectedInterests = $('input[name="interests"]:checked').length;
+                
+                if (selectedInterests > 5) {
+                    alert("취향은 다섯 개까지 선택 가능해요.");
+                    $(this).prop('checked', false);  
+                }
+
                 $('.interest-text').css('background-color', '#FFFFFF').css('color', '#000000'); 
                 $('input[name="interests"]:checked').each(function() {
                     $(this).siblings('.interest-text').css('background-color', '#F8B1A3').css('color', '#000000');
@@ -86,9 +114,10 @@
                 }
             }
 
-           
             $('.step-circle').click(function() {
                 var step = $(this).text();
+                if (step == 2 && !validateStep1()) return; // 1번 동그라미에서 2번 동그라미 클릭 시 유효성 검사
+                if (step == 3 && !validateStep2()) return; // 2번 동그라미에서 3번 동그라미 클릭 시 유효성 검사
                 showStep(step);
             });
         });
@@ -98,6 +127,9 @@
     <header>
         <nav>
             <ul>
+                <li class="left-logo">
+                    <a th:href="@{/}">Kkiri</a>
+                </li>
                 <div class="center-menu">
                     <li><a th:href="@{/socialgroup/socialing}">소셜링</a></li>
                     <li><a href="#">트렌드</a></li>
@@ -175,7 +207,10 @@
                     </label>
                 </div>
             </div>
-            <button type="button" id="nextStep1">다음 페이지 > </button>
+            <div style="display: flex; justify-content: center; width: 100%;">
+                <button type="button" id="prevStep1" style="margin-right: 10px;"> < 이전</button>
+                <button type="button" id="nextStep1"> 다음 > </button>
+            </div>
         </form>
     </div>
 
@@ -188,7 +223,10 @@
             <div class="interests-container">
                 <input type="text" id="location" name="location" placeholder="관심 지역 입력"><br>
             </div>
-            <button type="button" id="nextStep2">다음 페이지</button>
+            <div style="display: flex; justify-content: center; width: 100%;">
+                <button type="button" id="prevStep2" style="margin-right: 10px;"> < 이전 </button>
+                <button type="button" id="nextStep2"> 다음 > </button>
+            </div>
         </form>
     </div>
 
@@ -199,7 +237,10 @@
             <input type="password" id="password" name="password" placeholder="비밀번호"><br>
             <input type="password" id="password2" name="password2" placeholder="비밀번호 확인"><br>
             <input type="text" id="phone" name="phone" placeholder="휴대전화"><br>
-            <button type="button" id="submitForm">가입하기</button>
+            <div style="display: flex; justify-content: center; width: 100%;">
+                <button type="button" id="prevStep3" style="margin-right: 10px;"> < 이전</button>
+                <button type="button" id="submitForm">가입하기</button>
+            </div>
         </form>
     </div>
 </body>
