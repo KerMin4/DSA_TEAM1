@@ -1,5 +1,6 @@
 HELP.md
 .gradle
+.env
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
@@ -13,13 +14,16 @@ build/
 .settings
 .springBeans
 .sts4-cache
+.env
 bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
+application.properties
 
 ### IntelliJ IDEA ###
 .idea
 *.iws
+.env
 *.iml
 *.ipr
 out/
