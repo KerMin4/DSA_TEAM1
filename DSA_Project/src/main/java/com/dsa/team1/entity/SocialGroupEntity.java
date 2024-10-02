@@ -49,8 +49,8 @@ public class SocialGroupEntity {
     @Column(name = "profile_image")
     private String profileImage;
     
-    @Column(columnDefinition = "text")
-    private String interest;
+    @Column(name = "interest", columnDefinition = "text")
+    private String interests;
     private String location;
 
     @ManyToOne
