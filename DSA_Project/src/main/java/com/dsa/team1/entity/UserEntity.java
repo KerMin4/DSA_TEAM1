@@ -35,7 +35,7 @@ public class UserEntity {
 
     // Real name
     @Column(name = "username", nullable = false)
-    private String username;
+    private String userName;
     
     @Column(name = "password", nullable = false)
     private String password;
