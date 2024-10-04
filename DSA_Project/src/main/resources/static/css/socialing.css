@@ -1,23 +1,32 @@
 @charset "UTF-8";
 
-.container {
-    display: flex;
-    margin: 0 auto;
-}
-
-.sidebar {
-    width: 20%;
-    border-right: 1px solid #e0e0e0;
-}
-
-/* 버튼의 기본 스타일 */
-button {
-    cursor: pointer;
-    padding: 8px;
-    margin: 5px;
+/* 상위 지역 버튼 스타일 */
+.region-btn {
     background-color: #f0f0f0;
     border: 1px solid #ddd;
+    padding: 10px;
+    margin: 5px;
+    cursor: pointer;
     border-radius: 5px;
+    font-size: 14px;
+}
+
+/* 하위 지역 버튼 스타일 */
+.sub-region-btn {
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    padding: 8px;
+    margin: 3px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 12px;
+}
+
+/* 선택된 하위 지역 버튼에 대한 스타일 */
+.sub-region-btn.selected {
+    background-color: #000; /* 배경색 반전 */
+    color: #fff; /* 텍스트 색상 반전 */
+    border-color: #000; /* 테두리 색상 변경 */
 }
 
 /* 하위 지역 버튼 리스트 */
@@ -28,13 +37,44 @@ button {
     display: none;  /* Initially hidden */
 }
 
-.sub-region-list button {
-    margin: 3px;
-    background-color: #f9f9f9;
-    border: 1px solid #ccc;
-}
-
 /* 숨겨진 상태의 요소 */
 .hidden {
     display: none;
+}
+
+/* 생성 버튼 */
+.create-btn {
+    position: fixed;
+    bottom: 60px;
+    right: 60px;
+    width: 90px;
+    height: 90px;
+    background-color: rgba(74, 144, 226, 0.8);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    font-size: 14px;
+    text-align: center;
+}
+
+.create-btn:hover {
+    background-color: #0056b3;
+}
+
+#category-toggle, #sort-toggle, #location-toggle {
+    cursor: pointer;
+    display: inline-block;
+    margin: 20px 0;
+}
+
+/* 검색어 강조 스타일 */
+.highlight-query {
+    color: #FF4081;
+    font-weight: bold;
 }
