@@ -1,11 +1,21 @@
 <!DOCTYPE html>
-<html xmlns:th="thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>마이페이지</title>
-<script th:src="/js/jquery-3.7.1.min.js"></script>
+    <meta charset="UTF-8">
+    <title>마이페이지</title>
+    <link rel="stylesheet" type="text/css" href="/kkirikkiri/css/mypage.css">
+    <link rel="stylesheet" type="text/css" href="/kkirikkiri/css/header.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
+    <script src="/kkirikkiri/js/jquery-3.7.1.min.js"></script>
+    <script src="/kkirikkiri/js/mypage.js"></script>
+    <link rel="stylesheet" type="text/css" href="/kkirikkiri/css/main.css">
+    
 </head>
 <body>
-
+   
+    <div th:replace="dashboard/header :: header('mypage')"></div>
+    
+    <div id="calendar"></div>
 </body>
 </html>

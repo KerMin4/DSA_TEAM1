@@ -21,7 +21,8 @@ public class WebSecurityConfig {
 			"/js/**",
 			"/member/join",
 			"/member/login",
-			"/socialgroup/**"
+			"/socialgroup/**",
+			"/dashboard/**"       // 나중에 까먹지말고 빼야댐 (나연)
 	};
 	
 	@Bean
