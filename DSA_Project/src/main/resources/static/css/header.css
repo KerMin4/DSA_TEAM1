@@ -1,5 +1,6 @@
-<<<<<<< HEAD
 @charset "UTF-8";
+
+/* mainheader.css */
 
 @font-face {
     font-family: 'S-CoreDream-3Light';
@@ -22,17 +23,10 @@
     font-style: normal;
 }
 
-.left-logo a {
-    font-family: 'S-CoreDream-6Bold', sans-serif;
-    color: #333;
-    font-size: 18px;
-    text-decoration: none;
-}
-
 header {
     background-color: #fff;
     padding: 20px;
-    margin-bottom: 0;
+    margin-bottom: 15px;
 }
 
 nav ul {
@@ -71,62 +65,10 @@ nav ul li a {
     color: #333;
 }
 
-body {
-    font-family: 'S-CoreDream-3Light', sans-serif;
-    background-color: #f0f0f0;
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-=======
-@font-face {
-    font-family: 'S-CoreDream-3Light';
-    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'S-CoreDream-6Bold';
-    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-6Bold.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-}
-
-nav ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-}
-
-nav li {
-    margin-bottom: 10px;
-}
-
-nav a {
+/* 로고 스타일 */
+.left-logo a {
+    font-family: 'S-CoreDream-6Bold', sans-serif;
+    color: #333;  
+    font-size: 18px;
     text-decoration: none;
-    font-family: 'S-CoreDream-3Light', sans-serif; 
-    font-size: 16px;
-    color: #333;
-    padding: 10px 15px;
-    transition: color 0.3s;
-}
-
-nav a.active {
-    font-family: 'S-CoreDream-6Bold', sans-serif; 
-    color: #000000;
-}
-
-.header-image {
-    text-align: center; 
-    margin: 20px 0; 
-}
-
-.header-image img {
-    max-width: 100%; 
-    height: auto; 
->>>>>>> branch 'master' of https://github.com/KerMin4/DSA_TEAM1.git
 }
