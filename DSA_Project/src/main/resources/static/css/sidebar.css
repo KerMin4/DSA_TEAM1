@@ -1,28 +1,105 @@
-@charset "UTF-8";
+/* mainheader.css */
 
+/* 폰트 설정 */
+@font-face {
+    font-family: 'S-CoreDream-3Light';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'S-CoreDream-6Bold';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-6Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'S-CoreDream-5Medium';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-5Medium.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* 헤더 스타일 */
+header {
+    background-color: #fff;
+    padding: 20px;
+    margin-bottom: 0; /* 헤더 하단의 여백 제거 */
+    position: sticky;
+    top: 0;
+    z-index: 10; /* 헤더가 항상 상단에 위치하도록 설정 */
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.left-logo {
+    flex: 1;
+}
+
+.center-menu {
+    display: flex;
+    justify-content: center;
+    flex: 2;
+}
+
+.right-menu {
+    display: flex;
+    justify-content: flex-end;
+    flex: 1;
+}
+
+nav ul li {
+    margin: 0 15px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    font-size: 18px;
+    font-family: 'S-CoreDream-6Bold', sans-serif;
+    color: #333;
+}
+
+/* 로고 스타일 */
+.left-logo a {
+    font-family: 'S-CoreDream-6Bold', sans-serif;
+    color: #333;
+    font-size: 18px;
+    text-decoration: none;
+}
+
+/* 사이드바와 메인 컨텐츠 스타일 */
 .container {
     display: flex;
     width: 100%;
     margin: 0;
     flex-grow: 1;
-    align-items: flex-start; /* 상단을 기준으로 정렬 */
+    align-items: flex-start;
 }
 
 .sidebar {
-    width: 20%; /* 화면의 20%를 차지하도록 설정 */
+    width: 20%;
     padding: 20px;
     background-color: #fff;
     margin-top: 0;
-    min-height: 100vh; /* 전체 뷰포트 높이로 설정 */
+    min-height: 100vh;
     box-sizing: border-box;
     position: sticky;
-    top: 0; /* 사이드바를 화면에 고정하여 스크롤 시에도 따라오게 */
+    top: 70px; /* 헤더 높이에 맞춰 사이드바의 상단을 70px로 설정 */
 }
 
 .main-content {
-    width: 80%; /* 나머지 80%는 본문 영역이 차지 */
+    width: 80%;
     padding: 30px 40px;
     box-sizing: border-box;
-    overflow-y: auto; /* 메인 콘텐츠에서만 스크롤바가 생기도록 설정 */
-    height: calc(100vh - 70px); /* 헤더 높이를 제외한 뷰포트 높이로 설정 */
+    overflow-y: auto;
+    height: calc(100vh - 70px); /* 헤더 높이를 제외한 본문 높이 설정 */
 }
