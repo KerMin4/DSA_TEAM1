@@ -2,9 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Kkiri Kkiri</title>
-    <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="/kkirikkiri/css/main.css">
+    <title>Header</title>
+    <link th:href="@{/css/header.css}" rel="stylesheet">
 </head>
 <body>
     <header>
@@ -25,14 +24,5 @@
             </ul>
         </nav>
     </header>
-    
-    <main>
-        <h1 class="main-heading">Kkiri Kkiri</h1>
-        <p class="center-text">
-            <span>혼자가 아닌, 함께하는 즐거움!</span><br>
-            <span>끼리끼리에서!</span>
-        </p>
-        <a th:href="@{/socialgroup/create}" class="create-button">그룹 생성</a>
-    </main>
 </body>
 </html>

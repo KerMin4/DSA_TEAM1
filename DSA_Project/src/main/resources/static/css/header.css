@@ -1,0 +1,81 @@
+@charset "UTF-8";
+
+@font-face {
+    font-family: 'S-CoreDream-3Light';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'S-CoreDream-6Bold';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-6Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'S-CoreDream-5Medium';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-5Medium.woff') format('woff'); 
+    font-weight: normal;
+    font-style: normal;
+}
+
+.left-logo a {
+    font-family: 'S-CoreDream-6Bold', sans-serif;
+    color: #333;
+    font-size: 18px;
+    text-decoration: none;
+}
+
+header {
+    background-color: #fff;
+    padding: 20px;
+    margin-bottom: 0;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.left-logo {
+    flex: 1;
+}
+
+.center-menu {
+    display: flex;
+    justify-content: center;
+    flex: 2;
+}
+
+.right-menu {
+    display: flex;
+    justify-content: flex-end;
+    flex: 1;
+}
+
+nav ul li {
+    margin: 0 15px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    font-size: 18px;
+    font-family: 'S-CoreDream-6Bold', sans-serif;
+    color: #333;
+}
+
+body {
+    font-family: 'S-CoreDream-3Light', sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}

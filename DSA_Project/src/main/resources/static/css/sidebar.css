@@ -1,0 +1,28 @@
+@charset "UTF-8";
+
+.container {
+    display: flex;
+    width: 100%;
+    margin: 0;
+    flex-grow: 1;
+    align-items: flex-start; /* 상단을 기준으로 정렬 */
+}
+
+.sidebar {
+    width: 20%; /* 화면의 20%를 차지하도록 설정 */
+    padding: 20px;
+    background-color: #fff;
+    margin-top: 0;
+    min-height: 100vh; /* 전체 뷰포트 높이로 설정 */
+    box-sizing: border-box;
+    position: sticky;
+    top: 0; /* 사이드바를 화면에 고정하여 스크롤 시에도 따라오게 */
+}
+
+.main-content {
+    width: 80%; /* 나머지 80%는 본문 영역이 차지 */
+    padding: 30px 40px;
+    box-sizing: border-box;
+    overflow-y: auto; /* 메인 콘텐츠에서만 스크롤바가 생기도록 설정 */
+    height: calc(100vh - 70px); /* 헤더 높이를 제외한 뷰포트 높이로 설정 */
+}

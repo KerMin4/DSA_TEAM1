@@ -1,14 +1,66 @@
 $(function() {
+    // 그룹 필터링을 위한 함수
+    function filterGroups() {
+        var searchQuery = $('#searchInput').val().trim();  // 검색어
+        var selectedInterest = $('input[name="interest"]:checked').val();  // 선택된 카테고리
+        var selectedRegion = $('.sub-region-btn.selected').data('subregion');  // 선택된 지역
+
+        // selectedRegion이 undefined일 경우 처리
+        if (!selectedRegion) {
+            selectedRegion = '';
+        }
+
+        // Ajax 요청으로 검색 및 필터링 실행
+        $.ajax({
+		    url: 'http://localhost:7272/api/filter',
+		    type: 'GET',
+		    data: {
+		        query: searchQuery,
+		        category: selectedInterest,
+		        region: selectedRegion
+		    },
+		    success: function(response) {
+		        console.log('서버 응답:', response);  // 서버 응답 확인 로그
+		
+		        if (response.html.trim() === '') {
+		            // 검색 결과가 없을 때 메시지를 보여줌
+		            $('#no-result-message').show();
+		            $('#no-result-text').text(`"${searchQuery}"에 대한 검색 결과를 찾을 수 없습니다.`);
+		            $('.group-listing').html('');
+		        } else {
+		            // 검색 결과가 있을 때, 목록을 업데이트하고 메시지를 숨김
+		            $('#no-result-message').hide();
+		            $('.group-listing').html(response.html);
+		        }
+		    },
+		    error: function(err) {
+		        console.error('필터링 중 오류 발생:', err);
+		    }
+		});
+    }
+
+    // 검색 버튼 클릭 이벤트
+    $('#searchButton').on('click', function(event) {
+        event.preventDefault();
+        filterGroups();  // 필터링 함수 호출
+    });
+
+    // 카테고리 선택 이벤트
+    $('input[name="interest"]').on('change', function() {
+        filterGroups();  // 필터링 함수 호출
+    });
+
+    // 지역 필터링 이벤트 처리
+    $('#region-container').on('click', '.sub-region-btn', function() {
+        // 선택한 지역 버튼 스타일 처리
+        $('.sub-region-btn').removeClass('selected');
+        $(this).addClass('selected');
+        filterGroups();  // 필터링 함수 호출
+    });
+
     // 카테고리 제목 클릭 시 카테고리 목록 보이기/숨기기
     $('#category-toggle').on('click', function() {
         $('#category-container').toggle();
-    });
-
-    // 카테고리 라디오 버튼 선택 시 이벤트 처리
-    $('input[name="interest"]').on('change', function() {
-        const selectedInterest = $(this).val();
-        console.log('선택한 카테고리:', selectedInterest);
-        // 여기서 선택된 카테고리로 필요한 작업 수행 (예: 필터링)
     });
 
     // 지역별 필터 제목 클릭 시 필터 목록 보이기/숨기기
@@ -16,9 +68,9 @@ $(function() {
         $('#location-container').toggle();
     });
 
-    // 상위 지역 데이터
-	const regions = {
-	    "서울": ["서울 전체", "강남", "강동", "강북", "강서", "관악", "광진", "구로", "금천", "노원", "도봉", "동대문", "동작", "마포", "서대문", "서초", "성동", "성북", "송파", "양천", "영등포", "용산", "은평", "종로", "중구", "중랑"],
+    // 상위 지역 데이터 및 하위 지역 버튼 생성
+    const regions = {
+        "서울": ["서울 전체", "강남", "강동", "강북", "강서", "관악", "광진", "구로", "금천", "노원", "도봉", "동대문", "동작", "마포", "서대문", "서초", "성동", "성북", "송파", "양천", "영등포", "용산", "은평", "종로", "중구", "중랑"],
 	    "인천": ["인천 전체", "중구", "동구", "미추홀", "연수", "남동", "부평", "계양구", "서구", "강화", "옹진"],
 	    "경기": ["경기 전체", "수원", "성남", "고양", "용인", "부천", "안산", "안양", "남양주", "화성", "의정부", "시흥", "평택", "광명", "파주", "군포", "광주", "김포", "이천", "양주", "구리", "오산", "안성", "의왕", "하남", "포천", "동두천", "과천", "여주", "양평", "가평", "연천"],
 	    "강원": ["강원 전체", "춘천", "인제", "양구", "고성", "양양", "강릉", "속초", "삼척", "정선", "평창", "영월", "원주", "횡성", "홍천", "화천", "철원", "동해", "태백"],
@@ -35,7 +87,7 @@ $(function() {
 	    "울산": ["울산 전체", "남구", "동구", "북구", "중구", "울주군"],
 	    "부산": ["부산 전체", "중구", "서구", "동구", "영도구", "부산진구", "동래구", "남구", "북구", "강서구", "해운대구", "사하구", "금정구", "연제구", "수영구", "사상구", "기장군"],
 	    "제주": ["제주 전체", "제주", "한림", "애월", "구좌", "조천", "한경", "추자", "우도", "서귀포", "대정", "남원", "성산", "안덕", "표선"]
-	};
+    };
 
     // 상위 지역 버튼 생성
     const largeRegions = Object.keys(regions);
@@ -47,7 +99,7 @@ $(function() {
     $('#region-container').on('click', '.region-btn', function() {
         const regionKey = $(this).data('region');
         const subRegions = regions[regionKey];
-        
+
         // 다른 열려있는 모든 하위 지역들을 숨김
         $('.sub-region-list').not($(this).next('.sub-region-list')).slideUp();
 
@@ -64,39 +116,9 @@ $(function() {
         }
     });
 
-    // 세부 지역 버튼 클릭 시 추가적으로 할 작업
-    $('#region-container').on('click', '.sub-region-btn', function() {
-        const subRegion = $(this).data('subregion');
-        alert(`선택한 지역: ${subRegion}`);  // 여기서 원하는 작업을 수행 (예: 그룹 필터링)
-    });
-
     // 정렬 기준 토글
     $('#sort-toggle').on('click', function() {
         $('#sort-options').toggle();
     });
-
-    // 검색 버튼 클릭 이벤트
-    $('#searchButton').on('click', function() {
-        var searchQuery = $('#searchInput').val().trim();
-
-        if (searchQuery) {
-            console.log('검색어:', searchQuery);
-
-            $.ajax({
-                url: '/api/search',
-                type: 'GET',
-                data: { query: searchQuery },
-                success: function(response) {
-                    console.log('검색 결과:', response);
-                    $('.group-listing').html(response.html);
-                },
-                error: function(err) {
-                    console.error('검색 중 오류 발생:', err);
-                    alert('검색에 실패했습니다. 다시 시도해주세요.');
-                }
-            });
-        } else {
-            alert('검색어를 입력하세요.');
-        }
-    });
+    
 });

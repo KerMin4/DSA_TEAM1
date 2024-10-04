@@ -128,7 +128,10 @@ $(function() {
 	    if (!formData.get('memberLimit')) {
 	        formData.set('memberLimit', memberLimit);
 	    }
-
+	    
+	    // 해시태그 전송 - join()을 제거하고 그대로 설정
+    	formData.set('hashtags', formData.get('hashtags'));
+	
 	    if (!formData.get('interest')) return alert('관심사를 선택해주세요.');
 	    if (!formData.get('groupName')) return alert('그룹명을 입력해주세요.');
 	    if (!formData.get('eventDate')) return alert('활동 날짜를 선택해주세요.');
@@ -138,7 +141,7 @@ $(function() {
 	    if (!formData.get('joinMethod')) return alert('가입 권한을 선택해주세요.');
 	
 	    $.ajax({
-			url: '/socialgroup/create',
+	        url: '/socialgroup/create',
 	        type: 'POST',
 	        data: formData,
 	        processData: false,

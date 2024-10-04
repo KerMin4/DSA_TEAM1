@@ -4,10 +4,14 @@
     <meta charset="UTF-8">
     <title>그룹 게시판</title>
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+    <link th:href="@{/css/header.css}" rel="stylesheet">
+    <link th:href="@{/css/sidebar.css}" rel="stylesheet">
     <link th:href="@{/css/board.css}" rel="stylesheet">
     <script th:src="@{/js/board.js}"></script>
 </head>
 <body>
+    <th:block th:replace="fragments/header :: header"></th:block>
+    
     <div class="container">
         <!-- Sidebar Section -->
         <div class="sidebar">
@@ -20,8 +24,8 @@
         </div>
 
         <!-- Main Content Section -->
-        <!-- !!!!!!방장인 경우/ 방장이 아닌 경우 따로 분리할 것입니다!!!!!!! -->
         <div class="main-content">
+
             <nav class="tabs">
                 <a href="#" class="tab" data-content="announcement">공지사항</a>
                 <a href="#" class="tab" data-content="schedule">일정</a>
@@ -31,35 +35,17 @@
 
             <!-- Content Box -->
             <div class="content-box">
+
                 <div id="announcement" class="content-section">
                     <h3>📢 공지사항</h3>
-                    <p>이번 주 모임 일정과 장소입니다!!</p>
-                    <p>한 시간 전에 피자 10판 도착, 장소는 지원님 집으로 변경됐습니다</p>
-                    <div class="announcement-controls">
-                        <button>수정하기</button>
-                        <button>삭제하기</button>
-                    </div>
-                    
-                    <!-- 댓글 섹션 -->
+                    <textarea id="announcementText" placeholder="공지사항을 작성하세요..."></textarea>
+                    <button id="postAnnouncement">등록</button>
+                    <button id="editAnnouncement">수정</button>
                     <div class="comments-section">
-                        <h4>댓글 4</h4>
-                        <div class="comment">
-                            <img src="/path/to/comment1.jpg" alt="복이" class="comment-avatar">
-                            <p><strong>복이</strong> 글레이 님 딱 도노</p>
-                        </div>
-                        <div class="comment">
-                            <img src="/path/to/comment2.jpg" alt="오구" class="comment-avatar">
-                            <p><strong>오구</strong> 이번 주 모임 기대돼요!</p>
-                        </div>
-                        <!-- 추가 댓글 예시 -->
-                        <div class="comment">
-                            <img src="/path/to/comment3.jpg" alt="멤버1" class="comment-avatar">
-                            <p><strong>멤버1</strong> 재미있겠네요!</p>
-                        </div>
-                        <div class="comment">
-                            <img src="/path/to/comment4.jpg" alt="멤버2" class="comment-avatar">
-                            <p><strong>멤버2</strong> 모두 준비됐나요?</p>
-                        </div>
+                        <h4>댓글</h4>
+                        <input type="text" id="commentInput" placeholder="댓글 입력...">
+                        <button id="postComment">등록</button>
+                        <div id="commentsList"></div>
                     </div>
                 </div>
 
@@ -70,15 +56,104 @@
 
                 <div id="album" class="content-section hidden">
                     <h3>📸 앨범</h3>
-                    <p>앨범과 사진들을 여기에 표시합니다.</p>
+                    <input type="file" id="photoUpload" multiple>
+                    <button id="uploadPhotos">사진 업로드</button>
+                    <div id="uploadedPhotos"></div>
                 </div>
+                
+                <!-- 그룹 정보 섹션
+				<div class="group-info">
+				    
+				    <h2 th:text="${group.groupName}">그룹 이름</h2> 그룹 이름 표시
+				    <p th:text="${group.groupDescription}">그룹 설명</p> 그룹 설명 표시
+				    <p>위치: <span th:text="${group.location}">위치</span></p> 그룹 위치 표시
+				    <p>날짜: <span th:text="${#dates.format(group.eventDate, 'MM.dd(EEE) HH:mm')}">날짜</span></p> 그룹 이벤트 날짜 표시
+				    <p>인원: <span th:text="${group.memberCount}">인원 수</span>/<span th:text="${group.memberLimit}">최대 인원 수</span></p> 현재 인원 및 최대 인원 표시
+				   
+				</div> -->
 
                 <div id="settings" class="content-section hidden">
                     <h3>⚙️ 설정</h3>
-                    <p>그룹 설정 내용을 여기에 표시합니다.</p>
+                    <table>
+                        <tr>
+                            <td><strong>그룹 헤더 이미지</strong></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <img id="headerImagePreview" src="/path/to/placeholder.png" alt="헤더 이미지 미리보기" style="width:100px; height:100px; display:block;"> 기본 이미지 미리보기
+                                <input type="file" id="headerImageInput" accept="image/*">
+                                <button type="button" id="uploadHeaderImage">업로드</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>그룹 카테고리</strong></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="category-container">
+                                    <label><input type="radio" class="radio" name="interest" value="취미"> 취미</label>
+                                    <label><input type="radio" class="radio" name="interest" value="자기계발"> 자기계발</label>
+                                    <label><input type="radio" class="radio" name="interest" value="푸드"> 푸드</label>
+                                    <label><input type="radio" class="radio" name="interest" value="액티비티"> 액티비티</label>
+                                    <label><input type="radio" class="radio" name="interest" value="반려동물"> 반려동물</label>
+                                    <label><input type="radio" class="radio" name="interest" value="문화"> 문화</label>
+                                    <label><input type="radio" class="radio" name="interest" value="재테크"> 재테크</label>
+                                    <label><input type="radio" class="radio" name="interest" value="연애"> 연애</label>
+                                    <label><input type="radio" class="radio" name="interest" value="게임"> 게임</label>
+                                    <label><input type="radio" class="radio" name="interest" value="여행"> 여행</label>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>그룹 이름</strong></td>
+                        </tr>
+                        <tr>
+                            <td><input type="text" id="groupName" placeholder="그룹 이름"></td>
+                        </tr>
+                        <tr>
+                            <td><strong>그룹 설명</strong></td>
+                        </tr>
+                        <tr>
+                            <td><input type="text" id="groupDescription" placeholder="그룹 설명"></td>
+                        </tr>
+                        <tr>
+                            <td><strong>해시태그</strong></td>
+                        </tr>
+                        <tr>
+                        	<td><div id="hashtagContainer"></div></td> <!-- DB에서 불러온 해시태그들이 표시될 영역 -->
+                        </tr>
+                        <tr>
+                        	<td>
+	                        	<input type="text" name="hashtag" id="hashtag" placeholder="해쉬태그 입력">
+		                        <input type="button" id="addHashtag" value="등록">
+	                        </td>
+                        </tr>
+                    </table>
+
+                    <h4>그룹 멤버 관리</h4>
+                    <table>
+                        <tr>
+                            <td><input type="text" id="memberEmail" placeholder="멤버 이메일"></td>
+                            <td>
+                                <button id="inviteMember">멤버 초대</button>
+                                <button id="removeMember">멤버 삭제</button>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <h4>가입 방법 변경</h4>
+                    <table>
+                        <tr>
+                            <td><label><input type="radio" name="joinMethod" value="AUTO"> 바로 가입</label></td>
+                            <td><label><input type="radio" name="joinMethod" value="APPROVAL"> 승인 후 가입</label></td>
+                        </tr>
+                    </table>
+                    
+                    <input type="submit" value="변경사항 저장">
                 </div>
             </div>
         </div>
     </div>
+
 </body>
 </html>

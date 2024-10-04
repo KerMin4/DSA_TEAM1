@@ -4,10 +4,14 @@
     <meta charset="UTF-8">
     <title>그룹 생성 게시판</title>
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+    <link th:href="@{/css/header.css}" rel="stylesheet">
+    <link th:href="@{/css/sidebar.css}" rel="stylesheet">
     <link th:href="@{/css/createForm.css}" rel="stylesheet">
     <script th:src="@{/js/createForm.js}"></script>
 </head>
 <body>
+    <th:block th:replace="fragments/header :: header"></th:block>
+    
     <div class="container">
         <!-- Sidebar Section -->
         <div class="sidebar">
@@ -22,8 +26,9 @@
                 <li>태그를 적극 활용하세요.</li>
             </ul>
         </div>
-
-        <!-- Form Section -->
+        
+		<!-- Main-content Section -->
+		<div class="main-content">
         <div class="form-section">
             <form id="createForm" th:action="@{/socialgroup/create}" method="post" enctype="multipart/form-data">
                 <div class="category-container">
@@ -40,66 +45,68 @@
 				</div>
 
                 <table>
-                    <tr>
-                        <td colspan="2">
-                            <img id="imagePreview" src="/path/to/placeholder.png" alt="이미지 미리보기" style="display:block; width: 300px; height: 200px;">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <input type="text" name="groupName" id="groupName" placeholder="그룹이름을 입력하세요.">
-                        </td>
-                        <td>
-                            <input type="date" name="eventDate" id="eventDate">
-                            <input type="time" name="eventTime" id="eventTime">
-                        </td>
-                        <td>인원 수
-                            <div class="person-counter">
-                                <button type="button" id="decreaseCount"><</button>
-                                <span id="memberLimit">2</span>
-                                <button type="button" id="increaseCount">></button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <textarea name="description" id="description" placeholder="그룹에 대해 소개해보세요! ex. 취미계발 모임입니다."></textarea>
-                        </td>
-                        <td>
-                            <input type="file" name="profileImage" id="fileInput" class="tooltip-target">
-                            <button type="button" id="removeFile">파일 삭제</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>위치 설정</td>
-                        <td>
-                            <input type="text" name="location" id="location" placeholder="구 단위만 선택 가능해요">
-                        </td>
-                        <td>가입 권한</td>
-                        <td>
-                            <label><input type="radio" name="joinMethod" value="바로 가입"> 바로 가입</label>
-                            <label><input type="radio" name="joinMethod" value="승인 후 가입"> 승인 후 가입</label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <input type="text" name="hashtag" id="hashtag" placeholder="해쉬태그 입력">
-                            <input type="button" id="addHashtag" value="등록">
-                            <div id="hashtagContainer">
-                                <!-- 해시태그가 여기에 추가됨 -->
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <input type="submit" id="submitForm" value="그룹 생성">
-                        </td>
-                    </tr>
+	                <tr>
+	                    <td>
+	                        <img id="imagePreview" src="/path/to/placeholder.png" alt="이미지 미리보기" style="display:block;">
+	                    </td>
+	                </tr>
+	                <tr>
+	                    <td>
+	                        <input type="text" name="groupName" id="groupName" placeholder="그룹이름을 입력하세요.">
+	                    </td>
+	                    <td>
+	                        <input type="date" name="eventDate" id="eventDate">
+	                        <input type="time" name="eventTime" id="eventTime">
+	                    </td>
+	                    <td>인원 수
+	                        <div class="person-counter">
+	                            <button type="button" id="decreaseCount"><</button>
+	                            <span id="memberLimit">2</span>
+	                            <button type="button" id="increaseCount">></button>
+	                        </div>
+	                    </td>
+	                </tr>
+	                <tr>
+	                    <td>
+	                        <textarea name="description" id="description" placeholder="그룹에 대해 소개해보세요! ex. 취미계발 모임입니다."></textarea>
+	                    </td>
+	                    <td>
+	                        <input type="file" name="profileImage" id="fileInput" class="tooltip-target">
+	                        <button type="button" id="removeFile">파일 삭제</button>
+	                    </td>
+	                </tr>
+	                <tr>
+	                    <td>위치 설정</td>
+	                    <td>
+	                        <input type="text" name="location" id="location" placeholder="구 단위만 선택 가능해요">
+	                    </td>
+					    <td>가입 권한</td>
+					    <td>
+					        <label><input type="radio" name="joinMethod" value="AUTO"> 바로 가입</label>
+					        <label><input type="radio" name="joinMethod" value="APPROVAL"> 승인 후 가입</label>
+					    </td>
+					</tr>
+	                <tr>
+	                    <td>
+	                        <input type="text" name="hashtag" id="hashtag" placeholder="해쉬태그 입력">
+	                        <input type="button" id="addHashtag" value="등록">
+	                        <div id="hashtagContainer">
+	                            <!-- 해시태그가 여기에 추가됨 -->
+	                        </div>
+	                    </td>
+	                </tr>
+	                <tr>
+	                    <td>
+	                        <input type="submit" id="submitForm" value="그룹 생성">
+	                    </td>
+	                </tr>
                 </table>
             </form>
         </div>
     </div>
 
-    <div id="tooltip" class="tooltip">그룹 헤더 이미지를 설정하세요.<br>이미지를 설정하지 않을시, 디폴트 이미지가 적용됩니다.</div>
+    	<div id="tooltip" class="tooltip">그룹 헤더 이미지를 설정하세요.<br>이미지를 설정하지 않을시, 디폴트 이미지가 적용됩니다.</div>
+    
+    </div>
 </body>
 </html>
