@@ -18,7 +18,7 @@
     width: 350px; 
     height: 350px; 
     background-color: #FFFFFF; 
-    border: 1px solid rgba(0, 0, 0.0, 0.5); /* 외곽선 투명도 설정 */
+    border: 1px solid rgba(0, 0, 0.0, 0.5);
     border-radius: 10px; 
     padding: 20px; 
     margin: 120px auto; 

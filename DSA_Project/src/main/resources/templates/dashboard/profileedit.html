@@ -1,79 +1,29 @@
 <!DOCTYPE html>
-<html xmlns:th="thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>프로필 수정</title>
-    <script th:src="/js/jquery-3.7.1.min.js"></script>
-    <script>
-        $(document).ready(function(){
-            var formData = new FormData();
-
-            $('#submitForm').click(function(){
-                var selectedInterests = [];
-                $('input[name="interests"]:checked').each(function(){
-                    selectedInterests.push($(this).val());
-                });
-
-                var location = $('#location').val();
-                var phone = $('#phone').val();
-                var email = $('#email').val();
-                var profileImage = $('#profileImage')[0].files[0];
-
-                // 유효성 검사
-                if(selectedInterests.length === 0 || selectedInterests.length > 5){
-                    alert("최소한 하나의 취향을 선택해 주세요. (최대 5개)");
-                    return;
-                }
-                if(!location){
-                    alert("관심 지역을 입력해 주세요.");
-                    return;
-                }
-                if(!phone || !email || !profileImage){
-                    alert("모든 정보를 입력해 주세요.");
-                    return;
-                }
-
-                // FormData에 정보 추가
-                formData.append('interests', selectedInterests);
-                formData.append('location', location);
-                formData.append('phone', phone);
-                formData.append('email', email);
-                formData.append('profileImage', profileImage);
-              
-                // AJAX 요청
-                $.ajax({
-                    url: '/upload', 
-                    type: 'POST',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function(response) {
-                        alert("정보가 성공적으로 업데이트되었습니다.");
-                    },
-                    error: function(error) {
-                        alert("업데이트 실패: " + error.responseText);
-                    }
-                });
-            });
-
-            $('#cameraIcon').click(function(){
-                $('#profileImage').click(); 
-            });
-
-            $('#profileImage').change(function(){
-                var fileName = $(this).val().split('\\').pop(); 
-                $('#fileNameDisplay').text(fileName);
-            });
-        });
-    </script>
+    <link rel="stylesheet" type="text/css" href="/kkirikkiri/css/profileEdit.css">
+    <link rel="stylesheet" type="text/css" href="/kkirikkiri/css/header.css">
+    <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+    <script th:src="@{/js/profileEdit.js}"></script> 
 </head>
 <body>
-    <h2>프로필을 수정하세요!</h2>
-    <p style="color: gray;">(관심사는 최대 5개까지 선택 가능해요.)</p>
     
-    <form id="form-profile-edit">
+   
+    <div th:replace="dashboard/header :: header('profileedit')"></div>
+   
+    <div class="profile-edit-section">
         <div>
-            <h3>취향 설정</h3>
+            <img id="profileImage" src="/kkirikkiri/images/profile-image.jpg" alt="프로필 이미지" style="cursor:pointer; width: 150px; height: 150px; border-radius: 50%;"> <!-- 기존 프로필 사진 불러오기 -->
+            <input type="file" id="profileImageUpload" name="profileImage" accept="image/*" style="display:none;"> <!-- 숨겨진 파일 입력 -->
+        </div>
+        <button type="button" id="submitProfileImage">사진 수정하기</button>
+    </div>
+
+    <div class="step active" id="step1">
+        <h2>취향이 달라졌다면, 다시 설정해보세요!</h2>
+        <form id="form-step1">
             <input type="checkbox" name="interests" value="취미"> 취미<br>
             <input type="checkbox" name="interests" value="자기계발"> 자기계발<br>
             <input type="checkbox" name="interests" value="푸드"> 푸드<br>
@@ -84,25 +34,22 @@
             <input type="checkbox" name="interests" value="연애"> 연애<br>
             <input type="checkbox" name="interests" value="게임"> 게임<br>
             <input type="checkbox" name="interests" value="여행"> 여행<br>
-        </div>
-        
-        <div>
-            <h3>관심 지역</h3>
+        </form>
+    </div>
+
+    <div class="step" id="step2">
+        <h2>새로운 곳에서 활동하고 싶다면, 위치를 변경해보세요! </h2>
+        <form id="form-step2">
             <input type="text" id="location" name="location" placeholder="관심 지역 입력"><br>
-        </div>
-        
-        <div>
-            <h3>연락처 정보</h3>
-            <input type="text" id="phone" name="phone" placeholder="휴대전화"><br>
+        </form>
+    </div>
+
+    <div class="step" id="step3">
+        <form id="form-step3" action="/upload" method="post" enctype="multipart/form-data">
+            <input type="text" id="phone" name="phoneNumber" placeholder="휴대전화"><br>
             <input type="email" id="email" name="email" placeholder="이메일"><br>
-            <div>
-                <img id="cameraIcon" src="camera_icon.png" alt="카메라" style="cursor:pointer; width: 50px; height: 50px;"> <!-- 카메라 아이콘 -->
-                <input type="file" id="profileImage" name="profileImage" accept="image/*" style="display:none;"> <!-- 숨겨진 파일 입력 -->
-                <span id="fileNameDisplay">파일을 선택하세요.</span> 
-            </div>
-        </div>
-        
-        <button type="button" id="submitForm">수정하기</button>
-    </form>
+            <button type="button" id="submitForm">수정하기</button>
+        </form>
+    </div>
 </body>
 </html>

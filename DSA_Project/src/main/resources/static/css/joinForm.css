@@ -1,5 +1,3 @@
-@charset "UTF-8";
-
 @font-face {
     font-family: 'S-CoreDream-5Medium';
     src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-5Medium.woff') format('woff'); 
@@ -15,7 +13,6 @@
     margin-top: 40px;
 }
 
-/* 동그라미... 관련임 */
 .step-circle {
     width: 20px;
     height: 20px;
@@ -63,12 +60,13 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-top: 23px;
 }
 
 .interests-row {
     display: flex;
     justify-content: center;
-    margin-bottom: -10px; /* 각 행 */
+    margin-bottom: -10px;
 }
 
 .interest-option {
@@ -79,41 +77,40 @@
     justify-content: center;
     text-align: center;
     font-size: 16px;
-    margin: -20px; 
+    margin: -20px;
     position: relative;
-    margin-top: 6px; 
+    margin-top: 6px;
+    cursor: pointer;
 }
 
 .interest-option input[type="checkbox"] {
-    display: none; 
+    display: none;
 }
 
 .interest-text {
-    width: 60px; 
+    width: 60px;
     height: 25px;
-    background-color: rgba(255, 255, 255, 0.8); 
-    border: 1px solid rgba(0, 0, 0, 0.5); 
-    border-radius: 20px; 
-    color: #000000; 
-    font-family: 'S-CoreDream-5Medium', sans-serif; 
-    font-size: 13px; 
-    text-align: center; 
-    line-height: 25px; 
-    cursor: pointer; 
-    margin-bottom: -13px; 
-    transition: background-color 0.3s; 
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    border-radius: 20px;
+    color: #000000;
+    font-family: 'S-CoreDream-5Medium', sans-serif;
+    font-size: 13px;
+    text-align: center;
+    line-height: 25px;
+    transition: background-color 0.3s;
 }
 
 .interest-text:hover {
-    background-color: #E48F85; 
+    background-color: #E48F85;
 }
 
 .interest-option input[type="checkbox"]:checked + .interest-text {
-    background-color: #E48F85; 
+    background-color: #E48F85;
     color: #000000;
 }
 
-/* 취미 부터 */
+/* 취미부터 */
 .hobby {
     background-image: url('../images/hobby.png');
     background-size: 70px 70px;
@@ -184,23 +181,22 @@
     background-position: top center;
 }
 
-/* 버튼 스타일 */
 #nextStep1, #nextStep2, #submitForm, #prevStep1, #prevStep2, #prevStep3 {
-    width: 80x; 
+    width: 68px;
     height: 23px;
-    background-color: #FFFFFF; 
-    border: 1px solid #81BBF6; 
-    border-radius: 20px; 
+    background-color: #FFFFFF;
+    border: 1px solid #81BBF6;
+    border-radius: 20px;
     color: #81BBF6;
-    font-family: 'S-CoreDream-5Medium', sans-serif; 
+    font-family: 'S-CoreDream-5Medium', sans-serif;
     font-size: 13px;
-    cursor: pointer; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    margin: 17px 1px; 
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0px;
+    margin-top: -20px;
 }
-
 
 .center-content {
     display: flex;
@@ -209,23 +205,177 @@
     justify-content: center;
     text-align: center;
     margin-bottom: 20px;
-    margin-top: -15px;
+    margin-top: -30px;
 }
 
 .center-content h2 {
     font-size: 20px;
-    margin: 0; 
+    margin: 0;
 }
 
 .center-content p {
     font-size: 16px;
     color: #777;
-    margin-top: 20px;
+    margin-top: 10px;
+    text-align: center;
 }
 
 button {
-    cursor: pointer; 
-    padding: 10px 15px; 
-    font-size: 14px; 
+    cursor: pointer;
+    padding: 10px 15px;
+    font-size: 14px;
     margin-right: 10px;
-}  
+}
+
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+#prevStep3 {
+    margin: 0px;
+    margin-top: -20px;
+}
+
+#submitForm {
+    margin-left: 15px;
+}
+
+#profileImagePreview {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-image: url('../images/default.png');
+    background-size: cover;
+    display: inline-block;
+}
+
+.label-image {
+    cursor: pointer;
+    display: block;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-image: url('../images/default.png');
+    background-size: cover;
+    margin-bottom: 10px;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+}
+
+.step-title {
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.button-field {
+    border: none; 
+    background: none; 
+    padding: 0; 
+    margin: 0; 
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 40px;
+}
+
+#form-step3 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#userid {
+    flex-grow: 1; 
+    border: none;
+    border-bottom: 1px solid #ccc;
+    background: none;
+    font-size: 14px;
+    outline: none;
+    width: calc(100% - 85px); 
+
+}
+
+#form-step3 input[type="text"],
+#form-step3 input[type="password"],
+#form-step3 input[type="email"],
+#userid {
+    width: 100%; 
+    max-width: 300px;
+    padding: 10px 5px;
+    margin: 10px 0;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    background: none;
+    font-size: 14px;
+    outline: none;
+    padding-left: 0; /* padding-left 제거 */
+}
+
+#form-step3 input[type="text"]:focus,
+#form-step3 input[type="password"]:focus,
+#form-step3 input[type="email"]:focus,
+#userid:focus {
+    border-bottom: 1px solid #81BBF6;
+}
+.input-with-button {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    width: 100%; 
+    max-width: 200px; 
+}
+
+
+.input-with-button input,
+.form-container input {
+    width: 100%;
+    max-width: 300px;
+    padding: 10px 5px;
+    margin: 10px 0;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    background: none;
+    font-size: 14px;
+    outline: none;
+}
+
+
+#duplicateCheck {
+    padding: 5px 10px;
+    background-color: #ffffff;
+    border: 1px solid #81BBF6;
+    border-radius: 20px;
+    color: #81BBF6;
+    font-family: 'S-CoreDream-5Medium', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    white-space: nowrap;
+    width: 80px;
+}
+
+#form-step3 input[type="text"],
+#form-step3 input[type="password"],
+#form-step3 input[type="email"],
+#userid,
+#form-step3 label {
+    font-family: 'S-CoreDream-3Light', sans-serif; 
+    font-weight: 300; 
+}
