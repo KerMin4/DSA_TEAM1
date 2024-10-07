@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class NotificationDTO {
 	
 	private Integer notificationId;		// PK. Notification ID
-	private Integer userId;				// FK. User ID
+	private String userId;				// FK. User ID
 	private String message;				// Content of notification
 	private Boolean readStatus;			// Whether the user had read the notification
 	private LocalDateTime createdAt;	// When the notification was created

@@ -19,9 +19,8 @@ public class SocialGroupDTO {
 	private String groupName;					// Social Group's name
 	private String description;					// Description of the group
 	private String profileImage;				// Image representing the group
-	private String interests;					// Category of the group
 	private String location;					// Group members' preferred region
-	private Integer groupLeaderId;				// FK. Group Leader ID
+	private String groupLeaderId;				// FK. Group Leader ID
 	private GroupJoinMethod groupJoinMethod;	// Whether approval need or not when joining the group
 	private Integer memberLimit;				// Maximum number of the group members
 	private Integer viewCount;					// How many users have seen the group post

@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 /**
  * Page		Join
  * Function	Hashtag
- * @version CreateTables_6
+ * @version CreateTables_9
  */
 @Entity
 @Builder

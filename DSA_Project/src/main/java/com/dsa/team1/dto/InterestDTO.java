@@ -2,18 +2,19 @@ package com.dsa.team1.dto;
 
 import java.time.LocalDateTime;
 
+import com.dsa.team1.entity.enums.UserGroupStatus;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @Builder
-@NoArgsConstructor
+@Data
 @AllArgsConstructor
-public class MemberHashtagDTO {
-	
-	private Integer hashtagId;	// PK. Hashtag ID
-	private String userId;		// FK. User ID
-	private String name;		// Hashtag's name
+@NoArgsConstructor
+public class InterestDTO {
+	private Integer interestId;
+	private String userId;
+	private String interest;
 }

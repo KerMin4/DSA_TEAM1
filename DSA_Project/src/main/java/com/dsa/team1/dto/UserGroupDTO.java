@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class UserGroupDTO {
 
 	private Integer userGroupId;			// PK. UserGroup ID
-	private Integer userId;					// FK. User ID
+	private String userId;					// FK. User ID
 	private Integer groupId;				// FK. Social Group ID
 	private LocalDateTime joinedAt;			// Date and time User joined the group
 	private UserGroupStatus userStatus;		// Whether user is authorized to join the group
