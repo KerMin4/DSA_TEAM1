@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class UserPlaceDTO {
 
 	private Integer userPlaceId;		// PK. UserPlace ID
-	private Integer userId;				// FK. User ID
+	private String userId;				// FK. User ID
 	private Integer placeId;			// FK. Place ID
 	private LocalDateTime joindAt;		// When user has joined the Place post
 	private UserPlaceStatus status;		// Whether user request is approved

@@ -28,7 +28,7 @@ import lombok.NoArgsConstructor;
 /**
  * Page 	Socialing	Place
  * Function Settlement	Payment 
- * @version CreateTables_6
+ * @version CreateTables_9
  */
 @Entity
 @Builder

@@ -7,13 +7,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @Builder
-@NoArgsConstructor
+@Data
 @AllArgsConstructor
-public class MemberHashtagDTO {
+@NoArgsConstructor
+public class ReplyDTO {
 	
-	private Integer hashtagId;	// PK. Hashtag ID
-	private String userId;		// FK. User ID
-	private String name;		// Hashtag's name
+	private Integer replyId;
+	private Integer postId;
+	private String userId;
+	private String content;
+	private LocalDateTime createdAt;
 }

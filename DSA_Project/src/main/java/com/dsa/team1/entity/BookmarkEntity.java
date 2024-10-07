@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 /**
  * Page		Socialing, Trend, Place, MyPage
  * Function	Bookmark
- * @version CreateTables_6
+ * @version CreateTables_9
  */
 @Entity
 @Builder

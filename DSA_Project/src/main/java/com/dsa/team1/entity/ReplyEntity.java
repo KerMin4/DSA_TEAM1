@@ -11,13 +11,11 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 /**
  * Page		Socialing
- * Function	Hashtag
+ * Function	Reply in group post, including photos
  * @version CreateTables_9
  */
 @Entity
@@ -25,20 +23,19 @@ import lombok.Setter;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "GroupHashtag")
-public class GroupHashtagEntity {
+@Table(name = "Reply")
+public class ReplyEntity {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "reply_id")
+	private Integer replyId;
 	
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "hashtag_id")
-    private Integer hashtagId;
-
-    @ManyToOne
-    @JoinColumn(name = "group_id")
-    private SocialGroupEntity group; 
-
-    // name of Hashtag
-    @Column(length = 50)
-    private String name;
-
+	@ManyToOne
+	@JoinColumn(name = "post_id")
+	private PostEntity post;
+	
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private UserEntity user;
 }

@@ -1,7 +1,11 @@
 package com.dsa.team1.entity;
 
+import com.dsa.team1.entity.enums.Interest;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -11,13 +15,11 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 /**
- * Page		Socialing
- * Function	Hashtag
+ * Page		Join, Socialing
+ * Function	User and Group's category
  * @version CreateTables_9
  */
 @Entity
@@ -25,20 +27,19 @@ import lombok.Setter;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "GroupHashtag")
-public class GroupHashtagEntity {
-	
-    @Id
+@Table(name = "Interest")
+public class InterestEntity {
+
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "hashtag_id")
-    private Integer hashtagId;
+    @Column(name = "interest_id")
+    private Integer interestId;
 
     @ManyToOne
-    @JoinColumn(name = "group_id")
-    private SocialGroupEntity group; 
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
 
-    // name of Hashtag
-    @Column(length = 50)
-    private String name;
-
+    @Enumerated(EnumType.STRING)
+    @Column(name = "interest", nullable = false)
+    private Interest interest;
 }
