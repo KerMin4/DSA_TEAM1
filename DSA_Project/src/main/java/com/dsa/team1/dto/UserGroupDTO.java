@@ -19,5 +19,5 @@ public class UserGroupDTO {
 	private String userId;					// FK. User ID
 	private Integer groupId;				// FK. Social Group ID
 	private LocalDateTime joinedAt;			// Date and time User joined the group
-	private UserGroupStatus userStatus;		// Whether user is authorized to joine the group
+	private UserGroupStatus userStatus;		// Whether user is authorized to join the group
 }

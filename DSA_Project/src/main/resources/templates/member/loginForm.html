@@ -5,13 +5,12 @@
     <title>Kkiri Kkiri</title>
     <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="/kkirikkiri/css/main.css">
-    <link rel="stylesheet" type="text/css" href="/kkirikkiri/css/mainheader.css"> 
+    <link rel="stylesheet" type="text/css" href="/kkirikkiri/css/header.css"> 
     <link rel="stylesheet" type="text/css" href="/kkirikkiri/css/loginForm.css"> 
 </head>
 <body>
-    <!-- header fragment 불러오기 -->
-    <th:block th:replace="fragments/header :: header"></th:block>
-
+	<div th:replace="~{fragments/header :: header}"></div>
+	
     <main>
         <div class="login-container">
             <h1 class="welcome-text">Welcome!</h1>
@@ -20,7 +19,8 @@
                 <hr class="divider"> 
                 <input type="password" id="password" placeholder="비밀번호" class="password-input" required>
             </div>
-            <button class="login-button">로그인</button> 
+            <button class="login-button">로그인</button>
+            <button id = "btn-login" class = "btn btn-primary">로그인</button> 
         </div>
     </main>
 </body>
