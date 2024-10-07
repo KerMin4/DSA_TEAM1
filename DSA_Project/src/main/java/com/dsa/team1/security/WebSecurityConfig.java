@@ -19,10 +19,14 @@ public class WebSecurityConfig {
 			"/images/**",
 			"/css/**",
 			"/js/**",
-			"/member/join",
+			"/member/joinForm",
 			"/member/login",
+			"/kkirikkiri/member/join",
 			"/socialgroup/**",
-			"/dashboard/**"       // 나중에 까먹지말고 빼야댐 (나연)
+			"/dashboard/**",       // 나중에 까먹지말고 빼야댐 (나연)
+			"/member/joinForm1",
+			"/member/join1",
+			"/member/join"
 	};
 	
 	@Bean

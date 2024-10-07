@@ -97,7 +97,6 @@
             });
 
             $('#submitForm').click(function(e) {
-                e.preventDefault(); 
                 console.log('가입하기 버튼 클릭'); 
 
                 var userid = $('#userid').val();
@@ -116,13 +115,60 @@
                     return;
                 }
 
-                formData.userid = userid;
-                formData.password = password;
-                formData.phone = phone;
-                formData.email = email;
-
+                var userData = {
+					userid : userid,
+					password : password,
+					phone : phone,
+					email : email,
+					interests : formData.interests,
+					location : formData.location
+				};
+				formData.userid = userid;
+				formData.password = password;
+				formData.email = email;
+				formData.phone = phone;
+				
+				$.post('/kkirikkiri/member/join', formData, function(response){
+					console.log("가입 성공!", response);
+					window.location.href = '/kkirikkiri';
+				}).fail(function(error){
+					console.log("가입 실패:", error);
+					alert("가입중 오류 발생");
+					console.log(formData);
+				});
+				/*
+				$.get('/member/join',userData, function(response){
+					console.log("제발", response);
+					window.location.href = '/kkirikkiri';
+				}).fail(function(error){
+					console.log("가입시랲", error);
+					alert("제발");
+				})
+				*/
+				console.log("formData : ", formData);
+				console.log(formData.interests);
+				alert(formData.interests);
+               /*
+                $.post('/member/join', formData, function(response){
+					console.log("제발");
+					window.location.href = "/kkirikkiri";
+				}).fail(function(error){
+					console.log("error :", error);
+				});
+				*/
                 console.log('가입할 데이터:', formData);  
                 // 여기에 가입 처리 로직 추가
+                /*$.ajax({
+					url : '/member/join',
+					type : 'POST',
+					data: userData,
+					success: function(){
+						console.log('성공');
+						window.location.href = '/kkirikkiri/';
+					},error: function(error){
+						console.log("에러");
+					}
+				});*/
             });
 
             $('input[name="interests"]').change(function() {
@@ -133,7 +179,7 @@
                     $(this).prop('checked', false);
                 }
 
-                $('.interest-text').css('background-color', '#FFFFFF').css('color', '#000000');
+                $('.interest-text').css('background-color', '#FFFFFF').css('color', '#000000');3
                 $('input[name="interests"]:checked').each(function() {
                     $(this).siblings('.interest-text').css('background-color', '#F8B1A3').css('color', '#000000');
                 });

@@ -1,7 +1,8 @@
 package com.dsa.team1.entity;
 
-import java.time.LocalDateTime; 
+import java.time.LocalDateTime;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -41,7 +42,7 @@ public class UserEntity {
     private String password;
     
     //Nickname
-    @Column(name = "name", nullable = false, length = 50)
+    @Column(name = "name", nullable = true, length = 50)
     private String name;
     
     @Column(name = "phone_number", length = 20)
@@ -54,15 +55,16 @@ public class UserEntity {
     @Column(name = "preferred_location")
     private String preferredLocation;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "join_method", nullable = false)
-    private JoinMethod joinMethod;
+    @Column(name = "join_method", nullable = true)
+    @ColumnDefault("'WEBSITE'")
+    private String joinMethod;
 
     @Column(name = "profile_image")
     private String profileImage;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "user_type", nullable = false)
+    @Column(name = "user_type", nullable = true)
+    @ColumnDefault("'USER'")
     private UserType userType;
 
     @CreatedDate

@@ -24,9 +24,9 @@ public class UserDTO {
 	private String email;				// Email
 	private String interests;			// Category
 	private String preferredLocation;	// User prefered area
-	private JoinMethod joinMethod;		// joined usual(Website) or Social(Kakao) login
+	private String joinMethod;		// joined usual(Website) or Social(Kakao) login
 	private String profileImage;		// User customized profile
 	private UserType userType;			// joined as individual or vendor
 	private LocalDateTime createdAt;	// joined date and time
-	
+	private LocalDateTime updatedAt;
 }

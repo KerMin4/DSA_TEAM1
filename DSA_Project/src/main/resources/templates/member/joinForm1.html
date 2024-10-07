@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns:th = "thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>회원가입</title>
+<script th:src = "@{/js/jquery-3.7.1.min.js}"></script>
+<script th:src = "@{/js/joinForm1.js}"></script>
+<link rel = "stylesheet" type = "text/css" href="/kkirikkiri/css/joinForm.css">
+<link rel = "stylesheet" type = "text/css" href="/kkirikkiri/css/main.css">
+<link rel = "stylesheet" type = "text/css" href="/kkirikkiri/css/mainheader.css">
+</head>
+<body>
+	<th:block th:replace = "~{fragments/header :: header}"></th:block>
+	<div class = "stepper">
+		<div class = "step-circle active" id = "step-circle-1">1</div>
+		<div class = "line active" id = "line-1"></div>
+		<div class = "step-circle active" id = "step-circle-2">2</div>
+		<div class = "line" id = "line-2"></div>
+		<div class = "step-circle" id = "step-circle-3">3</div>
+	</div>
+<form>
+    <div class="step active" id="step1">
+    	<div class = "center-content">
+        <h2>요즘 뭐에 빠져있나요?</h2>
+        <h2> 당신의 취향을 알려주세요!</h2>
+        <p>(관심사는 최대 5개까지 선택 가능해요.)</p>
+        </div>
+        <div id="form-step1" class = "interest-container">
+        	<div class="interests-container">
+                <div class="interests-row">
+                    <div class="interest-option hobby">
+                        <input type="checkbox" id="hobby" name="interests" value="취미">
+                        <label for="hobby" class="interest-text">취미</label>
+                    </div>
+                    <div class="interest-option development">
+                        <input type="checkbox" id="development" name="interests" value="자기계발">
+                        <label for="development" class="interest-text">자기계발</label>
+                    </div>
+                    <div class="interest-option food">
+                        <input type="checkbox" id="food" name="interests" value="푸드">
+                        <label for="food" class="interest-text">푸드</label>
+                    </div>
+                </div>
+                <div class="interests-row">
+                    <div class="interest-option activity">
+                        <input type="checkbox" id="activity" name="interests" value="액티비티">
+                        <label for="activity" class="interest-text">액티비티</label>
+                    </div>
+                    <div class="interest-option pets">
+                        <input type="checkbox" id="pets" name="interests" value="반려동물">
+                        <label for="pets" class="interest-text">반려동물</label>
+                    </div>
+                    <div class="interest-option culture">
+                        <input type="checkbox" id="culture" name="interests" value="문화">
+                        <label for="culture" class="interest-text">문화</label>
+                    </div>
+                    <div class="interest-option money">
+                        <input type="checkbox" id="money" name="interests" value="재테크">
+                        <label for="money" class="interest-text">재테크</label>
+                    </div>
+                </div>
+                <div class="interests-row">
+                    <div class="interest-option love">
+                        <input type="checkbox" id="love" name="interests" value="연애">
+                        <label for="love" class="interest-text">연애</label>
+                    </div>
+                    <div class="interest-option game">
+                        <input type="checkbox" id="game" name="interests" value="게임">
+                        <label for="game" class="interest-text">게임</label>
+                    </div>
+                    <div class="interest-option travel">
+                        <input type="checkbox" id="travel" name="interests" value="여행">
+                        <label for="travel" class="interest-text">여행</label>
+                    </div>
+                </div>
+            </div>
+            <div class="button-container">
+                <button type="button" id="prevStep1" style="margin-right: 10px;"> < 이전</button>
+                <button type="button" id="nextStep1"> 다음 > </button>
+            </div>
+        <!-- 
+            <input type="checkbox" name="interests" value="취미"> 취미<br>
+            <input type="checkbox" name="interests" value="자기계발"> 자기계발<br>
+            <input type="checkbox" name="interests" value="푸드"> 푸드<br>
+            <input type="checkbox" name="interests" value="액티비티"> 액티비티<br>
+            <input type="checkbox" name="interests" value="반려동물"> 반려동물<br>
+            <input type="checkbox" name="interests" value="문화"> 문화<br>
+            <input type="checkbox" name="interests" value="재테크"> 재테크<br>
+            <input type="checkbox" name="interests" value="연애"> 연애<br>
+            <input type="checkbox" name="interests" value="게임"> 게임<br>
+            <input type="checkbox" name="interests" value="여행"> 여행<br>
+            <button type="button" id="nextStep1">다음 페이지</button>
+         -->
+        </div>
+    </div>
+
+    <div class="step" id="step2" style = "display: none;">
+        <h2>어디에서 살펴볼까요? 관심 지역을 선택해주세요!</h2>
+        <div id="form-step2">
+        	<div class = "interests-container">
+            <input type="text" id="location" name="location" placeholder="관심 지역 입력"><br>
+            </div>
+            <div class = "button-container">
+            	<button type="button" id="prevStep2" style="margin-right: 10px;"> < 이전 </button>
+                <button type="button" id="nextStep2"> 다음 > </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="step" id="step3" style = "display :none;">
+    <div class = "center-content">
+        <h2>이제 거의 다 왔어요!</h2>
+    </div>
+        <div id="form-step3">
+        <!-- 
+            <input type="text" id="userid" name="userid" placeholder="아이디"><br>
+            <input type="password" id="password" name="password" placeholder="비밀번호"><br>
+            <input type="password" id="password2" name="password2" placeholder="비밀번호 확인"><br>
+            <input type="text" id="phone" name="phone" placeholder="휴대전화"><br>
+            <input type ="email" id = "email" name = "email" placeholder = "이메일"><br>
+            <button type="button" id="submitForm">가입하기</button>
+            -->
+             <div class="profile-container">
+            <label for="profileImage" class="label-image"></label> 
+            <input type="file" id="profileImage" name="profileImage" accept="image/*" style="display: none;">
+        </div>
+       
+        <div class="input-with-button">
+            <div class="input-field">
+                <input type="text" id="userid" name="userid" placeholder="아이디">
+            </div>
+            <div class="button-field">
+                <button type="button" id="duplicateCheck">중복확인</button>
+            </div>
+        </div>
+        <input type="password" id="password" name="password" placeholder="비밀번호"><br>
+        <input type="password" id="password2" name="password2" placeholder="비밀번호 재확인"><br>
+        <input type="email" id="email" name="email" placeholder="이메일"><br>
+        <input type="text" id="phone" name="phone" placeholder="휴대전화"><br>
+        <div class="button-container">
+            <button type="button" id="prevStep3"> < 이전</button>
+            <button type="button" id="submitForm">가입 > </button>
+        </div>
+        </div>
+    </div>
+    </form>
+</body>
+</html>
