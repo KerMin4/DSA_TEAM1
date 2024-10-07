@@ -60,11 +60,13 @@ public class LoginController{
 			@RequestParam("userid") String userid,
 			@RequestParam("password")String password,
 			@RequestParam("email")String email,
-			@RequestParam("phone")String phone
+			@RequestParam("phone")String phone,
+			@RequestParam("name")String name,
+			@RequestParam("username")String username
 			) {
 		log.debug("흥미: {}", interests);
 		log.debug(location);
-		us.join(userid, password, phone, email, location);
+		us.join(userid, password, phone, email, location, name, username);
 		return "redirect:/";
 	}
 	
