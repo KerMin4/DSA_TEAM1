@@ -21,13 +21,15 @@ public class UserServiceImpl implements UserService{
 	private final UserRepository ur;
 	
 	@Override
-	public void join(String userName, String password, String phone, String email, String location/*, List<String> interests */) {
+	public void join(String userid, String password, String phone, String email, String location, String name, String username/*, List<String> interests */) {
 		UserEntity userEntity = UserEntity.builder()
-								.userName(userName)
+								.userId(userid)
 								.password(password)
 								.phoneNumber(phone)
 								.email(email)
 								.preferredLocation(location)
+								.userName(username)
+								.name(name)
 								.build();
 		ur.save(userEntity);
 	}

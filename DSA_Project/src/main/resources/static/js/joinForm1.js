@@ -44,8 +44,9 @@ $(document).ready(function(){
 			var password2 = $('#password2').val();
 			var phone = $('#phone').val();
 			var email = $('#email').val();
-
-			if(!userid || !password || !password2 || !phone || !email){
+			var username = $('#username').val();
+			var name = $('#name').val();
+			if(!userid || !password || !password2 || !phone || !email || !name || !username){
 				alert("모든 정보를 입력해 주세요.");
 				return;
 			}
@@ -59,7 +60,8 @@ $(document).ready(function(){
 			formData.password = password;
 			formData.phone = phone;
 			formData.email = email;
-			
+			formData.name = name;
+			formData.username = username;
 			alert(formData);
 			console.log(formData);
 			console.log(formData.interests);
