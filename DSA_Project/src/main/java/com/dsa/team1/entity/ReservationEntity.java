@@ -27,7 +27,7 @@ import lombok.NoArgsConstructor;
 /**
  * Page Place 
  * Function Reservation 
- * @version CreateTable_6
+ * @version CreateTable_9
  */
 @Entity
 @Builder

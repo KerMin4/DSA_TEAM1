@@ -14,6 +14,6 @@ import lombok.NoArgsConstructor;
 public class MemberHashtagDTO {
 	
 	private Integer hashtagId;	// PK. Hashtag ID
-	private Integer userId;		// FK. User ID
+	private String userId;		// FK. User ID
 	private String name;		// Hashtag's name
 }

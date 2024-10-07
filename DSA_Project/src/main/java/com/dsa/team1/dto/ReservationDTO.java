@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 public class ReservationDTO {
 	
 	private Integer reservationId;				// PK. Reservation ID
-	private Integer userId;						// FK. User ID
+	private String userId;						// FK. User ID
 	private Integer placeId;					// FK. Place ID
 	private LocalDateTime reservationDate;		// When user has reservated
 	private ReservationStatus status;			// Whether the reservation was confirmed

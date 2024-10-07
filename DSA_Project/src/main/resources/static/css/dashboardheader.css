@@ -1,0 +1,37 @@
+/* @font-face 폰트 정의 */
+@font-face {
+    font-family: 'S-CoreDream-3Light';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'S-CoreDream-5Medium';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-5Medium.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* 링크 스타일 기본값 (S-CoreDream-3Light 적용) */
+nav ul li a {
+    text-decoration: none;
+    list-style-type: none;
+    font-family: 'S-CoreDream-3Light', sans-serif; /* 기본적으로 S-CoreDream-3Light 폰트 적용 */
+    font-size: 20px; /* 폰트 크기 */
+    color: black; /* 기본 색상 */
+}
+
+/* 활성화된 링크 스타일 (S-CoreDream-5Medium 적용) */
+nav ul li a.active {
+    font-family: 'S-CoreDream-5Medium', sans-serif; /* 활성화된 링크에 S-CoreDream-5Medium 폰트 적용 */
+    font-weight: bold;
+    color: black; /* 활성화 색상을 검은색으로 변경 */
+}
+
+/* 리스트 스타일 */
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}

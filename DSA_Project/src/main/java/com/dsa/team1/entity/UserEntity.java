@@ -22,6 +22,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Page		Join, Login, etc
+ * Function	User Information
+ * @version CreateTable_9
+ */
 @Entity
 @Builder
 @Data
@@ -30,41 +35,36 @@ import lombok.NoArgsConstructor;
 @Table(name = "User")
 public class UserEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    private Integer userId;
+    private String userId;
 
     // Real name
-    @Column(name = "username", nullable = false)
+    @Column(name = "username")
     private String userName;
     
     @Column(name = "password", nullable = false)
     private String password;
     
     //Nickname
-    @Column(name = "name", nullable = true, length = 50)
+    @Column(name = "name", length = 50)
     private String name;
     
     @Column(name = "phone_number", length = 20)
     private String phoneNumber;
     private String email;
     
-    @Column(columnDefinition = "text")
-    private String interests;
-    
     @Column(name = "preferred_location")
     private String preferredLocation;
 
-    @Column(name = "join_method", nullable = true)
-    @ColumnDefault("'WEBSITE'")
-    private String joinMethod;
+
+    @Column(name = "join_method")
+    private JoinMethod joinMethod;
 
     @Column(name = "profile_image")
     private String profileImage;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "user_type", nullable = true)
-    @ColumnDefault("'USER'")
+    @Column(name = "user_type", columnDefinition = "ENUM('user', 'vendor') default 'user'")
     private UserType userType;
 
     @CreatedDate

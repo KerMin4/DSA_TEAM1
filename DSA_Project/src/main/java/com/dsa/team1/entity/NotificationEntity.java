@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 /**
  * Page		Top right of all logged-in pages
  * Function	Notify group membership, etc
- * @version	CreateTables_6
+ * @version	CreateTables_9
  */
 @Entity
 @Builder

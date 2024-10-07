@@ -18,7 +18,7 @@ import lombok.Setter;
 /**
  * Page		Socialing
  * Function	Hashtag
- * @version CreateTables_6
+ * @version CreateTables_9
  */
 @Entity
 @Builder
@@ -26,8 +26,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "GroupHashtag")
-@Getter
-@Setter
 public class GroupHashtagEntity {
 	
     @Id
@@ -37,7 +35,7 @@ public class GroupHashtagEntity {
 
     @ManyToOne
     @JoinColumn(name = "group_id")
-    private SocialGroupEntity group;
+    private SocialGroupEntity group; 
 
     // name of Hashtag
     @Column(length = 50)

@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 /**
  * Page		Socialing
  * Function	Group CRUD
- * @version CreateTable_6
+ * @version CreateTable_9
  */
 @Entity
 @Builder
@@ -49,8 +49,6 @@ public class SocialGroupEntity {
     @Column(name = "profile_image")
     private String profileImage;
     
-    @Column(name = "interest", columnDefinition = "text")
-    private String interests;
     private String location;
 
     @ManyToOne

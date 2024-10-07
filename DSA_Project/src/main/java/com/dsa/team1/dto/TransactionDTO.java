@@ -18,9 +18,9 @@ public class TransactionDTO {
 	
 	private Integer transactionId;					// PK. Transaction ID
 	private Integer groupId;						// FK. SocialGroup ID
-	private Integer leaderId;						// FK. Group Leader ID(User ID) tp receive settlement
+	private String leaderId;						// FK. Group Leader ID(User ID) tp receive settlement
 	private Integer placeId;						// FK. Place ID
-	private Integer userId;							// FK. User ID
+	private String userId;							// FK. User ID
 	private Double amount;							// Total price
 	private TransactionType transactionType;		// Whether user will pay or balance accounts
 	private TransactionStatus status;				// Status of Transaction progress

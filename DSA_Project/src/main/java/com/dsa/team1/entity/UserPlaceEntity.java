@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 /**
  * Page		Place
  * Function	Mapping User and Place
- * @version CreateTables_6
+ * @version CreateTables_9
  */
 @Entity
 @Builder

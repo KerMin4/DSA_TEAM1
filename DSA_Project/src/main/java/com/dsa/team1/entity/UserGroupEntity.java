@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 /**
  * Page		Socialing
  * Function	Mapping User and Group
- * @version CreateTables_6
+ * @version CreateTables_9
  */
 @Entity
 @Builder
