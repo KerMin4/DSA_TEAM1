@@ -1,7 +1,8 @@
 package com.dsa.team1.entity;
 
-import java.time.LocalDateTime; 
+import java.time.LocalDateTime;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -54,6 +55,7 @@ public class UserEntity {
     
     @Column(name = "preferred_location")
     private String preferredLocation;
+
 
     @Column(name = "join_method")
     private JoinMethod joinMethod;

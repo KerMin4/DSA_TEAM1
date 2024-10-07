@@ -28,5 +28,5 @@ public class UserDTO {
 	private UserType userType;			// joined as individual or vendor
 	private LocalDateTime createdAt;	// joined date and time
 	private LocalDateTime updatedAt;	// updated date and time
-	
+
 }
