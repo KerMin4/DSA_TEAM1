@@ -85,7 +85,7 @@ public class SocialGroupController {
         }
 
         // 사용자 및 그룹 정보 설정
-        socialGroupDTO.setGroupLeaderId(Integer.parseInt(user.getId()));
+        socialGroupDTO.setGroupLeaderId(user.getId());
         socialGroupDTO.setGroupJoinMethod(GroupJoinMethod.valueOf(joinMethod));  // Enum 값 설정
         
         // 파일 업로드 처리

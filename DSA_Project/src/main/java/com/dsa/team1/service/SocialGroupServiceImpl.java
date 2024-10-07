@@ -40,7 +40,7 @@ public class SocialGroupServiceImpl implements SocialGroupService {
         SocialGroupEntity socialGroupEntity = SocialGroupEntity.builder()
                 .groupName(socialGroupDTO.getGroupName())
                 .description(socialGroupDTO.getDescription())
-                .interests(socialGroupDTO.getInterests())
+                //.interests(socialGroupDTO.getInterests())
                 .location(socialGroupDTO.getLocation())
                 .groupLeader(groupLeader)  
                 .groupJoinMethod(socialGroupDTO.getGroupJoinMethod())  // 가입 승인 권한 값 설정
