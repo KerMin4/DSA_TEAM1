@@ -1,9 +1,14 @@
 package com.dsa.team1.controller;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -79,8 +84,23 @@ public class SocialGroupController {
             return "redirect:/member/loginForm";
         }
 
+        // 사용자 및 그룹 정보 설정
         socialGroupDTO.setGroupLeaderId(Integer.parseInt(user.getId()));
         socialGroupDTO.setGroupJoinMethod(GroupJoinMethod.valueOf(joinMethod));  // Enum 값 설정
+        
+        // 파일 업로드 처리
+        if (upload != null && !upload.isEmpty()) {
+            try {
+                String fileName = UUID.randomUUID().toString() + "_" + upload.getOriginalFilename();
+                Path filePath = Paths.get(uploadPath, fileName);
+                Files.copy(upload.getInputStream(), filePath);
+                socialGroupDTO.setProfileImage("/images/" + fileName); // 저장된 경로를 DTO에 설정
+            } catch (IOException e) {
+                e.printStackTrace();
+                redirectAttributes.addFlashAttribute("errorMessage", "파일 업로드 중 문제가 발생했습니다.");
+                return "redirect:/socialgroup/create";
+            }
+        }
 
         try {
             //그룹 생성
@@ -139,6 +159,15 @@ public class SocialGroupController {
 
         return "socialgroup/socialing";
     }
+    
+//    /**
+//     * 전체 그룹 목록 반환 
+//     */
+//    @GetMapping("/socialgroup/viewAll")
+//    public ResponseEntity<?> viewAllGroups() {
+//        List<SocialGroupDTO> groups = socialGroupService.getAllGroups();
+//        return ResponseEntity.ok(Map.of("groups", groups));
+//    }
 
     /**
      * Ajax로 검색 및 필터링 결과를 반환하는 메서드
@@ -159,7 +188,6 @@ public class SocialGroupController {
 
         return ResponseEntity.ok(response);
     }
-
 
     /**
      * 그룹 목록을 HTML로 변환하는 메서드
@@ -187,19 +215,52 @@ public class SocialGroupController {
         return htmlBuilder.toString();
     }
 
-    
-    @GetMapping("board")
-    public String board() {
-        return "socialgroup/board";
+    /**
+     * 그룹 게시판 페이지로 이동
+     */
+    @GetMapping("/groupBoard")
+    public String groupBoard() {
+        return "socialgroup/groupBoard";
+    }
+
+    /**
+     * 공지사항 탭 클릭 시 공지사항 HTML 반환
+     */
+    @GetMapping("/announcement")
+    public String announcementTab() {
+        return "socialgroup/announcement";
+    }
+
+    /**
+     * 일정 탭 클릭 시 일정 HTML 반환
+     */
+    @GetMapping("/schedule")
+    public String scheduleTab() {
+        return "socialgroup/schedule";
+    }
+
+    /**
+     * 앨범 탭 클릭 시 앨범 HTML 반환
+     */
+    @GetMapping("/album")
+    public String albumTab() {
+        return "socialgroup/album";
+    }
+
+    /**
+     * 설정 탭 클릭 시 설정 HTML 반환
+     */
+    @GetMapping("/settings")
+    public String settingsTab() {
+        return "socialgroup/settings";
     }
     
-//    @GetMapping("/socialgroup/board")
-//    public String getGroupBoard(@RequestParam("groupId") Integer groupId, Model model) {
-//        SocialGroupEntity group = socialGroupService.findGroupById(groupId);
-//        if (group == null) {
-//            return "redirect:/socialgroup/create"; // 그룹이 없으면 그룹 생성 페이지로 리디렉션
-//        }
-//        model.addAttribute("group", group);
-//        return "board"; // 그룹 게시판 페이지로 이동
-//    }
+    /**
+     * 설정 탭에서 그룹 정보 수정 
+     */
+    @PostMapping("/settings")
+    public String settingstab() {
+    	return "socialgroup/settings";
+    }
+    
 }

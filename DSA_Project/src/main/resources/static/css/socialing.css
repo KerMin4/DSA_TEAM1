@@ -1,3 +1,7 @@
+@charset "UTF-8";
+
+/* ======================= 상위 지역 및 하위 지역 버튼 스타일 ======================= */
+
 /* 상위 지역 버튼 스타일 */
 .region-btn {
     background-color: #f0f0f0;
@@ -35,10 +39,7 @@
     display: none;  /* Initially hidden */
 }
 
-/* 숨겨진 상태의 요소 */
-.hidden {
-    display: none;
-}
+/* ======================= 생성 버튼 스타일 ======================= */
 
 /* 생성 버튼 */
 .create-btn {
@@ -65,17 +66,31 @@
     background-color: #0056b3;
 }
 
-#category-toggle, #sort-toggle, #location-toggle {
+/* ======================= 버튼 및 토글 스타일 ======================= */
+
+/* 카테고리, 정렬, 위치 토글 버튼 스타일 */
+#allGroupsButton, #category-toggle, #sort-toggle, #location-toggle {
     cursor: pointer;
     display: inline-block;
     margin: 20px 0;
 }
+
+/* ======================= 검색어 강조 스타일 ======================= */
 
 /* 검색어 강조 스타일 */
 .highlight-query {
     color: #FF4081;
     font-weight: bold;
 }
+
+/* ======================= 숨김 클래스 스타일 ======================= */
+
+/* 숨겨진 상태의 요소 */
+.hidden {
+    display: none;
+}
+
+/* ======================= 기본 바디 스타일 ======================= */
 
 body {
     font-family: 'S-CoreDream-3Light', sans-serif;

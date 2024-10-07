@@ -10,9 +10,8 @@
     <script th:src="@{/js/joinForm.js}"></script>
 </head>
 <body>
-    <!-- header fragment 불러오기 -->
-    <th:block th:replace="fragments/header :: header"></th:block>
-
+	<div th:replace="~{fragments/header :: header}"></div>
+	
     <div class="stepper">
         <div class="step-circle active" id="step-circle-1">1</div>
         <div class="line active" id="line-1"></div>

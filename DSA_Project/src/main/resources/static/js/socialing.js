@@ -1,4 +1,30 @@
 $(function() {
+	// 전체보기 버튼 클릭 시 모든 그룹을 조회하는 함수
+    $('#allGroupsButton').on('click', function() {
+        // AJAX 요청으로 DB에서 모든 그룹을 조회
+        $.ajax({
+            url: 'http://localhost:7272/api/groups/all',  // 전체 그룹을 가져오는 API 경로
+            type: 'GET',
+            success: function(response) {
+                console.log('전체 그룹 조회 응답:', response);  // 서버 응답 확인 로그
+                
+                if (response.html.trim() === '') {
+                    // 그룹이 없을 경우 메시지를 보여줌
+                    $('#no-result-message').show();
+                    $('#no-result-text').text("등록된 그룹이 없습니다.");
+                    $('.group-listing').html('');
+                } else {
+                    // 그룹 목록을 업데이트
+                    $('#no-result-message').hide();
+                    $('.group-listing').html(response.html);
+                }
+            },
+            error: function(err) {
+                console.error('전체 그룹 조회 중 오류 발생:', err);
+            }
+        });
+    });
+	
     // 그룹 필터링을 위한 함수
     function filterGroups() {
         var searchQuery = $('#searchInput').val().trim();  // 검색어

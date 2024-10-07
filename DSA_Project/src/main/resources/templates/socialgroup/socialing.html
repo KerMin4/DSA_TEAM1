@@ -10,8 +10,8 @@
     <script th:src="@{/js/socialing.js}"></script>
 </head>
 <body>
-    <th:block th:replace="fragments/header :: header"></th:block>
-
+	<div th:replace="~{fragments/header :: header}"></div>
+	
     <div class="container">
         <!-- Sidebar Section -->
         <div class="sidebar">
@@ -25,6 +25,8 @@
             </div>
             
             <br><br>
+            
+            <h3 id="allGroupsButton">전체목록</h3>
 
             <!-- 카테고리 필터 -->
             <div class="category-filters">
@@ -91,36 +93,44 @@
             
             <!-- Group Listings -->
             <div class="group-listing" id="group-container">
-                <!-- 전체 그룹 목록을 처음에 출력 -->
-                <!-- 기본 메시지를 추가할 때만 보이도록 설정 -->
-    			<p th:if="${#lists.isEmpty(groups)}">전체 그룹 목록을 확인하세요!</p>
-                <div th:each="group : ${groups}">
-                    <div class="group-card">
-                        <div class="group-info">
-                            <table>
-                                <tr>
-                                    <td><img th:src="@{${group.profileImage}}" alt="그룹 사진" class="group-image"></td>
-                                    <td>
-                                        <h3 th:text="${group.groupName}">그룹 이름</h3>
-                                        <p th:text="'위치: ' + ${group.location}">위치</p>
-                                        <p th:text="'날짜: ' + ${#dates.format(group.eventDate, 'MM.dd(EEE) HH:mm')}">날짜</p>
-                                        <p th:text="'인원: ' + ${group.memberCount} + '/' + ${group.memberLimit} + '명'">인원</p>
-                                    </td>
-                                    <td>
-                                        <a th:href="@{/socialgroup/board(groupId=${group.groupId})}" class="join-btn">그룹 참여</a>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+			    <!-- 전체 그룹 목록을 처음에 출력 -->
+			    <!-- 기본 메시지를 추가할 때만 보이도록 설정 -->
+				<p th:if="${#lists.isEmpty(groups)}">전체 그룹 목록을 확인하세요!</p>
+			    <div th:each="group : ${groups}">
+			        <div class="group-card" data-group-id="${group.groupId}">
+			            <div class="group-info">
+			                <table>
+			                    <tr>
+			                        <td><img th:src="@{${group.profileImage}}" alt="그룹 사진" class="group-image"></td>
+			                        <td>
+			                            <h3 th:text="${group.groupName}">그룹 이름</h3>
+			                            <p th:text="'위치: ' + ${group.location}">위치</p>
+			                            <p th:text="'날짜: ' + ${#dates.format(group.eventDate, 'MM.dd(EEE) HH:mm')}">날짜</p>
+			                            <p th:text="'인원: ' + ${group.memberCount} + '/' + ${group.memberLimit} + '명'">인원</p>
+			                            <p th:text="'조회수: ' + ${group.viewCount}">조회수</p>
+			                            <p th:text="'북마크: ' + ${group.bookmarkCount}">북마크</p>
+			                        </td>
+			                        <td>
+			                            <a th:href="@{/socialgroup/board(groupId=${group.groupId})}" class="join-btn">그룹 참여</a>
+			                            <!-- 북마크 추가/해제 버튼 -->
+			                            <button class="bookmark-btn" data-group-id="${group.groupId}">북마크</button>
+			                            <button class="remove-bookmark-btn" data-group-id="${group.groupId}">북마크 해제</button>
+			                        </td>
+			                    </tr>
+			                </table>
+			            </div>
+			        </div>
+			    </div>
                 
-	                <!-- 검색 결과가 없을 때 출력할 메시지 -->
+	            <!-- 검색 결과가 없을 때 출력할 메시지 -->
 				<div id="no-result-message" style="display: none;">
 	                <p id="no-result-text"></p>
 	            </div>
+	            
             </div>
-            <a th:href="@{/socialgroup/create}" class="btn create-btn">그룹 생성</a>
+            
+        <a th:href="@{/socialgroup/create}" class="btn create-btn">그룹 생성</a>
+        
 		</div>
 	</div>
 </body>

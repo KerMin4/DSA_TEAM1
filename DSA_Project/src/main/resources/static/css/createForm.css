@@ -1,5 +1,7 @@
 @charset "UTF-8";
 
+/* ======================= 이미지 미리보기 스타일 ======================= */
+
 #imagePreview {
     display: block;
     margin-bottom: 10px;
@@ -7,30 +9,57 @@
     max-height: 200px;
 }
 
+/* ======================= 버튼 스타일 ======================= */
+
+/* 일반 버튼 스타일 */
+button, input[type="button"], input[type="submit"] {
+    cursor: pointer;
+}
+
+/* 활성화된 버튼 스타일 */
 .active-button {
     background-color: #000000;
     color: white;
 }
 
-button, input[type="button"], input[type="submit"] {
-    cursor: pointer;
-}
+/* ======================= 인원 수 카운터 스타일 ======================= */
 
+/* 인원 수 카운터 스타일 */
 .person-counter {
     display: inline-flex;
 }
 
-.tooltip {
+/* ======================= 모달 스타일 ======================= */
+.modal {
     display: none;
-    position: absolute;
-    background-color: #333;
-    color: #fff;
-    padding: 5px;
-    border-radius: 5px;
-    font-size: 12px;
+    position: fixed;
     z-index: 1000;
-    white-space: nowrap;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
+
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    max-width: 400px;
+    width: 80%;
+    margin: auto;
+}
+
+.close {
+    float: right;
+    font-size: 24px;
+    cursor: pointer;
+}
+/* ======================= 기본 바디 스타일 ======================= */
 
 body {
     font-family: 'S-CoreDream-3Light', sans-serif;
