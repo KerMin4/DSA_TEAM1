@@ -5,38 +5,37 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.dsa.team1.entity.UserEntity;
+import com.dsa.team1.repository.UserRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class AuthenticatedUserDetailsService //implements UserDetailsService
+public class AuthenticatedUserDetailsService implements UserDetailsService
 {
 	
-	// private final MemberRepository memberRepository; 레포지토리 만들면 그 때 다시 수정
-/*	
+	 private final UserRepository userRepository; 
+	
 	@Override
 	public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
 		log.info("로그인 시도 : {}",id);
 		
-		MemberEntity memberEntity = memberRepository.findById(id)
+		UserEntity userEntity = userRepository.findById(id)
 				.orElseThrow(() -> {
 					return new UsernameNotFoundException(id + " : 없는 ID입니다.");
 				});
-		log.debug("조회정보 : {}", memberEntity); 
-		엔티티 생성시 수정
+		log.debug("조회정보 : {}", userEntity); 
+		
 			
 		AuthenticatedUser user = AuthenticatedUser.builder()
-				.id(memberEntity.getMemberId())
-				.password(memberEntity.getMemberPassword())
-				.name(memberEntity.getMemberName())
-				.enabled(memberEntity.getMemberEnabled())
-				.roleName(memberEntity.getMemberRolename())
+				.id(userEntity.getUserId())
+				.password(userEntity.getPassword())
+				.name(userEntity.getName())
 				.build();
 		
 		return user;
-	
-	*/
-	//1
 }
+	}
