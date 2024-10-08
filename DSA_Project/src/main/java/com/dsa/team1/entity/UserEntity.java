@@ -49,6 +49,9 @@ public class UserEntity {
     @Column(name = "name", length = 50)
     private String name;
     
+    private Integer birth;
+    private Integer gender;
+    
     @Column(name = "phone_number", length = 20)
     private String phoneNumber;
     private String email;
