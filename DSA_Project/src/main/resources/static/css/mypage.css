@@ -1,60 +1,116 @@
-@charset "UTF-8";
 
-/* 전체 달력의 크기 조정 (width, height 직접 설정) */
+@font-face {
+    font-family: 'S-CoreDream-3Light';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.header-container {
+    width: 100%;
+}
+
+
+.page-container {
+    display: flex;
+    flex-direction: column; 
+    padding: 0;
+    margin: 0;
+}
+
+
+.calendar-wrapper {
+    display: flex;
+    margin-top: 70px; 
+}
+
+
+.calendar-container {
+    margin-top: 250px;
+    background-color: #f5f5f5;
+    width: 100%;
+    margin-left: -800px; 
+}
+
+
+#calendar {
+    font-family: 'S-CoreDream-3Light', sans-serif;
+    width: 450px;
+      height: auto; 
+}
+
+.fc-toolbar-title {
+    font-size: 14px !important;
+    font-weight: 100;
+    color: #333;
+    line-height: 1.2;
+}
+
+.fc-today-button {
+    display: none !important;
+}
+
 .fc {
-    width: 450px;  /* 전체 너비 설정 */
-    height: 350px;  /* 전체 높이 설정 (달력에 맞게 조정) */
-    margin: 0 auto;  /* 중앙 정렬 */
+    border: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
 }
 
-/* 달력 상단의 헤더 부분 (월 이동 버튼, 날짜 표시 등) */
-.fc-toolbar {
-    height: 40px;  /* 헤더 높이 설정 */
-    line-height: 40px;  /* 헤더 안의 콘텐츠를 수직 중앙 정렬 */
-    background-color: #333;  /* 헤더 배경색 */
-    color: #fff;  /* 헤더 텍스트 색상 */
-    padding: 5px;  /* 헤더 패딩 */
-}
 
-/* 각 요일 셀의 스타일 (요일 표시) */
-.fc-day-header {
-    height: 30px;  /* 요일 셀의 높이 설정 */
-    line-height: 30px;  /* 텍스트 중앙 정렬 */
-    text-align: center;  /* 텍스트 중앙 정렬 */
-    color: #333;  /* 요일 텍스트 색상 */
-}
-
-/* 각 날짜 셀의 높이와 너비 조정 */
 .fc-daygrid-day {
-    height: 40px;  /* 날짜 셀의 높이 설정 */
-    width: 40px;  /* 날짜 셀의 너비 설정 */
-    box-sizing: border-box;  /* 패딩과 테두리를 포함한 크기 계산 */
-    border: 1px solid #ddd;  /* 셀 테두리 */
-    background-color: #f0f8ff; /* 날짜 셀 배경색 */
-    color: #333;  /* 날짜 텍스트 색상 */
-    padding: 5px;  /* 셀 내부 패딩 조정 */
-    font-size: 12px;  /* 텍스트 크기 조정 */
-    display: table-cell;  /* 테이블 셀처럼 표시 */
-    text-align: center;  /* 텍스트 중앙 정렬 */
-    vertical-align: middle;  /* 세로 중앙 정렬 */
+    border: none;
+    width: 20px; 
+    height: 20px;
+    font-size: 12px;
 }
 
-/* 오늘 날짜 강조 스타일 */
-.fc-daygrid-day.fc-day-today {
-    background-color: #ADD8E6;  /* 오늘 날짜 배경색 */
-    border: 2px solid #000;  /* 강조를 위한 테두리 */
-    color: #fff;  /* 오늘 날짜의 텍스트 색상 */
-    font-weight: bold;  /* 오늘 날짜의 텍스트 두께 */
-}
 
-/* 이벤트 스타일 설정 */
 .fc-event {
-    height: 30px;  /* 이벤트 높이 설정 */
-    line-height: 30px;  /* 이벤트 텍스트 중앙 정렬 */
-    background-color: #FFB6C1; /* 이벤트 배경색 */
-    border-color: #FF69B4;  /* 이벤트 테두리 색상 */
-    color: #fff;  /* 이벤트 텍스트 색상 */
-    font-weight: bold;  /* 이벤트 텍스트 두께 */
-    border-radius: 5px;  /* 이벤트 테두리 둥글게 처리 */
-    padding: 2px;  /* 이벤트 내부 패딩 */
+    background-color: #FFB6C1 !important;
+    color: #333 !important;
+    border: none !important;
+    font-size: 10px; 
+}
+
+.fc-day-header {
+    font-size: 9px !important; 
+    height: 20px;
+    text-align: center;
+    color: #333;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.fc-day-header:nth-child(1) {
+    color: red;
+}
+
+/* 일요일 색상 조정 */
+.fc-daygrid-day.fc-day-sun {
+    color: red;
+}
+
+.fc .fc-button-group .fc-prev-button,
+.fc .fc-button-group .fc-next-button {
+    background-color: transparent;
+    border: none;
+    color: #333;
+    font-size: 14px;
+    padding: 5px 10px;
+    cursor: pointer;
+    outline: none;
+    box-shadow: none;
+}
+
+.fc .fc-button-group .fc-prev-button:active,
+.fc .fc-button-group .fc-next-button:active {
+    background-color: transparent;
+    border: none;
 }

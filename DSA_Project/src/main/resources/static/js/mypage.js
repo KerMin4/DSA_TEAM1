@@ -1,9 +1,10 @@
 $(document).ready(function() {
     var calendarEl = document.getElementById('calendar');
-    
+
     // FullCalendar 인스턴스 생성 및 설정
     var calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',  // 초기 뷰는 월 단위
+        fixedWeekCount: false,  // 한 달에 포함된 주 수만큼만 표시
         events: [
             {
                 title: '취미 모임',
@@ -30,6 +31,6 @@ $(document).ready(function() {
             alert('일정: ' + info.event.title + '\n설명: ' + info.event.extendedProps.description);
         }
     });
-    
+
     calendar.render();  // 캘린더 렌더링
 });
