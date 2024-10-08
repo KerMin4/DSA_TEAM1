@@ -42,6 +42,7 @@ public class WebSecurityConfig {
 					.passwordParameter("password")
 					.loginProcessingUrl("/member/login")
 					.defaultSuccessUrl("/", true)
+					.failureUrl("/member/loginForm?error=true")
 					.permitAll()
 					)
 			.logout(logout -> logout

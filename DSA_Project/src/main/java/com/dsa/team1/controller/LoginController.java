@@ -21,7 +21,7 @@ public class LoginController{
 	
 	private final UserService us;
 	
-	@GetMapping("login")
+	@GetMapping("loginForm")
 	public String loginForm() {
 		return "member/loginForm";
 	}
