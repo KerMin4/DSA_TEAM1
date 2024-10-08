@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>메인페이지 공통 헤더</title>
+    <link rel="stylesheet" type="text/css" href="/kkirikkiri/css/dashboardheader.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"></script>
+</head>
+<body>
+    <header th:fragment="header(currentPage)">
+        <nav>
+            <ul>
+                <li><a class="home-link" th:classappend="${currentPage == 'mypage'} ? 'active'" href="/kkirikkiri/dashboard/mypage">홈</a></li>
+                <li><a class="profile-edit-link" th:classappend="${currentPage == 'profileedit'} ? 'active'" href="/kkirikkiri/dashboard/profileedit">프로필 수정</a></li>
+                <li><a class="group-management-link" th:classappend="${currentPage == 'groupManagement'} ? 'active'" href="/kkirikkiri/dashboard/groupManagement">그룹 관리</a></li>
+                <li><a class="payment-management-link" th:classappend="${currentPage == 'paymentManagement'} ? 'active'" href="/kkirikkiri/dashboard/paymentManagement">결제 관리</a></li>
+            </ul>
+            <hr class="divider">
+        </nav>
+    </header>
+</body>
+</html>

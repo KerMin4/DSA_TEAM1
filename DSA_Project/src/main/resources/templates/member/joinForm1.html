@@ -7,10 +7,10 @@
 <script th:src = "@{/js/joinForm1.js}"></script>
 <link rel = "stylesheet" type = "text/css" href="/kkirikkiri/css/joinForm.css">
 <link rel = "stylesheet" type = "text/css" href="/kkirikkiri/css/main.css">
-<link rel = "stylesheet" type = "text/css" href="/kkirikkiri/css/mainheader.css">
+    <link rel="stylesheet" type="text/css" href="/kkirikkiri/css/header.css"> 
 </head>
 <body>
-	<th:block th:replace = "~{fragments/header :: header}"></th:block>
+	<div th:replace="~{fragments/header :: header}"></div>
 	<div class = "stepper">
 		<div class = "step-circle active" id = "step-circle-1">1</div>
 		<div class = "line active" id = "line-1"></div>

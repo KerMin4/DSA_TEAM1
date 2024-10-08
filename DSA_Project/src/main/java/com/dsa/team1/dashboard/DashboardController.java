@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("dashboard")
 public class DashboardController {
      
-    // http://localhost:7272/kkirikkiri/dashboard/mypage (대시보드 수정)
+    // http://localhost:7272/kkirikkiri/dashboard/mypage (대시보드)
     @GetMapping("mypage")
     public String myPageCalendar() {
         return "dashboard/mypage"; 

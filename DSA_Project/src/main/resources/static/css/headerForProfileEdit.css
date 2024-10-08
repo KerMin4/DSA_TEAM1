@@ -92,3 +92,20 @@ nav ul li a:hover {
     margin: 20px auto; /* 위아래 여백과 선 중앙 정렬 */
 }
 
+.profile-edit-section {
+    position: relative;
+    left: -750px; /* 원하는 만큼 왼쪽으로 이동 */
+    width: 100%;
+    top: 50px; /* 원하는 만큼 아래로 이동 */
+    display: flex;
+    align-items: center;
+}
+
+
+/* 프로필 이미지 스타일 */
+.profile-edit-section img {
+    cursor: pointer;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%; 
+}

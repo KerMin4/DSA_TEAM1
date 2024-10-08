@@ -1,55 +1,75 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>프로필 수정</title>
-    <link rel="stylesheet" type="text/css" href="/kkirikkiri/css/profileEdit.css">
-    <link rel="stylesheet" type="text/css" href="/kkirikkiri/css/dashboardheader.css">
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
-    <script th:src="@{/js/profileEdit.js}"></script> 
+    <script th:src="@{/js/profileEdit.js}"></script>
+    <link rel="stylesheet" type="text/css" href="/kkirikkiri/css/profileEdit.css">
 </head>
 <body>
-    
-   
-    <div th:replace="dashboard/header :: header('profileedit')"></div>
-   
-    <div class="profile-edit-section">
-        <div>
-            <img id="profileImage" src="/kkirikkiri/images/profile-image.jpg" alt="프로필 이미지" style="cursor:pointer; width: 150px; height: 150px; border-radius: 50%;"> <!-- 기존 프로필 사진 불러오기 -->
-            <input type="file" id="profileImageUpload" name="profileImage" accept="image/*" style="display:none;"> <!-- 숨겨진 파일 입력 -->
+    <th:block th:replace="~{fragments/header :: header}"></th:block>
+
+    <div class="profile-edit-container">
+        <h2>프로필 수정</h2>
+        
+        <div class="profile-image-section">
+            <label for="profileImage" class="label-image"></label>
+            <input type="file" id="profileImage" name="profileImage" accept="image/*" style="display: none;">
         </div>
-        <button type="button" id="submitProfileImage">사진 수정하기</button>
-    </div>
 
-    <div class="step active" id="step1">
-        <h2>취향이 달라졌다면, 다시 설정해보세요!</h2>
-        <form id="form-step1">
-            <input type="checkbox" name="interests" value="취미"> 취미<br>
-            <input type="checkbox" name="interests" value="자기계발"> 자기계발<br>
-            <input type="checkbox" name="interests" value="푸드"> 푸드<br>
-            <input type="checkbox" name="interests" value="액티비티"> 액티비티<br>
-            <input type="checkbox" name="interests" value="반려동물"> 반려동물<br>
-            <input type="checkbox" name="interests" value="문화"> 문화<br>
-            <input type="checkbox" name="interests" value="재테크"> 재테크<br>
-            <input type="checkbox" name="interests" value="연애"> 연애<br>
-            <input type="checkbox" name="interests" value="게임"> 게임<br>
-            <input type="checkbox" name="interests" value="여행"> 여행<br>
-        </form>
-    </div>
+        <div class="input-field">
+            <label for="nickname">닉네임</label>
+            <input type="text" id="nickname" name="nickname" placeholder="닉네임">
+        </div>
 
-    <div class="step" id="step2">
-        <h2>새로운 곳에서 활동하고 싶다면, 위치를 변경해보세요! </h2>
-        <form id="form-step2">
-            <input type="text" id="location" name="location" placeholder="관심 지역 입력"><br>
-        </form>
-    </div>
+        <div class="input-field">
+            <label for="email">이메일</label>
+            <input type="email" id="email" name="email" placeholder="이메일">
+        </div>
 
-    <div class="step" id="step3">
-        <form id="form-step3" action="/upload" method="post" enctype="multipart/form-data">
-            <input type="text" id="phone" name="phoneNumber" placeholder="휴대전화"><br>
-            <input type="email" id="email" name="email" placeholder="이메일"><br>
-            <button type="button" id="submitForm">수정하기</button>
-        </form>
+        <div class="input-field">
+            <label for="phone">휴대전화</label>
+            <input type="text" id="phone" name="phone" placeholder="휴대전화">
+        </div>
+
+        <div class="interest-section">
+            <h3>관심사 수정</h3>
+            <div class="interests-container">
+                <div class="interests-row">
+                    <div class="interest-option hobby">
+                        <input type="checkbox" id="hobby" name="interests" value="취미">
+                        <label for="hobby" class="interest-text">취미</label>
+                    </div>
+                    <div class="interest-option development">
+                        <input type="checkbox" id="development" name="interests" value="자기계발">
+                        <label for="development" class="interest-text">자기계발</label>
+                    </div>
+                    <div class="interest-option food">
+                        <input type="checkbox" id="food" name="interests" value="푸드">
+                        <label for="food" class="interest-text">푸드</label>
+                    </div>
+                </div>
+                <div class="interests-row">
+                    <div class="interest-option activity">
+                        <input type="checkbox" id="activity" name="interests" value="액티비티">
+                        <label for="activity" class="interest-text">액티비티</label>
+                    </div>
+                    <div class="interest-option pets">
+                        <input type="checkbox" id="pets" name="interests" value="반려동물">
+                        <label for="pets" class="interest-text">반려동물</label>
+                    </div>
+                    <div class="interest-option culture">
+                        <input type="checkbox" id="culture" name="interests" value="문화">
+                        <label for="culture" class="interest-text">문화</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="button-container">
+            <button type="button" id="saveProfile">저장</button>
+        </div>
     </div>
 </body>
 </html>
