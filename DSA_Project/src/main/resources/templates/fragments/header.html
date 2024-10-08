@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Header</title>
@@ -18,8 +19,14 @@
                     <li><a href="#">플레이스</a></li>
                 </div>
                 <div class="right-menu">
-                    <li><a th:href="@{/member/login}">Login</a></li>
+                   <th:block sec:authorize="not isAuthenticated()">
+                    <li><a th:href="@{/member/loginForm}">Login</a></li>
                     <li><a th:href="@{/member/joinForm1}">Join</a></li>
+                	</th:block>
+                	<th:block sec:authorize = "isAuthenticated()">
+                	<li><a th:href="@{/member/logout}">Logout</a></li>
+                	<li><a th:href="@{/member/myPage}">MyPage</a></li>
+                	</th:block>
                 </div>
             </ul>
         </nav>

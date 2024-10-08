@@ -24,8 +24,9 @@ public class AuthenticatedUser implements UserDetails {
 	String id;
 	String password;
 	String name;
-	String roleName;
-	boolean enabled;
+//	String roleName;
+//	boolean enabled;
+//	String username;
 	
 	@Override
 	public String getPassword() {
@@ -34,7 +35,7 @@ public class AuthenticatedUser implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return Collections.singletonList(new SimpleGrantedAuthority(roleName));
+		return Collections.emptyList();
 	}
 
 	@Override
@@ -59,7 +60,7 @@ public class AuthenticatedUser implements UserDetails {
 	
 	@Override
 	public boolean isEnabled() {
-		return this.enabled;
+		return true;
 	}
 	// 1
 }
