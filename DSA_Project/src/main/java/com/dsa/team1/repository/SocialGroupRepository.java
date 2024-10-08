@@ -16,11 +16,12 @@ public interface SocialGroupRepository extends JpaRepository<SocialGroupEntity, 
     List<SocialGroupEntity> findByGroupNameContainingOrDescriptionContaining(String groupName, String description);
 
     @Query("SELECT g FROM SocialGroupEntity g " +
-            "WHERE (:query IS NULL OR g.groupName LIKE %:query% OR g.description LIKE %:query%) " +
-            "AND (:category IS NULL OR g.interests = :category) " +
-            "AND (:region IS NULL OR g.location = :region)")
-     List<SocialGroupEntity> filterGroups(@Param("query") String query, 
-                                          @Param("category") String category, 
-                                          @Param("region") String region);
+           "WHERE (:query IS NULL OR g.groupName LIKE %:query% OR g.description LIKE %:query%) " +
+           "AND (:joinMethod IS NULL OR g.groupJoinMethod = :joinMethod) " +
+           "AND (:region IS NULL OR g.location = :region)")
+    List<SocialGroupEntity> filterGroups(@Param("query") String query, 
+                                         @Param("joinMethod") String joinMethod, 
+                                         @Param("region") String region);
+    
     
 }

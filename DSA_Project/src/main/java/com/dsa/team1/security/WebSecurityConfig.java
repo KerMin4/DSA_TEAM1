@@ -22,7 +22,7 @@ public class WebSecurityConfig {
 			"/member/joinForm",
 			"/member/login",
 			"/kkirikkiri/member/join",
-			"/socialgroup/**",
+			"/socialgroup/**",		// 임시추가
 			"/dashboard/**",       // 나중에 까먹지말고 빼야댐 (나연)
 			"/member/joinForm1",
 			"/member/join1",
