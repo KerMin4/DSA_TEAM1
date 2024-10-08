@@ -20,6 +20,8 @@ public class UserDTO {
 	private String userName;			// User's real name
 	private String password;			// Password
 	private String name;				// Nickname. User customized name
+    private Integer birth;
+    private Integer gender;
 	private String phoneNumber;			// Phone number
 	private String email;				// Email
 	private String preferredLocation;	// User prefered area
