@@ -7,21 +7,23 @@
     <link rel="stylesheet" type="text/css" href="/kkirikkiri/css/main.css">
     <link rel="stylesheet" type="text/css" href="/kkirikkiri/css/header.css"> 
     <link rel="stylesheet" type="text/css" href="/kkirikkiri/css/loginForm.css"> 
+    <script th:src ="@{/js/login.js}"></script>
 </head>
 <body>
 	<div th:replace="~{fragments/header :: header}"></div>
 	
     <main>
-        <div class="login-container">
+        <form id = "loginForm" th:action = "@{/member/login}" method = "post" class="login-container">
             <h1 class="welcome-text">Welcome!</h1>
             <div class="input-box">
-                <input type="text" id="username" placeholder="아이디" class="username-input" required>
+                <input type="text" id="id" placeholder="아이디" class="username-input" required>
                 <hr class="divider"> 
                 <input type="password" id="password" placeholder="비밀번호" class="password-input" required>
             </div>
+            <div class = "errorMsg" th:if = "${param.error}">IO 또는 비밀번호가 틀립니다.</div>
             <button class="login-button">로그인</button>
             <button id = "btn-login" class = "btn btn-primary">로그인</button> 
-        </div>
+        </form>
     </main>
 </body>
 </html>
