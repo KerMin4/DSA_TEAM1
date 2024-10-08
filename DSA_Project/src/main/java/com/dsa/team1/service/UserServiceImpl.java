@@ -34,4 +34,9 @@ public class UserServiceImpl implements UserService{
 								.build();
 		ur.save(userEntity);
 	}
+	
+	@Override
+	public boolean idCheck(String id) {
+		return !ur.existsById(id);
+	}
 }

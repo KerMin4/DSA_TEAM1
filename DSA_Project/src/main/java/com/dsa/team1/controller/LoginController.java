@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dsa.team1.service.UserService;
 
@@ -70,4 +71,10 @@ public class LoginController{
 		return "redirect:/";
 	}
 	
+	@ResponseBody
+	@PostMapping("/idCheck")
+	public boolean idCheck(@RequestParam("userid")String id) {
+		boolean result = us.idCheck(id);
+		return result;
+	}
 }

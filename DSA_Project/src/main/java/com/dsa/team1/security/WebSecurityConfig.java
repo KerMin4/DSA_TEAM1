@@ -25,7 +25,9 @@ public class WebSecurityConfig {
 			"/socialgroup/**",		// 임시추가
 			"/dashboard/**",       // 나중에 까먹지말고 빼야댐 (나연)
 			"/member/join1",
-			"/member/join"
+			"/member/join",
+			"/kkirikkiri/member/idCheck",
+			"/member/idCheck"
 	};
 	
 	@Bean
