@@ -140,5 +140,29 @@ $(document).ready(function(){
                 if (step == 2 && !validateStep1()) return;
                 if (step == 3 && !validateStep2()) return;
                 showStep(step);
-            });          
+            });      
+            
+            $('#duplicateCheck').click(function(){
+				let userid = {userid : $('#userid').val()};
+				if($('#userid').val()){
+				$.ajax({
+					url: '/kkirikkiri/member/idCheck',
+					type : 'post',
+					data: userid,
+					dataType: 'text', 
+					success: function(msg){
+						console.log('실행 성공');
+						if(msg == 'false'){
+							alert("중복된 아이디가 있습니다.");
+							$('#userid').val('');
+						} else{
+							alert("사용 가능한 아이디 입니다!");
+						}
+					}, error : function(e){
+						console.log('실행 실패');
+												
+					}
+				});
+				}
+			});    
 	});
