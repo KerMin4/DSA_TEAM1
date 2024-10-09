@@ -1,40 +1,17 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Kkiri Kkiri</title>
     <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="/kkirikkiri/css/header.css"> 
-    <link rel="stylesheet" type="text/css" href="/kkirikkiri/css/main.css"> 
+    <link th:href="@{/css/header.css}" rel="stylesheet"> 
+    <link th:href="@{/css/main.css}" rel="stylesheet"> 
 </head>
 <body>
-    <header>
-        <nav>
-            <ul>
-                <li class="left-logo">
-                    <a th:href="@{/}">Kkiri</a>
-                </li>
-                <div class="center-menu">
-                    <li><a th:href="@{/socialgroup/socialing}">소셜링</a></li>
-                    <li><a href="#">트렌드</a></li>
-                    <li><a href="#">플레이스</a></li>
-                </div>
-                <div class="right-menu">
-                	<th:block sec:authorize="not isAuthenticated()">
-                    <li><a th:href="@{/member/loginForm}">Login</a></li>
-                    <li><a th:href="@{/member/joinForm1}">Join</a></li>
-                	</th:block>
-                	<th:block sec:authorize = "isAuthenticated()">
-                	<li><a th:href="@{/member/logout}">Logout</a></li>
-                	<li><a th:href="@{/member/myPage}">MyPage</a></li>
-                	</th:block>
-                </div>
-            </ul>
-        </nav>
-    </header>
+
+    <div th:replace="~{fragments/header :: header}"></div>
     
-   
     <main>
         <h1 class="main-heading">Kkiri Kkiri</h1>
         <p class="center-text">
@@ -42,10 +19,10 @@
             <span>끼리끼리에서!</span>
         </p>
         
-         <a th:href="@{/socialgroup/create}" class="create-button">그룹 생성</a>
+        <a th:href="@{/socialgroup/create}" class="create-button">그룹 생성</a>
          
-          <div class="header-image">
-        <img src="/kkirikkiri/images/main.png" alt="메인 이미지" />
+        <div class="header-image">
+            <img th:src="@{/images/main.png}" alt="메인 이미지" />
         </div>
     </main>
 </body>

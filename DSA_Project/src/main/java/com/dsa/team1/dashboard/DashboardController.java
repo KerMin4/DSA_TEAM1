@@ -1,6 +1,7 @@
 package com.dsa.team1.dashboard;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model; // 추가
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -13,27 +14,27 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("dashboard")
 public class DashboardController {
      
-    // http://localhost:7272/kkirikkiri/dashboard/mypage (대시보드)
     @GetMapping("mypage")
-    public String myPageCalendar() {
+    public String myPageCalendar(Model model) {
+        model.addAttribute("activePage", "home"); 
         return "dashboard/mypage"; 
     }
     
-    // http://localhost:7272/kkirikkiri/dashboard/profileedit (프로필 수정)
     @GetMapping("profileedit")
-    public String editProfile() {
+    public String editProfile(Model model) {
+        model.addAttribute("activePage", "profile-edit"); 
         return "dashboard/profileedit"; 
     }
 
-    // http://localhost:7272/kkirikkiri/dashboard/groupManagement (그룹 관리)
     @GetMapping("groupManagement")
-    public String groupManagement() {
+    public String groupManagement(Model model) {
+        model.addAttribute("activePage", "group-management");
         return "dashboard/groupManagement"; 
     }
 
-    // http://localhost:7272/kkirikkiri/dashboard/paymentManagement (결제 관리)
     @GetMapping("paymentManagement")
-    public String paymentManagement() {
+    public String paymentManagement(Model model) {
+        model.addAttribute("activePage", "payment-management"); 
         return "dashboard/paymentManagement"; 
     }
 }
