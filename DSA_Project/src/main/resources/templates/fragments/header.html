@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>Header</title>
     <link th:href="@{/css/header.css}" rel="stylesheet">
+    <script th:src="@{/js/dropdown.js}"></script>
 </head>
 <body>
     <header>
@@ -13,20 +14,36 @@
                 <li class="left-logo">
                     <a th:href="@{/}">Kkiri</a>
                 </li>
+
                 <div class="center-menu">
                     <li><a th:href="@{/socialgroup/socialing}">소셜링</a></li>
                     <li><a href="#">트렌드</a></li>
                     <li><a href="#">플레이스</a></li>
                 </div>
+
                 <div class="right-menu">
-                   <th:block sec:authorize="not isAuthenticated()">
-                    <li><a th:href="@{/member/loginForm}">Login</a></li>
-                    <li><a th:href="@{/member/joinForm1}">Join</a></li>
-                	</th:block>
-                	<th:block sec:authorize = "isAuthenticated()">
-                	<li><a th:href="@{/member/logout}">Logout</a></li>
-                	<li><a th:href="@{/member/myPage}">MyPage</a></li>
-                	</th:block>
+                    <th:block sec:authorize="not isAuthenticated()">
+                        <li><a th:href="@{/member/loginForm}">Login</a></li>
+                        <li><a th:href="@{/member/joinForm1}">Join</a></li>
+                    </th:block>
+
+                    <th:block sec:authorize="isAuthenticated()">
+                    
+                        <!-- 여기부터 로그인 후 -->
+                        
+                        <li class="dropdown">
+                            <img th:src="${#authentication.principal.profileImage != null ? '/kkirikkiri/upload/' + #authentication.principal.profileImage : '/kkirikkiri/upload/default.png'}"
+                                 alt="프로필 이미지" class="profile-img" id="profileImg" />
+
+                            <ul class="dropdown-menu" id="profileDropdown">
+                                <li><a th:href="@{/dashboard/mypage}">홈</a></li>
+                                <li><a th:href="@{/dashboard/profileedit}">프로필 수정</a></li>
+                                <li><a th:href="@{/dashboard/groupManagement}">그룹 관리</a></li>
+                                <li><a th:href="@{/dashboard/paymentManagement}">결제 관리</a></li>
+                                <li><a th:href="@{/member/logout}">Logout</a></li>
+                            </ul>
+                        </li>
+                    </th:block>
                 </div>
             </ul>
         </nav>

@@ -1,75 +1,35 @@
 <!DOCTYPE html>
-<html xmlns:th="thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>프로필 수정</title>
-    <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
-    <script th:src="@{/js/profileEdit.js}"></script>
-    <link rel="stylesheet" type="text/css" href="/kkirikkiri/css/profileEdit.css">
+    <link th:href="@{/css/header.css}" rel="stylesheet">
+    <link th:href="@{/css/main.css}" rel="stylesheet"> 
+    <link th:href="@{/css/mypage.css}" rel="stylesheet">
+    <script src="/kkirikkiri/js/jquery-3.7.1.min.js"></script>
 </head>
 <body>
-    <th:block th:replace="~{fragments/header :: header}"></th:block>
+ 
+    <div th:replace="~{fragments/header :: header}"></div>
 
-    <div class="profile-edit-container">
-        <h2>프로필 수정</h2>
-        
-        <div class="profile-image-section">
-            <label for="profileImage" class="label-image"></label>
-            <input type="file" id="profileImage" name="profileImage" accept="image/*" style="display: none;">
-        </div>
+    <div class="mypage-container">
+        <nav class="mypage-nav">
+            <ul>
+                <li><a th:classappend="${activePage == 'home'} ? 'active'" th:href="@{/dashboard/mypage}" id="home">홈</a></li>
+                <li><a th:classappend="${activePage == 'profile-edit'} ? 'active'" th:href="@{/dashboard/profileedit}" id="profile-edit">프로필 수정</a></li>
+                <li><a th:classappend="${activePage == 'group-management'} ? 'active'" th:href="@{/dashboard/groupManagement}" id="group-management">그룹 관리</a></li>
+                <li><a th:classappend="${activePage == 'payment-management'} ? 'active'" th:href="@{/dashboard/paymentManagement}" id="payment-management">결제 관리</a></li>
+            </ul>
 
-        <div class="input-field">
-            <label for="nickname">닉네임</label>
-            <input type="text" id="nickname" name="nickname" placeholder="닉네임">
-        </div>
-
-        <div class="input-field">
-            <label for="email">이메일</label>
-            <input type="email" id="email" name="email" placeholder="이메일">
-        </div>
-
-        <div class="input-field">
-            <label for="phone">휴대전화</label>
-            <input type="text" id="phone" name="phone" placeholder="휴대전화">
-        </div>
-
-        <div class="interest-section">
-            <h3>관심사 수정</h3>
-            <div class="interests-container">
-                <div class="interests-row">
-                    <div class="interest-option hobby">
-                        <input type="checkbox" id="hobby" name="interests" value="취미">
-                        <label for="hobby" class="interest-text">취미</label>
-                    </div>
-                    <div class="interest-option development">
-                        <input type="checkbox" id="development" name="interests" value="자기계발">
-                        <label for="development" class="interest-text">자기계발</label>
-                    </div>
-                    <div class="interest-option food">
-                        <input type="checkbox" id="food" name="interests" value="푸드">
-                        <label for="food" class="interest-text">푸드</label>
-                    </div>
+            <th:block sec:authorize="isAuthenticated()">
+                <div class="profile-section">
+                    <img th:src="${#authentication.principal.profileImage != null ? '/kkirikkiri/upload/' + #authentication.principal.profileImage : '/kkirikkiri/upload/default.png'}"
+                         alt="프로필 이미지" class="mypage-profile-img" id="profileImg" />
                 </div>
-                <div class="interests-row">
-                    <div class="interest-option activity">
-                        <input type="checkbox" id="activity" name="interests" value="액티비티">
-                        <label for="activity" class="interest-text">액티비티</label>
-                    </div>
-                    <div class="interest-option pets">
-                        <input type="checkbox" id="pets" name="interests" value="반려동물">
-                        <label for="pets" class="interest-text">반려동물</label>
-                    </div>
-                    <div class="interest-option culture">
-                        <input type="checkbox" id="culture" name="interests" value="문화">
-                        <label for="culture" class="interest-text">문화</label>
-                    </div>
-                </div>
-            </div>
-        </div>
+            </th:block>
 
-        <div class="button-container">
-            <button type="button" id="saveProfile">저장</button>
-        </div>
+            <div class="horizontal-line"></div>
+        </nav>
     </div>
 </body>
 </html>

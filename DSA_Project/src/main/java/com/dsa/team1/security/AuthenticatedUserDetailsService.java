@@ -17,7 +17,37 @@ import lombok.extern.slf4j.Slf4j;
 public class AuthenticatedUserDetailsService implements UserDetailsService
 {
 	
-	 private final UserRepository userRepository; 
+private final UserRepository userRepository; 
+	
+    // 프로필 사진 불러오는 부분 추가함 -나연-
+    @Override
+    public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
+        log.info("로그인 시도 : {}", id);
+        
+        UserEntity userEntity = userRepository.findById(id)
+                .orElseThrow(() -> {
+                    return new UsernameNotFoundException(id + " : 없는 ID입니다.");
+                });
+        log.debug("조회정보 : {}", userEntity); 
+        
+       
+        AuthenticatedUser user = AuthenticatedUser.builder()
+                .id(userEntity.getUserId())
+                .password(userEntity.getPassword())
+                .name(userEntity.getName())
+                .profileImage(userEntity.getProfileImage()) 
+                .build();
+        
+        return user;
+    }
+}
+
+
+
+
+// 원래 코드
+/*
+ *  private final UserRepository userRepository; 
 	
 	@Override
 	public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
@@ -39,3 +69,4 @@ public class AuthenticatedUserDetailsService implements UserDetailsService
 		return user;
 }
 	}
+ */
