@@ -1,5 +1,5 @@
 /*
- * 2024-10-08
+ * 2024-10-09
  * CreateTables_10
  * MySQL, DBeaver
  * Update table User - add column birth, gender
@@ -24,7 +24,7 @@ CREATE TABLE User (
     preferred_location VARCHAR(255),
     join_method VARCHAR(255),
     profile_image VARCHAR(255),
-    user_type ENUM('user', 'vendor') default 'user',
+    user_type ENUM('USER', 'VENDOR') default 'USER',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );

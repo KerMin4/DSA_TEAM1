@@ -61,7 +61,7 @@ public class UserEntity {
 
 
     @Column(name = "join_method")
-    private JoinMethod joinMethod;
+    private String joinMethod;
 
     @Column(name = "profile_image")
     private String profileImage;
