@@ -2,6 +2,8 @@ package com.dsa.team1.dto;
 
 import java.time.LocalDateTime;
 
+import com.dsa.team1.entity.enums.PlaceCategory;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,7 +19,7 @@ public class PlaceDTO {
 	private String title;				// Name of Place post
 	private String description;			// Description of Place post
 	private String profileImage;
-	private String category;
+	private PlaceCategory category;
 	private String location;			// Where the event will takes
 	private LocalDateTime eventDate;	// When the event will takes
 	private Integer requiredMembers;	// Minimum number of the group members
@@ -26,6 +28,6 @@ public class PlaceDTO {
 	private Integer viewCount;
 	private Integer bookmarkCount;
 	private Double price;				// Price required to join the Place post
-	private Integer vendorId;			// FK. Place post creator ID(User ID_
+	private String vendorId;			// FK. Place post creator ID(User ID_
 	private LocalDateTime createdAt;	// When the Place post was created
 }

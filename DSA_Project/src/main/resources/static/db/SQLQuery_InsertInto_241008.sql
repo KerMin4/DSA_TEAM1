@@ -1,26 +1,26 @@
 /*
- * 2024-10-08
+ * 2024-10-09
  * Insert query to test
  * CreateTables_10 ver.   
  */
 use kkirikkiri;
 select * from user;
--- select * from usergroup;
--- select * from userplace;
--- select * from socialgroup;
--- select * from place;
--- select * from notification;
--- select * from transaction;
--- select * from reservation;
--- select * from bookmark;
--- select * from memberhashtag;
--- select * from grouphashtag;
+select * from usergroup;
+select * from userplace;
+select * from socialgroup;
+select * from place;
+select * from notification;
+select * from transaction;
+select * from reservation;
+select * from bookmark;
+select * from memberhashtag;
+select * from grouphashtag;
 
 -- User Table 데이터 삽입
 INSERT INTO User (user_id, username, password, name, birth, gender, phone_number, email, preferred_location, join_method, profile_image, user_type) VALUES
-('user1', 'John Doe', 'password1', 'Johnny', '930605', '1', '010-1234-5678', 'john@example.com', 'Seoul', 'website', 'john_profile.jpg', 'user'),
-('user2', 'Jane Smith', 'password2', 'Janey', '290307', '2', '010-2345-6789', 'jane@example.com', 'Busan', 'kakao', 'jane_profile.jpg', 'user'),
-('vendor1', 'Vendor A', 'password3', 'VendorA', '200101', '2', '010-3456-7890', 'vendor@example.com', 'Incheon', 'website', 'vendorA_profile.jpg', 'vendor');
+('user1', 'John Doe', 'password1', 'Johnny', '930605', '1', '010-1234-5678', 'john@example.com', 'Seoul', 'website', 'john_profile.jpg', 'USER'),
+('user2', 'Jane Smith', 'password2', 'Janey', '290307', '2', '010-2345-6789', 'jane@example.com', 'Busan', 'kakao', 'jane_profile.jpg', 'USER'),
+('vendor1', 'Vendor A', 'password3', 'VendorA', '200101', '2', '010-3456-7890', 'vendor@example.com', 'Incheon', 'website', 'vendorA_profile.jpg', 'VENDOR');
 
 -- SocialGroup Table 데이터 삽입
 INSERT INTO SocialGroup (group_name, description, profile_image, location, group_leader_id, group_join_method, member_limit, event_date) VALUES
@@ -35,7 +35,7 @@ INSERT INTO UserGroup (user_id, group_id, status) VALUES
 ('vendor1', 3, 'approved');
 
 -- Interests Table 데이터 삽입
-INSERT INTO Interests (user_id, interest) VALUES
+INSERT INTO Interest (user_id, interest) VALUES
 ('user1', 'hobby'),
 ('user1', 'culture'),
 ('user2', 'travel');
@@ -65,7 +65,7 @@ INSERT INTO Post (group_id, user_id) VALUES
 (3, 'vendor1');
 
 -- Photos Table 데이터 삽입
-INSERT INTO Photo (post_id, content) VALUES
+INSERT INTO Photo (post_id, image_name) VALUES
 (1, 'photo1.jpg'),
 (2, 'photo2.jpg'),
 (3, 'photo3.jpg');
@@ -77,10 +77,10 @@ insert into Reply (post_id, user_id, content) values
 (3, 'user1', "Let's go");
 
 -- Bookmark Table 데이터 삽입
-INSERT INTO Bookmark (user_id, place_id) VALUES
-('user1', 1),
-('user2', 2),
-('vendor1', 3);
+INSERT INTO Bookmark (user_id, place_id, group_id) VALUES
+('user1', NULL, 1),
+('user2', NULL, 2),
+('vendor1', 3, NULL);
 
 -- MemberHashtag Table 데이터 삽입
 INSERT INTO MemberHashtag (user_id, name) VALUES
