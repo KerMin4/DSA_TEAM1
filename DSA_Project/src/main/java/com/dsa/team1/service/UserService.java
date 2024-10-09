@@ -12,6 +12,7 @@ public interface UserService {
     void join(String userid, String password, String phone, String email, String location, String name, String username,
               MultipartFile profileImage) throws IOException;
     UserEntity findUserByUserId(String userId);
+    
 }
 
 
