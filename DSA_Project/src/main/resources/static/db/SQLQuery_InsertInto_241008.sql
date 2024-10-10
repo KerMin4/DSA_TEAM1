@@ -24,15 +24,15 @@ INSERT INTO User (user_id, username, password, name, birth, gender, phone_number
 
 -- SocialGroup Table 데이터 삽입
 INSERT INTO SocialGroup (group_name, description, profile_image, location, group_leader_id, group_join_method, member_limit, event_date) VALUES
-('Photography Club', 'A club for photography enthusiasts', 'photo_club.jpg', 'Seoul', 'user1', 'auto', 50, '2024-12-01 12:00:00'),
-('Cooking Club', 'Learn and share cooking skills', 'cook_club.jpg', 'Busan', 'user2', 'approval', 20, '2024-11-10 10:00:00'),
-('Art Enthusiasts', 'Group for art lovers', 'art_club.jpg', 'Incheon', 'vendor1', 'auto', 30, '2024-12-15 14:00:00');
+('Photography Club', 'A club for photography enthusiasts', 'photo_club.jpg', 'Seoul', 'user1', 'AUTO', 50, '2024-12-01 12:00:00'),
+('Cooking Club', 'Learn and share cooking skills', 'cook_club.jpg', 'Busan', 'user2', 'APPROVAL', 20, '2024-11-10 10:00:00'),
+('Art Enthusiasts', 'Group for art lovers', 'art_club.jpg', 'Incheon', 'vendor1', 'AUTO', 30, '2024-12-15 14:00:00');
 
 -- UserGroup Table 데이터 삽입
 INSERT INTO UserGroup (user_id, group_id, status) VALUES
-('user1', 1, 'approved'),
-('user2', 2, 'approved'),
-('vendor1', 3, 'approved');
+('user1', 1, 'APPROVED'),
+('user2', 2, 'APPROVED'),
+('vendor1', 3, 'APPROVED');
 
 -- Interests Table 데이터 삽입
 INSERT INTO Interest (user_id, interest) VALUES
@@ -54,9 +54,9 @@ INSERT INTO Place (title, description, profile_image, category, location, event_
 
 -- UserPlace Table 데이터 삽입
 INSERT INTO UserPlace (user_id, place_id, status) VALUES
-('user1', 1, 'confirmed'),
-('user2', 2, 'confirmed'),
-('vendor1', 3, 'confirmed');
+('user1', 1, 'CONFIRMED'),
+('user2', 2, 'CONFIRMED'),
+('vendor1', 3, 'CONFIRMED');
 
 -- Posts Table 데이터 삽입
 INSERT INTO Post (group_id, user_id) VALUES
