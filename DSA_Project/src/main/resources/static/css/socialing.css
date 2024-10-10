@@ -101,3 +101,34 @@ body {
     display: flex;
     flex-direction: column;
 }
+
+/* ============================================== */
+
+.group-image {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+}
+
+/* ============================================== */
+.hashtags {
+    white-space: normal; /* 줄바꿈 허용 */
+}
+
+.hashtags div {
+    display: flex; /* 해시태그가 가로로 나열되도록 강제 */
+    flex-wrap: wrap; /* 공간이 부족할 경우 다음 줄로 넘어가도록 */
+    gap: 10px; /* 해시태그 간의 간격을 지정 */
+}
+
+.hashtags div span {
+    display: inline-block; /* 해시태그를 가로로 정렬 */
+    margin-right: 10px; /* 해시태그 간 여백 */
+    padding: 5px; /* 여백을 주어 해시태그 간 간격을 일정하게 */
+    background-color: #f1f1f1; /* 해시태그 배경색 */
+    border-radius: 5px; /* 해시태그 모서리 둥글게 */
+    white-space: nowrap; /* 해시태그 텍스트 줄바꿈 방지 */
+}
+
+
+

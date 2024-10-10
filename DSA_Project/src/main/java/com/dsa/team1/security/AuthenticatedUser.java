@@ -23,6 +23,7 @@ public class AuthenticatedUser implements UserDetails {
     String password;
     String name;
     String profileImage;  // 프로필 사진 불러오게 추가함 -나연-
+    String groupHeaderImage;
     // String roleName;
     // boolean enabled;
     // String username;
