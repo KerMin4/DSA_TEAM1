@@ -1,0 +1,269 @@
+/* 프로필 상자 부분 */
+.profile-section {
+    text-align: center;
+    margin: 30px auto;
+    padding: 5px 10px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    width: 600px;
+    height: 270px;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+/* 프로필 이미지 */
+.mypage-profile-img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    display: block;
+    margin: 0 auto;
+    border: 1px solid #ccc;
+    position: relative;
+    top: 20px;
+    z-index: 1;
+}
+
+/* 카메라 버튼 */
+button#editProfileButton {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    top: -90px;
+    left: 50px;
+    z-index: 10;
+}
+
+button#editProfileButton img {
+    width: 25px;
+    height: 25px;
+}
+
+/* 프로필 사진 변경 버튼 */
+.save-button {
+    background-color: #FFFFFF;
+    color: #81BBF6;
+    border: 1px solid #81BBF6;
+    padding: 10px 20px;
+    text-align: center;
+    font-size: 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-family: 'S-CoreDream-5Medium', sans-serif;
+    position: relative;
+    top: -50px;
+    left: 0px;
+}
+
+/* 닉네임 스타일 */
+.profile-nickname {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-top: 30px;
+}
+
+/* 홈 버튼 */
+.home-icon-container {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 20px;
+    position: relative;
+    top: -335px;
+    left: 55px;
+}
+
+.home-icon {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    position: relative;
+    left: 300px;
+}
+
+/* 개인정보 수정 박스 */
+.field-box {
+    margin-bottom: 50px;
+    padding: 15px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+    margin-top: 50px;
+}
+
+/* 입력 필드 스타일 */
+.nickname-section input[type="text"],
+.phone-section input[type="text"],
+.password-section input[type="password"] {
+    width: 50%;
+    max-width: 200px;
+    padding: 10px 5px;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    background: none;
+    font-family: 'S-CoreDream-3Light', sans-serif;
+    font-size: 14px;
+    outline: none;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* 입력 필드 포커스 스타일 */
+.nickname-section input[type="text"]:focus,
+.phone-section input[type="text"]:focus,
+.password-section input[type="password"]:focus {
+    border-bottom: 1px solid #81BBF6;
+    box-shadow: none;
+}
+
+/* 수정 버튼 */
+.nickname-save-button,
+.phone-save-button,
+.password-save-button {
+    width: 100px;
+    height: 40px;
+    background-color: #FFFFFF;
+    color: #81BBF6;
+    border: 1px solid #81BBF6;
+    border-radius: 20px;
+    font-family: 'S-CoreDream-5Medium', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.nickname-save-button:hover,
+.phone-save-button:hover,
+.password-save-button:hover {
+    background-color: #81BBF6;
+    color: white;
+}
+
+/* 필드 박스 컨테이너 */
+.field-box-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: -90px;
+}
+
+/* 관심사 수정 박스 */
+.interests-container {
+    margin-top: 50px;
+    margin-bottom: 50px;
+    padding: 15px;
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.interests-row {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 15px;
+}
+
+.interest-option {
+    width: 75px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    font-family: 'S-CoreDream-5Medium', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.interest-option input[type="checkbox"] {
+    display: none;
+}
+
+.interest-option label {
+    width: 150px;
+    height: 40px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 1px solid #81BBF6;
+    border-radius: 20px;
+    color: #81BBF6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s;
+}
+
+.interest-option input[type="checkbox"]:checked + label {
+    background-color: #81BBF6;
+    color: white;
+}
+
+.interest-save-button {
+    width: 120px;
+    height: 45px;
+    background-color: #FFFFFF;
+    color: #81BBF6;
+    border: 1px solid #81BBF6;
+    border-radius: 25px;
+    font-family: 'S-CoreDream-5Medium', sans-serif;
+    font-size: 15px;
+    cursor: pointer;
+    margin-top: 25px;
+}
+
+.interest-save-button:hover {
+    background-color: #81BBF6;
+    color: white;
+}
+
+/* 위치 수정 박스 */
+.location-section-wrapper {
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.location-section {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.location-section input[type="text"] {
+    width: 60%;
+    max-width: 300px;
+    padding: 10px;
+    border: none;
+    border-bottom: 2px solid #ccc;
+    font-family: 'S-CoreDream-3Light', sans-serif;
+    font-size: 14px;
+    outline: none;
+    text-align: center;
+}
+
+.location-section input[type="text"]:focus {
+    border-bottom: 2px solid #81BBF6;
+}
+
+.location-save-button {
+    width: 120px;
+    height: 45px;
+    background-color: #FFFFFF;
+    color: #81BBF6;
+    border: 1px solid #81BBF6;
+    border-radius: 25px;
+    font-family: 'S-CoreDream-5Medium', sans-serif;
+    font-size: 15px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.location-save-button:hover {
+    background-color: #81BBF6;
+    color: white;
+}

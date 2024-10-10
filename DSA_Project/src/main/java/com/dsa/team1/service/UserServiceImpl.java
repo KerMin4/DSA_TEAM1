@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository ur;
     private final BCryptPasswordEncoder passwordEncoder;
-    private final FileManager fileManager;;
+    private final FileManager fileManager;
 
     @Override
     public void join(String userid, String password, String phone, String email, String location, String name, String username, MultipartFile profileImage) throws IOException {
@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
                 .password(passwordEncoder.encode(password))
                 .phoneNumber(phone)
                 .email(email)
-                .profileImage(profileImagePath)  // 사진 저장
+                .profileImage(profileImagePath)
                 .preferredLocation(location)
                 .userName(username)
                 .name(name)
@@ -56,4 +56,52 @@ public class UserServiceImpl implements UserService {
         return ur.findByUserId(userId).orElse(null);
     }
     
+    // 프로필 이미지 수정
+    @Override
+    public String updateProfileImage(String userId, MultipartFile profileImage) throws IOException {
+        UserEntity user = findUserByUserId(userId);
+        if (user != null && !profileImage.isEmpty()) {
+            String profileImagePath = fileManager.saveFile("C:/upload", profileImage);
+            user.setProfileImage(profileImagePath);
+            ur.save(user);
+            return profileImagePath; 
+        }
+        return null; 
+    }
+
+    // 닉네임 수정
+    public void updateNickname(String userId, String nickname) {
+        UserEntity user = findUserByUserId(userId);
+        if (user != null) {
+            user.setName(nickname);
+            ur.save(user);
+        }
+    }
+
+    // 전화번호 수정
+    public void updatePhone(String userId, String phone) {
+        UserEntity user = findUserByUserId(userId);
+        if (user != null) {
+            user.setPhoneNumber(phone);
+            ur.save(user);
+        }
+    }
+
+    // 비밀번호 수정
+    public void updatePassword(String userId, String password) {
+        UserEntity user = findUserByUserId(userId);
+        if (user != null) {
+            user.setPassword(passwordEncoder.encode(password));
+            ur.save(user);
+        }
+    }
+
+    // 위치 수정
+    public void updateLocation(String userId, String location) {
+        UserEntity user = findUserByUserId(userId);
+        if (user != null) {
+            user.setPreferredLocation(location);
+            ur.save(user);
+        }
+    }
 }

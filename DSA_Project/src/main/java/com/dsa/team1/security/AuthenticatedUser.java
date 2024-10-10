@@ -64,6 +64,16 @@ public class AuthenticatedUser implements UserDetails {
         return true;
     }
     // 1
+    
+    // 프로필 수정 실시간 반영 -나연-
+    
+    public void updateProfileImage(String newProfileImage) {
+        this.profileImage = newProfileImage;
+    }
+
+    public void updateNickname(String newName) {
+        this.name = newName;
+    }
 }
 
 

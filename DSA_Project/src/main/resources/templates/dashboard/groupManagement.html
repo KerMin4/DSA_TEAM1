@@ -27,6 +27,7 @@
                     <img th:src="${#authentication.principal.profileImage != null ? '/kkirikkiri/upload/' + #authentication.principal.profileImage : '/kkirikkiri/upload/default.png'}"
                          alt="프로필 이미지" class="mypage-profile-img" id="profileImg" />
                 </div>
+                   <p th:text="${#authentication.principal.name}" class="profile-nickname"></p>
             </th:block>
 
             <div class="horizontal-line"></div>
