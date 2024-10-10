@@ -6,6 +6,7 @@ import org.hibernate.usertype.UserType;
 import org.springframework.data.annotation.CreatedDate;
 
 import com.dsa.team1.entity.enums.GroupJoinMethod;
+import com.dsa.team1.entity.enums.Interest;
 import com.dsa.team1.entity.enums.JoinMethod;
 
 import jakarta.persistence.Column;
@@ -35,6 +36,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Table(name = "SocialGroup")
 public class SocialGroupEntity {
+	
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "group_id")
@@ -50,6 +52,10 @@ public class SocialGroupEntity {
     private String profileImage;
     
     private String location;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(name = "interest")
+    private Interest interest;
 
     @ManyToOne
     @JoinColumn(name = "group_leader_id")

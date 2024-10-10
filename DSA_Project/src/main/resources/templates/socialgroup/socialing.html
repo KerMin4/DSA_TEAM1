@@ -33,16 +33,16 @@
             <div class="category-filters">
                 <h3 id="category-toggle" style="cursor: pointer;">카테고리별</h3>
                 <div id="category-container" style="display: none;">
-                    <label><input type="radio" name="interest" value="취미"> 취미</label>
-                    <label><input type="radio" name="interest" value="자기계발"> 자기계발</label>
-                    <label><input type="radio" name="interest" value="푸드"> 푸드</label>
-                    <label><input type="radio" name="interest" value="액티비티"> 액티비티</label>
-                    <label><input type="radio" name="interest" value="반려동물"> 반려동물</label>
-                    <label><input type="radio" name="interest" value="문화"> 문화</label>
-                    <label><input type="radio" name="interest" value="재테크"> 재테크</label>
-                    <label><input type="radio" name="interest" value="연애"> 연애</label>
-                    <label><input type="radio" name="interest" value="게임"> 게임</label>
-                    <label><input type="radio" name="interest" value="여행"> 여행</label>
+                    <label><input type="radio" name="interest" value="HOBBY"> 취미</label>
+                    <label><input type="radio" name="interest" value="DEVELOPMENT"> 자기계발</label>
+                    <label><input type="radio" name="interest" value="FOOD"> 푸드</label>
+                    <label><input type="radio" name="interest" value="ACTIVITY"> 액티비티</label>
+                    <label><input type="radio" name="interest" value="PETS"> 반려동물</label>
+                    <label><input type="radio" name="interest" value="CULTURE"> 문화</label>
+                    <label><input type="radio" name="interest" value="MONEY"> 재테크</label>
+                    <label><input type="radio" name="interest" value="LOVE"> 연애</label>
+                    <label><input type="radio" name="interest" value="GAME"> 게임</label>
+                    <label><input type="radio" name="interest" value="TRAVEL"> 여행</label>
                 </div>
             </div>
             
@@ -51,7 +51,7 @@
                 <h3 id="location-toggle" style="cursor: pointer;">지역별</h3>
                 <div id="location-container" class="hidden">
                     <!-- 상위 지역 버튼들이 여기에 동적으로 생성됨 -->
-                    <div id="region-container" class="region-container"></div>
+                    <div id="location-container" class="location-container"></div>
                 </div>
             </div>
 
@@ -82,9 +82,9 @@
 			        <div th:if="${#lists.isEmpty(allHashtags)}">
 			            <span>#아직 등록된 해시태그가 없습니다. 해시태그를 추가해보세요.</span>
 			        </div>
-			        <!-- 해시태그가 있을 때 출력 -->
+			        <!-- 해시태그가 있을 때 출력 (중복 제거된 해시태그만 출력) -->
 					<div th:each="hashtag : ${allHashtags}">
-					    <a th:href="@{/socialgroup/socialing(query=${hashtag})}">
+					    <a th:href="@{/socialgroup/filter(query=${hashtag})}">
 					         <span th:text="'#' + ${hashtag}"></span>
 					    </a>
 					</div>
@@ -99,15 +99,20 @@
             <!-- Group Listings -->
             <div class="group-listing" id="group-container">
 			    <!-- 전체 그룹 목록을 처음에 출력 -->
-				<p th:if="${#lists.isEmpty(groups)}">검색 결과가 없습니다. 다른 검색어를 입력해보세요.</p>
-				
+			    <!-- 검색 결과가 없을 경우 출력 -->
+				<div th:if="${#lists.isEmpty(groups)}">
+			        <p>검색 결과가 없습니다. 다른 검색어를 입력해보세요.</p>
+			    </div>
+			    
+				<!-- 검색 결과가 있을 경우 출력 -->
+				<div th:unless="${#lists.isEmpty(groups)}">
 			    <div th:each="group : ${groups}">
 			        <div class="group-card" data-group-id="${group.groupId}">
 			            <div class="group-info">
 			                <table>
 			                    <tr>
 			                        <td>
-										<img th:src="@{'/upload/' + ${group.profileImage}}" alt="Profile Image" class="group-image">
+			                        	<img th:src="@{${group.profileImage != null} ? '/upload/' + ${group.profileImage} : '/images/noImage_icon.png'}" alt="Profile Image" class="group-image">
 			                        </td>
 			                        <td>
 			                            <h3 th:text="${group.groupName}">그룹 이름</h3>
@@ -128,6 +133,7 @@
 			            </div>
 			        </div>
 			    </div>
+			</div>
                 
 	            <!-- 검색 결과가 없을 때 출력할 메시지 -->
 				<div id="no-result-message" style="display: none;">
