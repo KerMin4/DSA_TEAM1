@@ -183,7 +183,6 @@ $(function() {
         });
     });
 
-
     // 정렬 기준 토글
     $('#sort-toggle').on('click', function() {
         $('#sort-options').toggle();
