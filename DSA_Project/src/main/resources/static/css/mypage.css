@@ -30,10 +30,13 @@
     color: #333;
     font-size: 18px;
     display: block;
-    border-radius: 8px;
+    border-radius: 0;
+    background-color: transparent;
+    border: none;
     font-family: 'S-CoreDream-3Light', sans-serif;
     transition: background-color 0.3s ease, color 0.3s ease;
     text-align: left;
+    padding: 0;
 }
 
 #home {
@@ -53,14 +56,19 @@
 }
 
 .mypage-nav li a:hover {
-    background-color: #f0f0f0;
+    background-color: #f0f0f0; 
     color: #F8B1A3;
+    border: none; 
+    padding: 0;
+    background-color: transparent; 
 }
 
 .mypage-nav li a.active {
-    background-color: transparent;
+    background-color: transparent; 
     color: #F8B1A3; 
     font-weight: bold; 
+    border: none; 
+    padding: 0; 
 }
 
 .content {
@@ -70,7 +78,6 @@
     font-family: 'S-CoreDream-3Light', sans-serif;
 }
 
-
 .mypage-profile-img {
     width: 170px;
     height: 170px;
@@ -78,10 +85,10 @@
     display: block;
     margin-left: 1240px;
     position: relative; 
-    top: -200px;
+    top: -220px;
     left: 28px;
+    border: 1px solid #ccc;
 }
-
 
 .horizontal-line {
     width: 1485px; 
@@ -94,13 +101,19 @@
     margin: 0 auto; 
 }
 
-
 .profile-section {
-    text-align: center;
-    margin-top: 20px;
-    margin-bottom: 20px;
     display: flex;
-    justify-content: center;
-    align-items: center;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.profile-nickname {
+    font-size: 1.2em; 
+    font-weight: bold;
+    text-align: center; 
+    margin-top: -210px;  
+    margin-left: 730px; 
+    white-space: nowrap;
 }

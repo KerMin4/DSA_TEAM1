@@ -20,14 +20,14 @@ public class HomeController {
 
     @GetMapping({"", "/"})
     public String home(Model model) {
-        // 현재 인증된 사용자 정보 가져오기
+    
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String userid = auth.getName();  // 인증된 사용자의 아이디 가져오기
+        String userid = auth.getName();  
         
-        // 사용자 정보 조회
+  
         var user = userService.findUserByUserId(userid);
 
-        // 사용자 프로필 이미지가 있으면 모델에 추가
+       
         if (user != null && user.getProfileImage() != null) {
             model.addAttribute("profileImage", user.getProfileImage());
         }

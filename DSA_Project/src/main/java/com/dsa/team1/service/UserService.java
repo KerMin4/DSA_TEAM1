@@ -13,6 +13,12 @@ public interface UserService {
               MultipartFile profileImage) throws IOException;
     UserEntity findUserByUserId(String userId);
     
+    // 프로필 수정 -나연-
+    String updateProfileImage(String userId, MultipartFile profileImage) throws IOException;
+    void updateNickname(String userId, String nickname);
+    void updatePhone(String userId, String phone);
+    void updatePassword(String userId, String password); 
+    void updateLocation(String userId, String location);
 }
 
 
