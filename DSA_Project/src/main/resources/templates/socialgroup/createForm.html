@@ -1,12 +1,16 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://thymeleaf.org/extra/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>그룹 생성 게시판</title>
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
     <link th:href="@{/css/sidebar.css}" rel="stylesheet">
     <link th:href="@{/css/createForm.css}" rel="stylesheet">
+    <!-- 여기 아래 코드 위치만 바꿈 위에 있으면 적용안돼서 -나연- -->
+    <link th:href="@{/css/header.css}" rel="stylesheet">
     <script th:src="@{/js/createForm.js}"></script>
+    
 </head>
 <body>
 	<div th:replace="~{fragments/header :: header}"></div>
@@ -46,7 +50,7 @@
 	                <table>
 		                <tr>
 		                    <td>
-                                <img id="imagePreview" src="" alt="이미지 미리보기" style="display:none; width:200px; height:200px;">
+                                <img id="imagePreview" style="display: block;">
                                 <button type="button" id="removeImage" style="display:none;">이미지 삭제</button>
                         	</td>
 		                </tr>
@@ -56,7 +60,6 @@
 		                    </td>
 		                    <td>
 		                        <input type="date" name="eventDate" id="eventDate">
-		                        <input type="time" name="eventTime" id="eventTime">
 		                    </td>
 		                    <td>인원 수
 		                        <div class="person-counter">

@@ -1,14 +1,16 @@
 $(function() {
 	// 전체보기 버튼 클릭 시 모든 그룹을 조회하는 함수
-    $('#allGroupsButton').on('click', function() {
+    $('#allGroupsButton').on('click', function(event) {
+        event.preventDefault(); // 기본 링크 동작 방지
+
         // AJAX 요청으로 DB에서 모든 그룹을 조회
         $.ajax({
-            url: 'http://localhost:7272/api/groups/all',  // 전체 그룹을 가져오는 API 경로
+            url: '/kkirikkiri/socialgroup/listAll',  // 전체 그룹을 가져오는 API 경로
             type: 'GET',
             success: function(response) {
                 console.log('전체 그룹 조회 응답:', response);  // 서버 응답 확인 로그
-                
-                if (response.html.trim() === '') {
+
+                if (response.length === 0) {
                     // 그룹이 없을 경우 메시지를 보여줌
                     $('#no-result-message').show();
                     $('#no-result-text').text("등록된 그룹이 없습니다.");
@@ -16,7 +18,32 @@ $(function() {
                 } else {
                     // 그룹 목록을 업데이트
                     $('#no-result-message').hide();
-                    $('.group-listing').html(response.html);
+                    $('.group-listing').html(''); // 기존 목록 초기화
+
+                    response.forEach(function(group) {
+                        $('.group-listing').append(`
+                            <div class="group-card" data-group-id="${group.groupId}">
+                                <div class="group-info">
+                                    <table>
+                                        <tr>
+                                            <td><img src="${group.profileImage}" alt="그룹 사진" class="group-image"></td>
+                                            <td>
+                                                <h3>${group.groupName}</h3>
+                                                <p>위치: ${group.location}</p>
+                                                <p>날짜: ${new Date(group.eventDate).toLocaleString()}</p>
+                                                <p>인원: ${group.memberCount}/${group.memberLimit}명</p>
+                                                <p>조회수: ${group.viewCount}</p>
+                                                <p>북마크: ${group.bookmarkCount}</p>
+                                            </td>
+                                            <td>
+                                                <a href="/socialgroup/board?groupId=${group.groupId}" class="join-btn">그룹 참여</a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        `);
+                    });
                 }
             },
             error: function(err) {

@@ -2,26 +2,35 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>마이페이지</title>
-    <link rel="stylesheet" type="text/css" href="/kkirikkiri/css/mypage.css">
-    <link rel="stylesheet" type="text/css" href="/kkirikkiri/css/dashboardheader.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
+    <title>메인페이지</title>
+    <link th:href="@{/css/header.css}" rel="stylesheet">
+    <link th:href="@{/css/main.css}" rel="stylesheet"> 
+    <link th:href="@{/css/mypage.css}" rel="stylesheet">
     <script src="/kkirikkiri/js/jquery-3.7.1.min.js"></script>
-    <script src="/kkirikkiri/js/mypage.js"></script>
 </head>
 <body>
-    <!-- 공통 헤더 -->
-    <div class="header-container">
-        <div th:replace="dashboard/dashboardheader :: header('mypage')"></div>
-    </div>
-    
-    <!-- 캘린더를 위한 컨테이너 -->
-    <div class="calendar-wrapper"> 
-        <div class="calendar-container">
-            <div id="calendar"></div>
-        </div>
-    </div>
+  
+    <div th:replace="~{fragments/header :: header}"></div>
 
+    <div class="mypage-container">
+        <nav class="mypage-nav">
+            <ul>
+                <li><a th:classappend="${activePage == 'home'} ? 'active'" th:href="@{/dashboard/mypage}" id="home">홈</a></li>
+                <li><a th:classappend="${activePage == 'profile-edit'} ? 'active'" th:href="@{/dashboard/profileedit}" id="profile-edit">프로필 수정</a></li>
+                <li><a th:classappend="${activePage == 'group-management'} ? 'active'" th:href="@{/dashboard/groupManagement}" id="group-management">그룹 관리</a></li>
+                <li><a th:classappend="${activePage == 'payment-management'} ? 'active'" th:href="@{/dashboard/paymentManagement}" id="payment-management">결제 관리</a></li>
+            </ul>
+
+           
+            <th:block sec:authorize="isAuthenticated()">
+                <div class="profile-section">
+                    <img th:src="${#authentication.principal.profileImage != null ? '/kkirikkiri/upload/' + #authentication.principal.profileImage : '/kkirikkiri/upload/default.png'}"
+                         alt="프로필 이미지" class="mypage-profile-img" id="profileImg" />
+                </div>
+            </th:block>
+
+            <div class="horizontal-line"></div>
+        </nav>
+    </div>
 </body>
 </html>

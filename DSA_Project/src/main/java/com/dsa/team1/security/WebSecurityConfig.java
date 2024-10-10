@@ -13,53 +13,57 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class WebSecurityConfig {
 
-	// 로그인 없이 접근 가능한 경로. 필요한거 더 추가해서 사용하세요
+    // 로그인 없이 접근 가능한 경로. 필요한거 더 추가해서 사용하세요
 	private static final String[] PUBLIC_URLS = {
-			"/",
-			"/images/**",
-			"/css/**",
-			"/js/**",
-			"/member/joinForm1",
-			"/member/login",
-			"/kkirikkiri/member/join",
-			"/socialgroup/**",		// 임시추가
-			"/dashboard/**",       // 나중에 까먹지말고 빼야댐 (나연)
-			"/member/join1",
-			"/member/join",
-			"/kkirikkiri/member/idCheck",
-			"/member/idCheck"
-	};
-	
-	@Bean
-	protected SecurityFilterChain config(HttpSecurity http) throws Exception{
-		http
-			.authorizeHttpRequests(author -> author
-					.requestMatchers(PUBLIC_URLS).permitAll()
-					.anyRequest().authenticated()
-					)
-			.httpBasic(Customizer.withDefaults())
-			.formLogin(formLogin -> formLogin
-					.loginPage("/member/loginForm")
-					.usernameParameter("id")
-					.passwordParameter("password")
-					.loginProcessingUrl("/member/login")
-					.defaultSuccessUrl("/", true)
-					.failureUrl("/member/loginForm?error=true")
-					.permitAll()
-					)
-			.logout(logout -> logout
-					.logoutUrl("/member/logout")
-					.logoutSuccessUrl("/"));
-		
-		http
-			.cors(AbstractHttpConfigurer::disable)
-			.csrf(AbstractHttpConfigurer::disable);
-			
-		return http.build();
-	}
-	// 1
-	@Bean
-	public BCryptPasswordEncoder getPasswordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+		    "/",
+		    "/images/**",
+		    "/css/**",
+		    "/js/**",
+		    "/member/joinForm1",
+		    "/member/login",
+		    "/kkirikkiri/member/join",
+		    "/dashboard/**",
+		    "/member/join1",
+		    "/member/join",
+		    "/kkirikkiri/member/idCheck",
+		    "/member/idCheck",
+		    "/kkirikkiri/upload/**", 
+		    "/upload/**",
+		    "/socialgroup/**"
+		};
+
+    
+    @Bean
+    protected SecurityFilterChain config(HttpSecurity http) throws Exception {
+        http
+            .authorizeHttpRequests(author -> author
+                    .requestMatchers(PUBLIC_URLS).permitAll()
+                    .anyRequest().authenticated()
+            )
+            .httpBasic(Customizer.withDefaults())
+            .formLogin(formLogin -> formLogin
+                    .loginPage("/member/loginForm")
+                    .usernameParameter("id")
+                    .passwordParameter("password")
+                    .loginProcessingUrl("/member/login")
+                    .defaultSuccessUrl("/", true)
+                    .failureUrl("/member/loginForm?error=true")
+                    .permitAll()
+            )
+            .logout(logout -> logout
+                    .logoutUrl("/member/logout")
+                    .logoutSuccessUrl("/")
+            );
+        
+        http
+            .cors(AbstractHttpConfigurer::disable)
+            .csrf(AbstractHttpConfigurer::disable);
+        
+        return http.build();
+    }
+    
+    @Bean
+    public BCryptPasswordEncoder getPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }
