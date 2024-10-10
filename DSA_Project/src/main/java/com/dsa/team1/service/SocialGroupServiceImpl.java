@@ -12,9 +12,13 @@ import org.springframework.web.multipart.MultipartFile;
 import com.dsa.team1.dto.SocialGroupDTO;
 import com.dsa.team1.entity.GroupHashtagEntity;
 import com.dsa.team1.entity.SocialGroupEntity;
+import com.dsa.team1.entity.UserEntity;
+import com.dsa.team1.entity.UserGroupEntity;
 import com.dsa.team1.entity.enums.GroupJoinMethod;
+import com.dsa.team1.entity.enums.UserGroupStatus;
 import com.dsa.team1.repository.GroupHashtagRepository;
 import com.dsa.team1.repository.SocialGroupRepository;
+import com.dsa.team1.repository.UserGroupRepository;
 import com.dsa.team1.repository.UserRepository;
 import com.dsa.team1.security.AuthenticatedUser;
 import com.dsa.team1.util.FileManager;
@@ -30,7 +34,8 @@ public class SocialGroupServiceImpl implements SocialGroupService {
     
     private final SocialGroupRepository socialGroupRepository;   
     private final UserRepository userRepository;                 
-    private final GroupHashtagRepository groupHashtagRepository; 
+    private final GroupHashtagRepository groupHashtagRepository;
+    private final UserGroupRepository userGroupRepository;
     private final FileManager fileManager;                       
     
     @Override
@@ -82,6 +87,23 @@ public class SocialGroupServiceImpl implements SocialGroupService {
             }
         }
     }
+    
+    @Override
+    public int getMemberCountByGroup(SocialGroupEntity group) {
+        // 그룹의 현재 활성화된 멤버 수 계산 (방장을 제외한 멤버 수)
+        int memberCount = userGroupRepository.countActiveMembersByGroupId(group.getGroupId());
+        
+        // 방장은 무조건 포함하므로 1명을 더한다
+        memberCount += 1;
+
+        // 멤버 수가 그룹의 제한인원(memberLimit)을 넘지 않게 한다
+        if (memberCount > group.getMemberLimit()) {
+            memberCount = group.getMemberLimit();
+        }
+
+        return memberCount;
+    }
+
 
     @Override
     public List<SocialGroupDTO> getAllGroups() {
@@ -95,4 +117,9 @@ public class SocialGroupServiceImpl implements SocialGroupService {
                                                    entity.getEventDate(), entity.getCreatedAt()))
                 .collect(Collectors.toList());
     }
+
+	
+    
+	
+
 }

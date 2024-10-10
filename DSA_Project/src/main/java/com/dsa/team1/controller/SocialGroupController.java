@@ -10,13 +10,16 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,6 +38,7 @@ import com.dsa.team1.entity.UserEntity;
 import com.dsa.team1.entity.enums.GroupJoinMethod;
 import com.dsa.team1.repository.GroupHashtagRepository;
 import com.dsa.team1.repository.SocialGroupRepository;
+import com.dsa.team1.repository.UserGroupRepository;
 import com.dsa.team1.repository.UserRepository;
 import com.dsa.team1.security.AuthenticatedUser;
 import com.dsa.team1.service.SocialGroupService;
@@ -51,6 +55,7 @@ public class SocialGroupController {
     
     private final SocialGroupService socialGroupService;
     private final SocialGroupRepository socialGroupRepository;
+    private final UserGroupRepository userGroupRepository;
     private final GroupHashtagRepository groupHashtagRepository;
     
     @Value("${socialgroup.pageSize}")
@@ -117,14 +122,15 @@ public class SocialGroupController {
      */
     @GetMapping("/socialing")
     public String list(
+    		Model model,
             @RequestParam(value = "query", required = false) String query,
-            Model model,
             @AuthenticationPrincipal AuthenticatedUser user) {
     	
         log.info("Authenticated User: {}", user);
 
         List<SocialGroupEntity> groups;
 
+        // 검색어가 있는 경우 처리
         if (query != null && !query.trim().isEmpty()) {
             // 그룹 이름 또는 설명에 검색어가 포함된 그룹을 찾음
             List<SocialGroupEntity> nameOrDescriptionGroups = socialGroupRepository
@@ -141,6 +147,7 @@ public class SocialGroupController {
             groups.addAll(hashtagGroups);
             groups = groups.stream().distinct().collect(Collectors.toList());
         } else {
+            // 전체 그룹 조회
             groups = socialGroupRepository.findAll();
         }
 
@@ -151,24 +158,51 @@ public class SocialGroupController {
             model.addAttribute("name", null);
         }
         
-
         // 모든 해시태그를 가져와서 모델에 추가
         List<String> allHashtags = groupHashtagRepository.findAllHashtags();
         model.addAttribute("allHashtags", allHashtags);
+        
+        // 그룹 목록 및 멤버 수 계산
+        Map<Integer, Integer> memberCountMap = new HashMap<>();
+        for (SocialGroupEntity group : groups) {
+            int memberCount = getMemberCountByGroup(group);
+            memberCountMap.put(group.getGroupId(), memberCount);
+        }
+
+        // 모델에 그룹 목록 및 멤버 수 추가
         model.addAttribute("groups", groups);
-        model.addAttribute("query", query); // 검색어도 뷰에 전달
+        model.addAttribute("memberCountMap", memberCountMap);
+
+        
+        // 프로필 이미지 추가
+        List<String> profileImages = groups.stream()
+                .map(SocialGroupEntity::getProfileImage)
+                .map(image -> (image != null) ? image : "noImage_icon.png")
+                .collect(Collectors.toList());
+        model.addAttribute("profileImages", profileImages);
+
+        // 검색어도 뷰에 전달
+        model.addAttribute("query", query); 
 
         return "socialgroup/socialing";
     }
     
-    /**
-     * 그룹 전체 목록 조회
-     */
-    @GetMapping("/listAll")
-    public ResponseEntity<List<SocialGroupDTO>> listAllGroups() {
-        List<SocialGroupDTO> groups = socialGroupService.getAllGroups();
-        return ResponseEntity.ok(groups);
+    // 그룹에 속한 멤버 수를 계산하는 함수
+    public int getMemberCountByGroup(SocialGroupEntity group) {
+        // 그룹의 현재 활성화된 멤버 수 계산 (방장을 제외한 멤버 수)
+        int memberCount = userGroupRepository.countActiveMembersByGroupId(group.getGroupId());
+        
+        // 방장은 무조건 포함하므로 1명을 더한다
+        memberCount += 1;
+
+        // 멤버 수가 그룹의 제한인원(memberLimit)을 넘지 않게 한다
+        if (memberCount > group.getMemberLimit()) {
+            memberCount = group.getMemberLimit();
+        }
+
+        return memberCount;
     }
+    
 
     /**
      * 그룹 게시판 페이지로 이동

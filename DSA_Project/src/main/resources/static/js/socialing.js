@@ -31,7 +31,7 @@ $(function() {
                                                 <h3>${group.groupName}</h3>
                                                 <p>위치: ${group.location}</p>
                                                 <p>날짜: ${new Date(group.eventDate).toLocaleString()}</p>
-                                                <p>인원: ${group.memberCount}/${group.memberLimit}명</p>
+                                                <p>인원: ${group.membeLimit}/${group.memberLimit}명</p>
                                                 <p>조회수: ${group.viewCount}</p>
                                                 <p>북마크: ${group.bookmarkCount}</p>
                                             </td>
@@ -65,7 +65,7 @@ $(function() {
 
         // Ajax 요청으로 검색 및 필터링 실행
         $.ajax({
-		    url: 'http://localhost:7272/api/filter',
+		    url: '/kkirikkiri/socialgroup/filter',
 		    type: 'GET',
 		    data: {
 		        query: searchQuery,

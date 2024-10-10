@@ -19,12 +19,11 @@
         <div class="sidebar">
             <h2>검색어로 내게 맞는 그룹 찾기</h2>
             <div class="search">
-                <!-- 검색 폼: 사용자가 검색어를 입력하고 검색 버튼을 누르면 서버로 요청이 전송됨 -->
-                <form id="searchForm">
-                    <input type="text" id="searchInput" name="query" placeholder="검색어를 입력하세요...">
-                    <button type="submit" id="searchButton">검색</button>
-                </form>
-            </div>
+			    <form method="get" th:action="@{/socialgroup/socialing}">
+				    <input type="text" name="query" th:value="${query}" placeholder="검색어를 입력하세요">
+				    <input type="submit" value="검색">
+				</form>
+			</div>
             
             <br><br>
             
@@ -84,9 +83,11 @@
 			            <span>#아직 등록된 해시태그가 없습니다. 해시태그를 추가해보세요.</span>
 			        </div>
 			        <!-- 해시태그가 있을 때 출력 -->
-			        <div th:each="hashtag : ${allHashtags}">
-			            <span th:text="${hashtag}"></span>
-			        </div>
+					<div th:each="hashtag : ${allHashtags}">
+					    <a th:href="@{/socialgroup/socialing(query=${hashtag})}">
+					         <span th:text="'#' + ${hashtag}"></span>
+					    </a>
+					</div>
 			    </div>
 		    </div>
 
@@ -98,24 +99,26 @@
             <!-- Group Listings -->
             <div class="group-listing" id="group-container">
 			    <!-- 전체 그룹 목록을 처음에 출력 -->
-			    <!-- 기본 메시지를 추가할 때만 보이도록 설정 -->
-				<p th:if="${#lists.isEmpty(groups)}">전체 그룹 목록을 확인하세요!</p>
+				<p th:if="${#lists.isEmpty(groups)}">검색 결과가 없습니다. 다른 검색어를 입력해보세요.</p>
+				
 			    <div th:each="group : ${groups}">
 			        <div class="group-card" data-group-id="${group.groupId}">
 			            <div class="group-info">
 			                <table>
 			                    <tr>
-			                        <td><img th:src="@{${group.profileImage}}" alt="그룹 사진" class="group-image"></td>
+			                        <td>
+										<img th:src="@{'/upload/' + ${group.profileImage}}" alt="Profile Image" class="group-image">
+			                        </td>
 			                        <td>
 			                            <h3 th:text="${group.groupName}">그룹 이름</h3>
 			                            <p th:text="'위치: ' + ${group.location}">위치</p>
-			                            <span th:text="${#temporals.format(group.eventDate, 'yyyy-MM-dd')}">날짜</span>
-			                            <p th:text="'인원: ' + ${group.memberLimit} + '/' + ${group.memberLimit} + '명'">인원</p>
+			                            <p th:text="${#temporals.format(group.eventDate, 'yyyy-MM-dd')}">날짜</p>
+			                            <p th:text="'인원: ' + (${memberCountMap != null ? memberCountMap[group.groupId] : 0}) + '/' + ${group.memberLimit} + '명'">인원</p>
 			                            <p th:text="'조회수: ' + ${group.viewCount}">조회수</p>
 			                            <p th:text="'북마크: ' + ${group.bookmarkCount}">북마크</p>
 			                        </td>
 			                        <td>
-			                            <a th:href="@{/socialgroup/board(groupId=${group.groupId})}" class="join-btn">그룹 참여</a>
+			                            <a th:href="@{/socialgroup/groupBoard(groupId=${group.groupId})}" class="join-btn">그룹 참여</a>
 			                            <!-- 북마크 추가/해제 버튼 -->
 			                            <button class="bookmark-btn" data-group-id="${group.groupId}">북마크</button>
 			                            <button class="remove-bookmark-btn" data-group-id="${group.groupId}">북마크 해제</button>
