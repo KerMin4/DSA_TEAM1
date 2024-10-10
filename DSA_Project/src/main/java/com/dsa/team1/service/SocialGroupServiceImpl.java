@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.dsa.team1.dto.SocialGroupDTO;
+import com.dsa.team1.entity.BookmarkEntity;
 import com.dsa.team1.entity.GroupHashtagEntity;
 import com.dsa.team1.entity.SocialGroupEntity;
 import com.dsa.team1.entity.UserEntity;
@@ -18,6 +20,7 @@ import com.dsa.team1.entity.UserGroupEntity;
 import com.dsa.team1.entity.enums.GroupJoinMethod;
 import com.dsa.team1.entity.enums.Interest;
 import com.dsa.team1.entity.enums.UserGroupStatus;
+import com.dsa.team1.repository.BookmarkRepository;
 import com.dsa.team1.repository.GroupHashtagRepository;
 import com.dsa.team1.repository.SocialGroupRepository;
 import com.dsa.team1.repository.UserGroupRepository;
@@ -38,6 +41,7 @@ public class SocialGroupServiceImpl implements SocialGroupService {
     private final UserRepository userRepository;                 
     private final GroupHashtagRepository groupHashtagRepository;
     private final UserGroupRepository userGroupRepository;
+    private final BookmarkRepository bookmarkRepository;
     private final FileManager fileManager;                       
     
     @Override
@@ -72,6 +76,8 @@ public class SocialGroupServiceImpl implements SocialGroupService {
                  .memberLimit(memberLimit)       
                  .eventDate(eventDateTime)
                  .groupLeader(userRepository.findById(user.getId()).orElseThrow(() -> new IllegalArgumentException("리더 사용자 ID를 찾을 수 없습니다.")))
+                 .viewCount(0)  // 기본 조회수 설정
+                 .bookmarkCount(0)  // 기본 북마크 설정
                  .createdAt(LocalDateTime.now())  
                  .groupJoinMethod(groupJoinMethodEnum)	// Enum 타입으로 변경된 값을 사용
                  .interest(interestEnumList.get(0))		// 변환된 interestEnum 사용		// 첫 번째 관심사만 설정
@@ -160,6 +166,32 @@ public class SocialGroupServiceImpl implements SocialGroupService {
 	    // 중복 제거
 	    return groups.stream().distinct().collect(Collectors.toList());
 	}
-
 	
+	@Override
+	public void toggleBookmark(UserEntity user, SocialGroupEntity group) {
+	    Optional<BookmarkEntity> existingBookmark = bookmarkRepository.findByUserAndGroup(user, group);
+	    
+	    if (existingBookmark.isPresent()) {
+	        // 북마크가 존재하면 제거
+	        bookmarkRepository.delete(existingBookmark.get());
+	        // 북마크 수가 0 이상이면 감소, 그렇지 않으면 0으로 유지
+	        if (group.getBookmarkCount() > 0) {
+	            group.setBookmarkCount(group.getBookmarkCount() - 1); 
+	        }
+	    } else {
+	        // 북마크가 없으면 추가
+	        BookmarkEntity newBookmark = BookmarkEntity.builder()
+	            .user(user)
+	            .group(group)
+	            .place(null)  // 필요 없으므로 null
+	            .createdAt(LocalDateTime.now())
+	            .build();
+	        bookmarkRepository.save(newBookmark);
+	        group.setBookmarkCount(group.getBookmarkCount() + 1); // 북마크 수 증가
+	    }
+	    
+	    // DB에 그룹의 북마크 수 업데이트 반영
+	    socialGroupRepository.save(group);
+	}
+
 }

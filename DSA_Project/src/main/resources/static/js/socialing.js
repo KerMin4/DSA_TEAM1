@@ -56,7 +56,7 @@ $(function() {
             
                 if ($(data).find('#group-container').html().trim() === '') {
                     $('#no-result-message').show();
-                    $('#no-result-text').text(`"${searchQuery}"에 대한 검색 결과를 찾을 수 없습니다.`);
+                    $('#no-result-text').text(`${searchQuery}에 대한 검색 결과를 찾을 수 없습니다.`);
                 } else {
                     $('#no-result-message').hide();
                 }
@@ -117,10 +117,10 @@ $(function() {
     };
 
     // 상위 지역 버튼 생성
-    const largeLocations = Object.keys(locations);
-    largeLocations.forEach(location => {
-        $('#location-container').append(`<button class="location-btn" data-location="${location}">${location}</button>`);
-    });
+	const largeLocations = Object.keys(locations);
+	largeLocations.forEach(location => {
+	    $('#location-container').append(`<button class="location-btn" data-location="${location}">${location}</button>`);
+	});
 
     // 상위 지역 버튼 클릭 시 세부 지역 표시 및 다른 지역 접기
     $('#location-container').on('click', '.location-btn', function() {
@@ -143,12 +143,46 @@ $(function() {
         }
     });
     
-	// 해시태그 클릭 시 해당 해시태그로 필터링
-    $('#hashtag-container').on('click', 'a', function(event) {
-        event.preventDefault();
-        var selectedHashtag = $(this).text().replace('#', '').trim(); // 클릭한 해시태그에서 # 제거
-        filterGroups(selectedHashtag);  // 해시태그를 검색어로 사용하여 필터링
+	// 해시태그 클릭 시 호출되는 filterGroups 메서드
+	$('#hashtag-container').on('click', 'a', function(event) {
+	    event.preventDefault();
+	    var selectedHashtag = $(this).text().replace('#', '').trim(); // 클릭한 해시태그에서 # 제거
+	    filterGroups(selectedHashtag);  // 해시태그를 검색어로 사용하여 필터링
+	});
+
+    
+    // 북마크 버튼 클릭 시 동작
+    $('.group-listing').on('click', '.bookmark-btn', function() {
+        var groupId = $(this).data('group-id'); 
+        var bookmarkButton = $(this);
+
+        $.ajax({
+            type: "POST",
+            url: "/kkirikkiri/socialgroup/bookmark/toggle",
+            data: { groupId: groupId },
+            success: function(response) {
+                console.log("북마크 상태 변경 성공: " + response);
+
+                // 북마크 수 업데이트를 위한 요소 선택
+                var bookmarkCountElement = bookmarkButton.closest('.group-card').find('.bookmark-count');
+                var updatedCount = parseInt(response); // 서버로부터 받은 새로운 북마크 수
+
+                // 북마크 상태에 따라 버튼 텍스트 변경
+                if (bookmarkButton.text() === '북마크 추가') {
+                    bookmarkButton.text('북마크 제거');
+                } else {
+                    bookmarkButton.text('북마크 추가');
+                }
+
+                // 북마크 수 업데이트
+                bookmarkCountElement.text('북마크: ' + updatedCount);
+            },
+            error: function(error) {
+                console.log("에러 발생", error);
+            }
+        });
     });
+
 
     // 정렬 기준 토글
     $('#sort-toggle').on('click', function() {

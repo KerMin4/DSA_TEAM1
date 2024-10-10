@@ -20,4 +20,5 @@ public class UserGroupDTO {
 	private Integer groupId;				// FK. Social Group ID
 	private LocalDateTime joinedAt;			// Date and time User joined the group
 	private UserGroupStatus userStatus;		// Whether user is authorized to join the group
+	private Boolean isBookmarked;
 }
