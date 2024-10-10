@@ -37,6 +37,7 @@ public class AuthenticatedUser implements UserDetails {
         return Collections.emptyList();
     }
 
+    
     @Override
     public String getUsername() {
         return this.id;

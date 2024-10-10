@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://thymeleaf.org/extra/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>그룹 목록 페이지</title>
@@ -27,7 +28,7 @@
             
             <br><br>
             
-            <h3 id="allGroupsButton">전체목록</h3>
+            <a href="#" id="allGroupsButton" class="btn view-all-btn">전체 그룹 보기</a>
 
             <!-- 카테고리 필터 -->
             <div class="category-filters">
@@ -89,9 +90,11 @@
 			    </div>
 		    </div>
 
-            <h2 th:if="${name != null}" th:text="'[[${name}]]님의 관심사에 맞는 그룹들을 만나보세요!'"></h2>
-            <h2 th:if="${name == null}">로그인 후 관심사에 맞는 그룹들을 만나보세요!</h2>
-            
+            <div sec:authorize="isAuthenticated()">
+		        <h2 th:text="${#authentication.name} + '님의 관심사에 맞는 그룹들을 만나보세요!'"></h2>
+		    </div>
+		    <h2 th:if="${name == null}">로그인 후 관심사에 맞는 그룹들을 만나보세요!</h2>
+
             <!-- Group Listings -->
             <div class="group-listing" id="group-container">
 			    <!-- 전체 그룹 목록을 처음에 출력 -->
@@ -106,8 +109,8 @@
 			                        <td>
 			                            <h3 th:text="${group.groupName}">그룹 이름</h3>
 			                            <p th:text="'위치: ' + ${group.location}">위치</p>
-			                            <p th:text="'날짜: ' + ${#dates.format(group.eventDate, 'MM.dd(EEE) HH:mm')}">날짜</p>
-			                            <p th:text="'인원: ' + ${group.memberCount} + '/' + ${group.memberLimit} + '명'">인원</p>
+			                            <span th:text="${#temporals.format(group.eventDate, 'yyyy-MM-dd')}">날짜</span>
+			                            <p th:text="'인원: ' + ${group.memberLimit} + '/' + ${group.memberLimit} + '명'">인원</p>
 			                            <p th:text="'조회수: ' + ${group.viewCount}">조회수</p>
 			                            <p th:text="'북마크: ' + ${group.bookmarkCount}">북마크</p>
 			                        </td>

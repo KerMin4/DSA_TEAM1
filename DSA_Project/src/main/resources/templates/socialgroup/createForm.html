@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://thymeleaf.org/extra/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>그룹 생성 게시판</title>
@@ -49,7 +50,7 @@
 	                <table>
 		                <tr>
 		                    <td>
-                                <img id="imagePreview" src="" alt="이미지 미리보기" style="display:none; width:200px; height:200px;">
+                                <img id="imagePreview" style="display: block;">
                                 <button type="button" id="removeImage" style="display:none;">이미지 삭제</button>
                         	</td>
 		                </tr>
@@ -59,7 +60,6 @@
 		                    </td>
 		                    <td>
 		                        <input type="date" name="eventDate" id="eventDate">
-		                        <input type="time" name="eventTime" id="eventTime">
 		                    </td>
 		                    <td>인원 수
 		                        <div class="person-counter">

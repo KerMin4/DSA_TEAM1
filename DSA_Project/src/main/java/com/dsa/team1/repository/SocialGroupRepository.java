@@ -8,20 +8,20 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.dsa.team1.entity.SocialGroupEntity;
+import com.dsa.team1.entity.enums.GroupJoinMethod;
 
 @Repository
 public interface SocialGroupRepository extends JpaRepository<SocialGroupEntity, Integer> {
 
-	// 그룹 이름 또는 설명에 검색어가 포함된 그룹 찾기
+    // 그룹 이름 또는 설명에 검색어가 포함된 그룹 찾기
     List<SocialGroupEntity> findByGroupNameContainingOrDescriptionContaining(String groupName, String description);
 
     @Query("SELECT g FROM SocialGroupEntity g " +
-           "WHERE (:query IS NULL OR g.groupName LIKE %:query% OR g.description LIKE %:query%) " +
-           "AND (:joinMethod IS NULL OR g.groupJoinMethod = :joinMethod) " +
-           "AND (:region IS NULL OR g.location = :region)")
-    List<SocialGroupEntity> filterGroups(@Param("query") String query, 
-                                         @Param("joinMethod") String joinMethod, 
-                                         @Param("region") String region);
-    
-    
+    	    "WHERE (:query IS NULL OR g.groupName LIKE %:query% OR g.description LIKE %:query%) " +
+    	    "AND (:joinMethod IS NULL OR g.groupJoinMethod = :joinMethod) " +
+    	    "AND (:location IS NULL OR g.location = :location)")
+    	List<SocialGroupEntity> filterGroups(@Param("query") String query, 
+    	                                     @Param("joinMethod") String joinMethod, 
+    	                                     @Param("location") String location);
+
 }

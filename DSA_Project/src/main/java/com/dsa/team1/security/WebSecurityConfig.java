@@ -22,14 +22,14 @@ public class WebSecurityConfig {
 		    "/member/joinForm1",
 		    "/member/login",
 		    "/kkirikkiri/member/join",
-		    "/socialgroup/**",
 		    "/dashboard/**",
 		    "/member/join1",
 		    "/member/join",
 		    "/kkirikkiri/member/idCheck",
 		    "/member/idCheck",
 		    "/kkirikkiri/upload/**", 
-		    "/upload/**"
+		    "/upload/**",
+		    "/socialgroup/**"
 		};
 
     

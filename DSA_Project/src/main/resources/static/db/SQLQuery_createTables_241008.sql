@@ -37,7 +37,7 @@ CREATE TABLE SocialGroup (
     profile_image VARCHAR(255),
     location VARCHAR(255),
     group_leader_id VARCHAR(255),
-    group_join_method ENUM('auto', 'approval') NOT NULL,
+    group_join_method ENUM('AUTO', 'APPROVAL') NOT NULL,
     member_limit INT not NULL,
     view_count INT DEFAULT 0,
     bookmark_count INT DEFAULT 0,
@@ -52,7 +52,7 @@ CREATE TABLE UserGroup (
     user_id VARCHAR(255),
     group_id INT,
     joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    status ENUM('pending', 'approved', 'rejected') DEFAULT 'approved',
+    status ENUM('PENDING', 'APPROVED', 'REJECTED') DEFAULT 'APPROVED',
     constraint FK_User2UserGroup_user_id FOREIGN KEY (user_id) REFERENCES User(user_id),
     constraint FK_SocialGroup2UserGroup_group_id FOREIGN KEY (group_id) REFERENCES SocialGroup(group_id)
 );
@@ -101,7 +101,7 @@ CREATE TABLE UserPlace (
     user_id VARCHAR(255),
     place_id INT,
     joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    status ENUM('pending', 'confirmed', 'canceled') DEFAULT 'confirmed',
+    status ENUM('PENDING', 'CONFIRMED', 'CANCELED') DEFAULT 'CONFIRMED',
     constraint FK_User2UserPlace_user_id FOREIGN KEY (user_id) REFERENCES User(user_id),
     constraint FK_Place2UserPlace_place_id FOREIGN KEY (place_id) REFERENCES Place(place_id)
 );

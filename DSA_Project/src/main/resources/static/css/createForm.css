@@ -5,9 +5,14 @@
 #imagePreview {
     display: block;
     margin-bottom: 10px;
-    max-width: 100%;
-    max-height: 200px;
+    width: 200px; /* 원하는 너비로 설정 */
+    height: 200px; /* 원하는 높이로 설정 */
+    object-fit: cover; /* 이미지 비율 유지하며 잘림 방지 */
+    background-image: url('../images/noImage_icon.png'); /* 배경 이미지로 설정 */
+    background-size: cover; /* 배경 이미지 크기를 div에 맞추기 */
+    background-position: center; /* 배경 이미지의 위치 설정 */
 }
+
 
 /* ======================= 버튼 스타일 ======================= */
 

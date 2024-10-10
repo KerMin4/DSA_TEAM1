@@ -34,32 +34,34 @@ public class FileManager {
      */
     public String saveFile(String path, MultipartFile file) throws IOException {
 
-        // 디렉토리가 없으면 생성
-        File directoryPath = new File(path);
-        if (!directoryPath.isDirectory()) {
-            directoryPath.mkdirs();
-        }
-
-        // ==== 서버에 저장할 파일명 생성 ====
-        // 파일의 원래 이름
-        String originalFileName = file.getOriginalFilename();
-        // 원래 이름의 확장자 추출
-        String extension = originalFileName.substring(originalFileName.lastIndexOf("."));
-        // 오늘 날짜를 문자열로 변환
-        String dateString = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-        // UUID 생성
-        String uuidString = UUID.randomUUID().toString();
-        // 저장할 파일명 생성
-        String fileName = dateString + "_" + uuidString + extension;
-
-        // 파일 복사하여 저장
-        File filePath = new File(directoryPath + "/" + fileName);
-        file.transferTo(filePath);
-
-        // 파일 저장 정보를 디버그 로그에 기록
-        log.debug("**파일 정보 : 원래 이름: {}, 저장된 이름: {}, 크기: {} bytes", file.getOriginalFilename(), fileName, file.getSize());
-        return fileName;
-    }
+	        // 디렉토리가 없으면 생성
+	        File directoryPath = new File(path);
+	        
+	        if (!directoryPath.isDirectory()) {
+	            directoryPath.mkdirs();
+	        }
+	
+	        // ==== 서버에 저장할 파일명 생성 ====
+	        // 파일의 원래 이름
+	        String originalFileName = file.getOriginalFilename();
+	        // 원래 이름의 확장자 추출
+	        String extension = originalFileName.substring(originalFileName.lastIndexOf("."));
+	        // 오늘 날짜를 문자열로 변환
+	        String dateString = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+	        // UUID 생성
+	        String uuidString = UUID.randomUUID().toString();
+	        // 저장할 파일명 생성
+	        String fileName = dateString + "_" + uuidString + extension;
+	
+	        // 파일 복사하여 저장
+	        File filePath = new File(directoryPath + "/" + fileName);
+	        file.transferTo(filePath);
+	
+	        // 파일 저장 정보를 디버그 로그에 기록
+	        log.debug("**파일 정보 : 원래 이름: {}, 저장된 이름: {}, 크기: {} bytes", file.getOriginalFilename(), fileName, file.getSize());
+	        return fileName;
+    
+    	}
 
     /**
      * 지정된 경로와 파일명으로 디스크에서 파일을 삭제합니다.
