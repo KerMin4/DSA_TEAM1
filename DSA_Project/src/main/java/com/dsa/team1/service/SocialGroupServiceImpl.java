@@ -2,6 +2,7 @@ package com.dsa.team1.service;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,6 +16,7 @@ import com.dsa.team1.entity.SocialGroupEntity;
 import com.dsa.team1.entity.UserEntity;
 import com.dsa.team1.entity.UserGroupEntity;
 import com.dsa.team1.entity.enums.GroupJoinMethod;
+import com.dsa.team1.entity.enums.Interest;
 import com.dsa.team1.entity.enums.UserGroupStatus;
 import com.dsa.team1.repository.GroupHashtagRepository;
 import com.dsa.team1.repository.SocialGroupRepository;
@@ -55,6 +57,11 @@ public class SocialGroupServiceImpl implements SocialGroupService {
         
         // String joinMethod를 GroupJoinMethod로 변환
         GroupJoinMethod groupJoinMethodEnum = GroupJoinMethod.valueOf(joinMethod.toUpperCase()); // 대문자로 변환 후 Enum 변환
+        
+        // Interest Enum으로 변환 - 리스트로 변환
+        List<Interest> interestEnumList = interest.stream()
+            .map(Interest::valueOf)   // 각 문자열을 Enum으로 변환
+            .collect(Collectors.toList());
 
     	// SocialGroupEntity 생성
         SocialGroupEntity socialGroupEntity = SocialGroupEntity.builder()
@@ -67,6 +74,7 @@ public class SocialGroupServiceImpl implements SocialGroupService {
                  .groupLeader(userRepository.findById(user.getId()).orElseThrow(() -> new IllegalArgumentException("리더 사용자 ID를 찾을 수 없습니다.")))
                  .createdAt(LocalDateTime.now())  
                  .groupJoinMethod(groupJoinMethodEnum)	// Enum 타입으로 변경된 값을 사용
+                 .interest(interestEnumList.get(0))		// 변환된 interestEnum 사용		// 첫 번째 관심사만 설정
                  .build();
          
         // 그룹 저장
@@ -74,6 +82,11 @@ public class SocialGroupServiceImpl implements SocialGroupService {
 
         // 해시태그 저장
         saveHashtags(hashtagList, socialGroupEntity);
+        
+        // 나머지 관심사 로깅 (현재는 저장하지 않음)
+    	for (int i = 1; i < interestEnumList.size(); i++) {
+    		System.out.println("Additional interest: " + interestEnumList.get(i));
+    	}
     }
 
     private void saveHashtags(List<String> hashtags, SocialGroupEntity socialGroupEntity) {
@@ -88,7 +101,6 @@ public class SocialGroupServiceImpl implements SocialGroupService {
         }
     }
     
-    @Override
     public int getMemberCountByGroup(SocialGroupEntity group) {
         // 그룹의 현재 활성화된 멤버 수 계산 (방장을 제외한 멤버 수)
         int memberCount = userGroupRepository.countActiveMembersByGroupId(group.getGroupId());
@@ -104,22 +116,50 @@ public class SocialGroupServiceImpl implements SocialGroupService {
         return memberCount;
     }
 
+	@Override
+	public List<SocialGroupEntity> findAllGroups() {
+	    List<SocialGroupEntity> groups = socialGroupRepository.findAll();
+	    return (groups != null) ? groups : new ArrayList<>();
+	}
 
-    @Override
-    public List<SocialGroupDTO> getAllGroups() {
-        List<SocialGroupEntity> entities = socialGroupRepository.findAll();
-        return entities.stream()
-                .map(entity -> new SocialGroupDTO(entity.getGroupId(), entity.getGroupName(),
-                                                   entity.getDescription(), entity.getProfileImage(),
-                                                   entity.getLocation(), entity.getGroupLeader().getUserId(),
-                                                   entity.getGroupJoinMethod(), entity.getMemberLimit(),
-                                                   entity.getViewCount(), entity.getBookmarkCount(),
-                                                   entity.getEventDate(), entity.getCreatedAt()))
-                .collect(Collectors.toList());
-    }
+	@Override
+	public List<SocialGroupEntity> searchGroups(String query, String category, String location) {
+
+	    // 1. 해시태그나 그룹 이름/설명으로 검색
+	    List<SocialGroupEntity> groups = new ArrayList<>();
+	    
+	    if (query != null && !query.trim().isEmpty()) {
+	        // 그룹 이름과 설명에서 검색
+	        groups = socialGroupRepository.searchByGroupNameOrDescription(query);
+	        
+	        // 해시태그에서 검색한 결과를 추가
+	        List<SocialGroupEntity> hashtagGroups = groupHashtagRepository
+	                .findByNameContaining(query)
+	                .stream()
+	                .map(GroupHashtagEntity::getGroup)
+	                .collect(Collectors.toList());
+	        
+	        groups.addAll(hashtagGroups);
+	    }
+
+	    // 2. 카테고리와 위치 필터링
+	    Interest interestCategory = null;
+	    if (category != null && !category.isEmpty()) {
+	        try {
+	            interestCategory = Interest.valueOf(category.toUpperCase());
+	        } catch (IllegalArgumentException e) {
+	            log.error("유효하지 않은 카테고리 값: {}", category);
+	        }
+	    }
+
+	    // 필터링된 결과 반환 (query가 없을 경우, 필터링만 실행)
+	    if (location != null || interestCategory != null) {
+	        groups = socialGroupRepository.filterGroups(query, null, location, interestCategory);
+	    }
+
+	    // 중복 제거
+	    return groups.stream().distinct().collect(Collectors.toList());
+	}
 
 	
-    
-	
-
 }

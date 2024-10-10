@@ -2,94 +2,69 @@ $(function() {
 	// 전체보기 버튼 클릭 시 모든 그룹을 조회하는 함수
     $('#allGroupsButton').on('click', function(event) {
         event.preventDefault(); // 기본 링크 동작 방지
-
-        // AJAX 요청으로 DB에서 모든 그룹을 조회
-        $.ajax({
-            url: '/kkirikkiri/socialgroup/listAll',  // 전체 그룹을 가져오는 API 경로
-            type: 'GET',
-            success: function(response) {
-                console.log('전체 그룹 조회 응답:', response);  // 서버 응답 확인 로그
-
-                if (response.length === 0) {
-                    // 그룹이 없을 경우 메시지를 보여줌
-                    $('#no-result-message').show();
-                    $('#no-result-text').text("등록된 그룹이 없습니다.");
-                    $('.group-listing').html('');
-                } else {
-                    // 그룹 목록을 업데이트
-                    $('#no-result-message').hide();
-                    $('.group-listing').html(''); // 기존 목록 초기화
-
-                    response.forEach(function(group) {
-                        $('.group-listing').append(`
-                            <div class="group-card" data-group-id="${group.groupId}">
-                                <div class="group-info">
-                                    <table>
-                                        <tr>
-                                            <td><img src="${group.profileImage}" alt="그룹 사진" class="group-image"></td>
-                                            <td>
-                                                <h3>${group.groupName}</h3>
-                                                <p>위치: ${group.location}</p>
-                                                <p>날짜: ${new Date(group.eventDate).toLocaleString()}</p>
-                                                <p>인원: ${group.membeLimit}/${group.memberLimit}명</p>
-                                                <p>조회수: ${group.viewCount}</p>
-                                                <p>북마크: ${group.bookmarkCount}</p>
-                                            </td>
-                                            <td>
-                                                <a href="/socialgroup/board?groupId=${group.groupId}" class="join-btn">그룹 참여</a>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                        `);
-                    });
-                }
-            },
-            error: function(err) {
-                console.error('전체 그룹 조회 중 오류 발생:', err);
-            }
-        });
+        window.location.href = '/kkirikkiri/socialgroup/socialing';
     });
-	
-    // 그룹 필터링을 위한 함수
-    function filterGroups() {
-        var searchQuery = $('#searchInput').val().trim();  // 검색어
-        var selectedInterest = $('input[name="interest"]:checked').val();  // 선택된 카테고리
-        var selectedRegion = $('.sub-region-btn.selected').data('subregion');  // 선택된 지역
 
-        // selectedRegion이 undefined일 경우 처리
-        if (!selectedRegion) {
-            selectedRegion = '';
-        }
+    // 그룹 필터링을 위한 함수
+    function filterGroups(query) {
+	    var searchQuery = query || ($('#searchInput').length ? $('#searchInput').val().trim() : ''); // searchInput 존재 여부 확인
+	    var selectedInterest = $('input[name="interest"]:checked').val(); 							// 선택된 카테고리
+	    var selectedLocation = $('.sub-location-btn.selected').data('sublocation');					// 선택된 지역
+		var selectedRegion = $('.location-btn.selected').data('location'); 							// 선택된 상위 지역 (예: '서울 전체')
+		
+	    // 상위 지역이 선택되지 않은 경우, 사용자가 선택한 상위 지역이 있는지 확인
+	    if (!selectedRegion && selectedLocation && selectedLocation.includes('전체')) {
+	        selectedRegion = Object.keys(locations).find(region => {
+	            return locations[region].includes(selectedLocation); // 하위 지역에서 상위 지역을 추론
+	        });
+	    }
+	
+	    // 하위 지역에서 '전체'를 선택한 경우 해당 상위 지역의 모든 하위 지역 그룹을 조회
+	    if (selectedLocation && selectedLocation.includes('전체')) {
+	        if (selectedRegion !== undefined) {
+	            var subLocations = locations[selectedRegion]; // 상위 지역에 포함된 모든 하위 지역들
+	            
+	            // 상위 지역의 하위 지역이 존재하는지 확인
+	            if (subLocations) {
+	                selectedLocation = subLocations.join(','); // 콤마로 구분된 하위 지역 목록으로 변환
+	            } else {
+	                console.error('Sub locations not found for region: ' + selectedRegion);
+	                return; // 하위 지역이 없으면 필터링 중단
+	            }
+	        } else {
+	            console.error('Selected region is undefined');
+	            return; // 상위 지역이 undefined일 경우 필터링 중단
+	        }
+	    }
+	    
+	    if (!selectedLocation) {
+	        selectedLocation = '';
+	    }
 
         // Ajax 요청으로 검색 및 필터링 실행
         $.ajax({
-		    url: '/kkirikkiri/socialgroup/filter',
-		    type: 'GET',
-		    data: {
-		        query: searchQuery,
-		        category: selectedInterest,
-		        region: selectedRegion
-		    },
-		    success: function(response) {
-		        console.log('서버 응답:', response);  // 서버 응답 확인 로그
-		
-		        if (response.html.trim() === '') {
-		            // 검색 결과가 없을 때 메시지를 보여줌
-		            $('#no-result-message').show();
-		            $('#no-result-text').text(`"${searchQuery}"에 대한 검색 결과를 찾을 수 없습니다.`);
-		            $('.group-listing').html('');
-		        } else {
-		            // 검색 결과가 있을 때, 목록을 업데이트하고 메시지를 숨김
-		            $('#no-result-message').hide();
-		            $('.group-listing').html(response.html);
-		        }
-		    },
-		    error: function(err) {
-		        console.error('필터링 중 오류 발생:', err);
-		    }
-		});
+            url: '/kkirikkiri/socialgroup/filter',
+            type: 'GET',
+            data: {
+                query: searchQuery,          // 검색어 또는 해시태그
+                category: selectedInterest,  // 선택된 카테고리
+                location: selectedLocation   // 지역 필터
+            },
+           success: function(data) {
+	            var newContent = $(data).find('#group-container').html();
+	            $('#group-container').html(newContent);
+            
+                if ($(data).find('#group-container').html().trim() === '') {
+                    $('#no-result-message').show();
+                    $('#no-result-text').text(`"${searchQuery}"에 대한 검색 결과를 찾을 수 없습니다.`);
+                } else {
+                    $('#no-result-message').hide();
+                }
+            },
+            error: function(xhr) {
+                console.error('필터링 중 오류 발생:', xhr);
+            }
+        });
     }
 
     // 검색 버튼 클릭 이벤트
@@ -104,9 +79,8 @@ $(function() {
     });
 
     // 지역 필터링 이벤트 처리
-    $('#region-container').on('click', '.sub-region-btn', function() {
-        // 선택한 지역 버튼 스타일 처리
-        $('.sub-region-btn').removeClass('selected');
+    $('#location-container').on('click', '.sub-location-btn', function() {
+        $('.sub-location-btn').removeClass('selected');
         $(this).addClass('selected');
         filterGroups();  // 필터링 함수 호출
     });
@@ -122,7 +96,7 @@ $(function() {
     });
 
     // 상위 지역 데이터 및 하위 지역 버튼 생성
-    const regions = {
+    const locations = {
         "서울": ["서울 전체", "강남", "강동", "강북", "강서", "관악", "광진", "구로", "금천", "노원", "도봉", "동대문", "동작", "마포", "서대문", "서초", "성동", "성북", "송파", "양천", "영등포", "용산", "은평", "종로", "중구", "중랑"],
 	    "인천": ["인천 전체", "중구", "동구", "미추홀", "연수", "남동", "부평", "계양구", "서구", "강화", "옹진"],
 	    "경기": ["경기 전체", "수원", "성남", "고양", "용인", "부천", "안산", "안양", "남양주", "화성", "의정부", "시흥", "평택", "광명", "파주", "군포", "광주", "김포", "이천", "양주", "구리", "오산", "안성", "의왕", "하남", "포천", "동두천", "과천", "여주", "양평", "가평", "연천"],
@@ -143,35 +117,41 @@ $(function() {
     };
 
     // 상위 지역 버튼 생성
-    const largeRegions = Object.keys(regions);
-    largeRegions.forEach(region => {
-        $('#region-container').append(`<button class="region-btn" data-region="${region}">${region}</button>`);
+    const largeLocations = Object.keys(locations);
+    largeLocations.forEach(location => {
+        $('#location-container').append(`<button class="location-btn" data-location="${location}">${location}</button>`);
     });
 
     // 상위 지역 버튼 클릭 시 세부 지역 표시 및 다른 지역 접기
-    $('#region-container').on('click', '.region-btn', function() {
-        const regionKey = $(this).data('region');
-        const subRegions = regions[regionKey];
+    $('#location-container').on('click', '.location-btn', function() {
+        const locationKey = $(this).data('location');
+        const subLocations = locations[locationKey];
 
         // 다른 열려있는 모든 하위 지역들을 숨김
-        $('.sub-region-list').not($(this).next('.sub-region-list')).slideUp();
+        $('.sub-location-list').not($(this).next('.sub-location-list')).slideUp();
 
         // 세부 지역 버튼이 이미 있는지 확인하고, 있으면 숨기거나 다시 보여줌
-        if ($(this).next('.sub-region-list').length) {
-            $(this).next('.sub-region-list').slideToggle();  // slideToggle() for smooth hide/show
+        if ($(this).next('.sub-location-list').length) {
+            $(this).next('.sub-location-list').slideToggle();  // slideToggle() for smooth hide/show
         } else {
-            const subRegionContainer = $('<div class="sub-region-list"></div>');
-            subRegions.forEach(subRegion => {
-                subRegionContainer.append(`<button class="sub-region-btn" data-subregion="${subRegion}">${subRegion}</button>`);
+            const subLocationContainer = $('<div class="sub-location-list"></div>');
+            subLocations.forEach(subLocation => {
+                subLocationContainer.append(`<button class="sub-location-btn" data-sublocation="${subLocation}">${subLocation}</button>`);
             });
-            $(this).after(subRegionContainer);
-            subRegionContainer.slideDown();  // Smooth reveal
+            $(this).after(subLocationContainer);
+            subLocationContainer.slideDown();  // Smooth reveal
         }
+    });
+    
+	// 해시태그 클릭 시 해당 해시태그로 필터링
+    $('#hashtag-container').on('click', 'a', function(event) {
+        event.preventDefault();
+        var selectedHashtag = $(this).text().replace('#', '').trim(); // 클릭한 해시태그에서 # 제거
+        filterGroups(selectedHashtag);  // 해시태그를 검색어로 사용하여 필터링
     });
 
     // 정렬 기준 토글
     $('#sort-toggle').on('click', function() {
         $('#sort-options').toggle();
     });
-    
 });

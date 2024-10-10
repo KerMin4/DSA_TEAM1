@@ -3,6 +3,7 @@ package com.dsa.team1.dto;
 import java.time.LocalDateTime;
 
 import com.dsa.team1.entity.enums.GroupJoinMethod;
+import com.dsa.team1.entity.enums.Interest;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,6 +21,7 @@ public class SocialGroupDTO {
 	private String description;					// Description of the group
 	private String profileImage;				// Image representing the group
 	private String location;					// Group members' preferred region
+	private Interest interest;
 	private String groupLeaderId;				// FK. Group Leader ID
 	private GroupJoinMethod groupJoinMethod;	// Whether approval need or not when joining the group
 	private Integer memberLimit;				// Maximum number of the group members

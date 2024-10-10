@@ -3,7 +3,7 @@
 /* ======================= 상위 지역 및 하위 지역 버튼 스타일 ======================= */
 
 /* 상위 지역 버튼 스타일 */
-.region-btn {
+.location-btn {
     background-color: #f0f0f0;
     border: 1px solid #ddd;
     padding: 10px;
@@ -14,7 +14,7 @@
 }
 
 /* 하위 지역 버튼 스타일 */
-.sub-region-btn {
+.sub-location-btn {
     background-color: #f9f9f9;
     border: 1px solid #ccc;
     padding: 8px;
@@ -25,14 +25,14 @@
 }
 
 /* 선택된 하위 지역 버튼에 대한 스타일 */
-.sub-region-btn.selected {
+.sub-location-btn.selected {
     background-color: #000; /* 배경색 반전 */
     color: #fff; /* 텍스트 색상 반전 */
     border-color: #000; /* 테두리 색상 변경 */
 }
 
 /* 하위 지역 버튼 리스트 */
-.sub-region-list {
+.sub-location-list {
     display: flex;
     flex-wrap: wrap;
     margin: 10px 0 10px 10px;

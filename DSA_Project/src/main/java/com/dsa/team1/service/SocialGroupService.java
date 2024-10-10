@@ -16,9 +16,10 @@ public interface SocialGroupService {
 			String joinMethod, Integer memberLimit, List<String> hashtagList, MultipartFile profileImage,
 			AuthenticatedUser user) throws IOException;
 	
-	List<SocialGroupDTO> getAllGroups();
-
 	int getMemberCountByGroup(SocialGroupEntity group);
+	
+	List<SocialGroupEntity> findAllGroups();
 
-
+	List<SocialGroupEntity> searchGroups(String query, String category, String location);
+	
 }

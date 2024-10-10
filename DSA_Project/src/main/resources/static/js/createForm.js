@@ -123,19 +123,16 @@ $(function() {
         e.preventDefault();
 
         // 필수 데이터 설정
-        formData.set('groupName', $('#groupName').val()); // 그룹명 저장
-        formData.set('description', $('#description').val()); // 설명 저장
-        formData.set('location', $('#location').val()); // 위치 저장
+        formData.set('groupName', $('#groupName').val());		// 그룹명 저장
+        formData.set('description', $('#description').val());	// 설명 저장
+        formData.set('location', $('#location').val()); 		// 위치 저장
         if (!formData.get('memberLimit')) {
-            formData.set('memberLimit', memberLimit); // 기본 멤버 제한 설정
+            formData.set('memberLimit', memberLimit); 			// 기본 멤버 제한 설정
         }
 
         // 날짜와 시간을 조합하여 LocalDateTime 형식으로 변환
         var eventDate = $('#eventDate').val(); // 날짜 값 가져오기 (yyyy-MM-dd 형식)
-
-        // 필수 필드 검증
-        if (!eventDate) return alert('활동 날짜를 선택해주세요.');
-
+        if (!eventDate) return alert('활동 날짜를 선택해주세요.');	// 필수 필드 검증
 		formData.set('eventDate', eventDate);  // FormData에 저장
 
         // 필수 필드 검증
@@ -146,9 +143,9 @@ $(function() {
         if (!formData.get('joinMethod')) return alert('가입 권한을 선택해주세요.');
         
         // formData의 내용을 확인
-	    for (let pair of formData.entries()) {
-	        console.log(pair[0] + ': ' + pair[1]); // 모든 formData 값을 출력
-	    }
+        for (let pair of formData.entries()) {
+            console.log(pair[0] + ': ' + pair[1]); // 모든 formData 값을 출력
+        }
 
         // 서버에 데이터 전송
         $.ajax({
