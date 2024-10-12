@@ -1,6 +1,7 @@
 package com.dsa.team1.dto;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import com.dsa.team1.entity.enums.UserGroupStatus;
 
@@ -24,4 +25,7 @@ public class PostDTO {
 	private String userId;
 	private String content;
 	private LocalDateTime createdAt;
+	
+	private String imageName;
+	private List<PhotoDTO> photos;
 }

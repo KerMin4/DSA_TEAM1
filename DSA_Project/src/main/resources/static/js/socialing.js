@@ -187,4 +187,12 @@ $(function() {
     $('#sort-toggle').on('click', function() {
         $('#sort-options').toggle();
     });
+  
+  
+  // 카테고리 체크박스 이벤트 - 하나만 선택하도록 처리
+    $('input[name="interest"]').on('change', function() {
+        $('input[name="interest"]').not(this).prop('checked', false); // 다른 체크박스를 모두 해제
+        filterGroups();  // 필터링 함수 호출
+    });
+
 });

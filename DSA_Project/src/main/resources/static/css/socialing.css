@@ -39,9 +39,9 @@
     display: none;  /* Initially hidden */
 }
 
-/* ======================= 생성 버튼 스타일 ======================= */
+/* ======================= 그룹 생성 버튼 스타일 ======================= */
 
-/* 생성 버튼 */
+/* 그룹 생성 버튼 */
 .create-btn {
     position: fixed;
     bottom: 60px;
@@ -129,6 +129,68 @@ body {
     border-radius: 5px; /* 해시태그 모서리 둥글게 */
     white-space: nowrap; /* 해시태그 텍스트 줄바꿈 방지 */
 }
+
+/* ================== 관심사 카테고리 ============================ */
+
+.interests-container {
+    margin-top: 50px;
+    margin-bottom: 50px;
+    padding: 15px;
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.interests-row {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 15px;
+}
+
+/* 카테고리 버튼 스타일 */
+.interest-option {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 10px;
+    font-family: 'S-CoreDream-5Medium', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    margin-bottom: 10px; /* 버튼 간격 좁게 */
+}
+
+.interest-option input[type="checkbox"] {
+    display: none;
+}
+
+.interest-option span {
+    width: 70px;  /* 버튼 크기 고정 */
+    height: 30px; /* 버튼 높이 고정 */
+    background-color: #ffffff;
+    border: 1px solid #81BBF6;
+    border-radius: 20px;
+    color: #81BBF6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s;
+}
+
+/* 선택된 경우 색상 변경 */
+.interest-option input[type="checkbox"]:checked + span {
+    background-color: #81BBF6;
+    color: white;
+}
+
+/* hover 상태에서 색상 변환 */
+.interest-option span:hover {
+    background-color: #81BBF6;
+    color: white;
+}
+
 
 
 

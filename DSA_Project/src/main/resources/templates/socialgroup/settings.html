@@ -3,136 +3,118 @@
 	  xmlns:sec="http://thymeleaf.org/extra/spring-security">
 <head>
 	<meta charset="UTF-8">
-	<title>그룹 헤더 이미지 업로드 및 수정</title>
+	<title>Insert title here</title>
 	<script th:src="@{/js/jquery-3.7.1.min.js}"></script>
 	<script th:src="@{/js/settings.js}"></script>
 </head>
 <body>
+
 	<div class="container">
 	    <!-- 그룹 정보 수정 폼 -->
 	    <form id="settingsForm" th:action="@{/socialgroup/update}" method="post" enctype="multipart/form-data">
-	        <table>
-	            <tr>
-	                <td><label for="interest">카테고리:</label></td>
-	                <td>
-	                    <label><input type="radio" name="interest" value="취미"> 취미</label>
-	                    <label><input type="radio" name="interest" value="자기계발"> 자기계발</label>
-	                    <label><input type="radio" name="interest" value="푸드"> 푸드</label>
-	                    <label><input type="radio" name="interest" value="액티비티"> 액티비티</label>
-	                    <label><input type="radio" name="interest" value="반려동물"> 반려동물</label>
-	                    <label><input type="radio" name="interest" value="문화"> 문화</label>
-	                    <label><input type="radio" name="interest" value="재테크"> 재테크</label>
-	                    <label><input type="radio" name="interest" value="연애"> 연애</label>
-	                    <label><input type="radio" name="interest" value="게임"> 게임</label>
-	                    <label><input type="radio" name="interest" value="여행"> 여행</label>
-	                    <!-- th:checked="${group.interest == '취미'}" 선택된 관심사에 따라 선택 상태를 설정 -->
-	                </td>
-	            </tr>
-	            
-	            <tr>
-	                <td><label for="headerImage">헤더 이미지:</label></td>
-	                <td>
-	                	<img id="headerImagePreview" src="" alt="헤더 이미지 미리보기" style="width:200px; height:200px; display:none;"><!-- th:src="${group.profileImage}" -->
-	                	<button type="button" id="removeImage" style="display:none;">이미지 삭제</button>
-	                	<button type="button" id="openHeaderImageModal">헤더 이미지 관리</button>
-	                </td>
-	            </tr>
-	        
-	            <tr>
-	                <td><label for="groupName">그룹 이름:</label></td>
-	                <td><input type="text" id="groupName" name="groupName"><!-- th:value="${group.groupName}" --></td>
-	            </tr>
+    		<input type="hidden" name="groupId" id="groupId" th:value="${group.groupId}"/> <!-- groupId 숨겨진 필드 -->
 
-	            <tr>
-	                <td><label for="description">그룹 설명:</label></td>
-	                <td><textarea id="description" name="description"></textarea><!-- th:text="${group.description}" --></td>
-	            </tr>
+            <table>
+            	<tr>
+				    <td><label for="interest">카테고리:</label></td>
+				    <td>
+				        <label><input type="radio" name="interest" value="HOBBY" th:checked="${group.interest.name() == 'HOBBY'}"> 취미</label>
+				        <label><input type="radio" name="interest" value="DEVELOPMENT" th:checked="${group.interest.name() == 'DEVELOPMENT'}"> 자기계발</label>
+				        <label><input type="radio" name="interest" value="FOOD" th:checked="${group.interest.name() == 'FOOD'}"> 푸드</label>
+				        <label><input type="radio" name="interest" value="ACTIVITY" th:checked="${group.interest.name() == 'ACTIVITY'}"> 액티비티</label>
+				        <label><input type="radio" name="interest" value="PETS" th:checked="${group.interest.name() == 'PETS'}"> 반려동물</label>
+				        <label><input type="radio" name="interest" value="CULTURE" th:checked="${group.interest.name() == 'CULTURE'}"> 문화</label>
+				        <label><input type="radio" name="interest" value="MONEY" th:checked="${group.interest.name() == 'MONEY'}"> 재테크</label>
+				        <label><input type="radio" name="interest" value="LOVE" th:checked="${group.interest.name() == 'LOVE'}"> 연애</label>
+				        <label><input type="radio" name="interest" value="GAME" th:checked="${group.interest.name() == 'GAME'}"> 게임</label>
+				        <label><input type="radio" name="interest" value="TRAVEL" th:checked="${group.interest.name() == 'TRAVEL'}"> 여행</label>
+				    </td>
+				</tr>
+                
+                <tr>
+				    <td><label for="headerImage">헤더 이미지:</label></td>
+				    <td>
+				        <!-- 헤더 이미지 미리보기 -->
+				        <img id="headerImagePreview" th:src="@{/upload/{groupProfileImage}(groupProfileImage=${groupProfileImage})}" alt="헤더 이미지 미리보기" style="width:200px; height:200px;">
+				        <button type="button" id="removeImage" style="display:block;">이미지 삭제</button>
+				        <button type="button" id="openHeaderImageModal">헤더 이미지 관리</button>
+				    </td>
+				</tr>
 
-	            <tr>
-	                <td><label for="eventDate">활동 날짜:</label></td>
-	                <td><input type="date" id="eventDate" name="eventDate"><!-- th:value="${group.eventDate}" --></td>
-	            </tr>
-	            <tr>
-	                <td><label for="eventTime">활동 시간:</label></td>
-	                <td><input type="time" id="eventTime" name="eventTime"><!-- th:value="${group.eventTime}" --></td>
-	            </tr>
+                <tr>
+                    <td><label for="groupName">그룹 이름:</label></td>
+                    <td><input type="text" id="groupName" name="groupName" th:value="${group.groupName}"></td>
+                </tr>
 
-	            <tr>
-	                <td><label for="location">위치:</label></td>
-	                <td><input type="text" id="location" name="location"><!-- th:value="${group.location}" --></td>
-	            </tr>
+                <tr>
+                    <td><label for="description">그룹 설명:</label></td>
+                    <td><textarea id="description" name="description" th:text="${group.description}"></textarea></td>
+                </tr>
 
-	            <tr>
-	                <td><label for="memberLimit">인원 제한:</label></td>
-	                <td>
+                <tr>
+                    <td><label for="eventDate">이벤트 날짜:</label></td>
+                    <td><input type="text" id="eventDate" name="eventDate" th:value="${eventDateFormatted}"></td>
+                </tr>
+
+                <tr>
+                    <td><label for="location">위치:</label></td>
+                    <td><input type="text" id="location" name="location" th:value="${group.location}"></td>
+                </tr>
+
+                <tr>
+                    <td><label for="memberLimit">인원 제한:</label></td>
+                    <td>
                         <div class="person-counter">
-	                        <button type="button" id="decreaseCount"><</button>
-	                        <span id="memberLimit">2</span><!-- th:text="${group.memberLimit}" -->
-	                        <button type="button" id="increaseCount">></button>
-	                    </div>
-	                </td>
-	            </tr>
-	            
-	            <tr>
-				    <td><label for="addMember">멤버 추가:</label></td>
+                            <button type="button" id="decreaseCount"><</button>
+                            <input type="text" id="memberLimit" name="memberLimit" th:value="${group.memberLimit}" readonly>
+                            <!-- <span id="memberLimit" th:text="${group.memberLimit}">2</span> -->
+                            <button type="button" id="increaseCount">></button>
+                        </div>
+                    </td>
+                </tr>
+                
+                <tr>
+				    <td><label>가입 권한:</label></td>
 				    <td>
-				        <input type="text" id="addMember" placeholder="멤버 이름 또는 ID 입력">
-				        <button type="button" id="addMemberBtn">멤버 추가</button>
+				        <input type="radio" name="joinMethod" value="AUTO" th:checked="${group.groupJoinMethod.name() == 'AUTO'}"> 바로 가입
+				        <input type="radio" name="joinMethod" value="APPROVAL" th:checked="${group.groupJoinMethod.name() == 'APPROVAL'}"> 승인 후 가입
 				    </td>
 				</tr>
-				
-				<tr>
-				    <td>현재 멤버:</td>
-				    <td>
-				        <ul id="memberList">
-				            <!-- 
-				            <li th:each="member : ${group.members}">
-				                <span th:text="${member.name}"></span>
-				                <button class="removeMember" th:data-member-id="${member.id}">제거</button>
-				            </li>
-				            -->
-				        </ul>
-				    </td>
-				</tr>
-
-	            <tr>
-	                <td><label>가입 권한:</label></td>
-	                <td>
-	                    <input type="radio" name="joinMethod" value="AUTO"><!-- th:checked="${group.groupJoinMethod == 'AUTO'}" --> 바로 가입
-	                    <input type="radio" name="joinMethod" value="APPROVAL"><!-- th:checked="${group.groupJoinMethod == 'APPROVAL'}" --> 승인 후 가입
-	                </td>
-	            </tr>
-
-	            <tr>
-	                <td><label for="hashtag">해시태그:</label></td>
-	                <td>
+                
+                <tr>
+                    <td><label for="hashtag">해시태그:</label></td>
+                    <td>
                         <input type="text" id="hashtag" name="hashtags" placeholder="해시태그 입력">
-	                    <input type="button" id="addHashtag" value="등록">
-	                    <div id="hashtagContainer">
-	                        <!-- 해시태그가 여기에 추가됨 -->
-	                    </div>
-	                </td>
-	            </tr>
+                        <input type="button" id="addHashtag" value="등록">
+                        <div id="hashtagContainer">
+				            <div th:each="tag : ${hashtags}">
+				                <span class="hashtag-item" th:text="'#' + ${tag.name}"></span>
+				                <button type="button" class="remove-hashtag">삭제</button>
+				            </div>
+				        </div>
+                    </td>
+                </tr>
 
-	            <tr>
-	                <td colspan="2">
-	                    <button type="submit">그룹 수정</button>
-	                </td>
-	            </tr>
-	        </table>
-	    </form>
-	</div>
-
+                <tr>
+                    <td>
+                        <button type="submit" id="updateGroupBtn">그룹 수정</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    
 	<!-- 헤더 이미지 업로드 모달 -->
-	<div id="headerImageModal" class="modal" style="display:none;">
-	    <div class="modal-content">
-	        <span class="close">&times;</span>
-	        <h2>헤더 이미지 업로드</h2>
-	        <input type="file" id="modalHeaderImageInput" accept="image/*">
-	        <img id="modalImagePreview" src="" alt="이미지 미리보기" style="display:none; width:200px; height:200px;">
-	        <button type="button" id="modalUploadHeaderImage">업로드</button>
-	        <button type="button" id="modalCancelUpload">취소</button>
-	    </div>
-	</div>
+    <div id="headerImageModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>헤더 이미지 업로드</h2>
+            <input type="file" id="modalHeaderImageInput" accept="image/*">
+            <img id="modalImagePreview" src="" alt="이미지 미리보기" style="display:none; width:200px; height:200px;">
+            <button type="button" id="modalUploadHeaderImage">업로드</button>
+            <button type="button" id="modalCancelUpload">취소</button>
+        </div>
+    </div>
+    
 </body>
 </html>

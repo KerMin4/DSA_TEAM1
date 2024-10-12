@@ -24,5 +24,16 @@ public interface SocialGroupService {
 	List<SocialGroupEntity> searchGroups(String query, String category, String location);
 
 	void toggleBookmark(UserEntity userEntity, SocialGroupEntity group);
+
+	SocialGroupEntity findById(Integer groupId);
+
+	void requestApprovalToJoinGroup(String id, Integer groupId);
+
+	void addMemberToGroup(String id, Integer groupId);
+
+	void rejectJoinRequest(Integer userId, Integer groupId);
+
+	void addMemberToGroup(Integer userId, Integer groupId);
 	
+
 }

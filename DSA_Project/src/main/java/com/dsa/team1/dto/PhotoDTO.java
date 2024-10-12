@@ -1,6 +1,7 @@
 package com.dsa.team1.dto;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,4 +17,6 @@ public class PhotoDTO {
 	private Integer photoId;
 	private Integer postId;
 	private String imageName;
+	
+	private List<PhotoDTO> photos;
 }

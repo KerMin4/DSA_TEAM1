@@ -38,4 +38,7 @@ public class PhotoEntity {
 	@Column(name = "image_name")
 	private String imageName;
 
+	@ManyToOne
+    @JoinColumn(name = "group_id")  // group_id로 SocialGroupEntity와 연결
+    private SocialGroupEntity group;
 }
