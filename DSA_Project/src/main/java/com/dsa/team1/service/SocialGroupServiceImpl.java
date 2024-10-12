@@ -511,6 +511,7 @@ public class SocialGroupServiceImpl implements SocialGroupService {
 
 		        return groupStatistics;
 		    }
+	
 		  
 		  @Override
 		    public List<SocialGroupEntity> getJoinedGroupsByUser(String userId) {
@@ -519,5 +520,18 @@ public class SocialGroupServiceImpl implements SocialGroupService {
 		    }
 		  
 		  
+		  @Override
+		  public void leaveGroup(String userId, Integer groupId) {
+		      
+		      SocialGroupEntity group = socialGroupRepository.findById(groupId)
+		              .orElseThrow(() -> new IllegalArgumentException("그룹을 찾을 수 없습니다."));
+
+		      UserGroupEntity userGroup = userGroupRepository.findByUser_UserIdAndGroup_GroupId(userId, groupId)
+		              .orElseThrow(() -> new IllegalArgumentException("사용자가 이 그룹의 멤버가 아닙니다."));
+
+		   
+		      userGroupRepository.delete(userGroup);
+		  }
+
 
 }

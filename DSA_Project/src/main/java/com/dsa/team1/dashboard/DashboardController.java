@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import com.dsa.team1.entity.SocialGroupEntity;
@@ -34,13 +35,39 @@ public class DashboardController {
     @GetMapping("/mypage")
     public String myPage(@AuthenticationPrincipal AuthenticatedUser authenticatedUser, Model model) {
         String userId = authenticatedUser.getUsername();
+
+        // 사용자가 가입한 그룹 목록 가져오기
+        List<SocialGroupEntity> joinedGroups = socialGroupService.getJoinedGroupsByUser(userId);
         
+        // 사용자가 생성한 그룹 목록 가져오기 (방장인 그룹)
+        List<SocialGroupEntity> createdGroups = socialGroupService.getGroupsCreatedByUser(userId);
+
         // 관심사 통계 데이터를 가져옴
         Map<Interest, Long> interestStatistics = socialGroupService.getInterestGroupStatistics(userId);
         
-        // 모델에 관심사 통계 추가
+        List<Map<String, Object>> groupEvents = joinedGroups.stream()
+            .map(group -> {
+                Map<String, Object> event = new HashMap<>();
+                event.put("title", group.getGroupName());
+                event.put("start", group.getEventDate().toString());
+                return event;
+            })
+            .collect(Collectors.toList());
+
+        groupEvents.addAll(createdGroups.stream()
+            .map(group -> {
+                Map<String, Object> event = new HashMap<>();
+                event.put("title", group.getGroupName());
+                event.put("start", group.getEventDate().toString());  
+                return event;
+            })
+            .collect(Collectors.toList()));
+
+        // 모델에 데이터 추가
         model.addAttribute("interestStatistics", interestStatistics);
         model.addAttribute("activePage", "home");
+        model.addAttribute("joinedGroups", joinedGroups);
+        model.addAttribute("groupEvents", groupEvents);  
 
         return "dashboard/mypage";
     }
@@ -59,23 +86,27 @@ public class DashboardController {
         // 관심사 통계 데이터 가져오기
         Map<Interest, Long> interestStatistics = socialGroupService.getInterestGroupStatistics(userId);
 
-        // 현재 멤버 수 계산
+        // 현재 멤버 수 계산 (생성된 그룹 + 가입한 그룹 모두 처리)
         Map<Integer, Integer> memberCountMap = new HashMap<>();
         for (SocialGroupEntity group : createdGroups) {
             int memberCount = socialGroupService.getMemberCountByGroup(group);
             memberCountMap.put(group.getGroupId(), memberCount);
         }
+      
+        for (SocialGroupEntity group : joinedGroups) {
+            int memberCount = socialGroupService.getMemberCountByGroup(group);
+            memberCountMap.put(group.getGroupId(), memberCount);
+        }
 
-        // 모델에 생성된 그룹 목록, 가입한 그룹 목록 및 관심사 통계 추가
+      
         model.addAttribute("createdGroups", createdGroups);
         model.addAttribute("joinedGroups", joinedGroups); 
         model.addAttribute("interestStatistics", interestStatistics);
         model.addAttribute("activePage", "group-management");
-        model.addAttribute("memberCountMap", memberCountMap); // 멤버 수 맵 추가
+        model.addAttribute("memberCountMap", memberCountMap); 
         
         return "dashboard/groupManagement";
     }
-
 
     @PostMapping("deleteGroup")
     public String deleteGroup(@AuthenticationPrincipal AuthenticatedUser authenticatedUser,
@@ -94,6 +125,22 @@ public class DashboardController {
             redirectAttributes.addFlashAttribute("error", "그룹 삭제에 실패했습니다.");
         }
         return "redirect:/dashboard/groupManagement";
+    }
+
+    // 그룹 탈퇴 기능 추가
+    @PostMapping("leaveGroup")
+    public String leaveGroup(@AuthenticationPrincipal AuthenticatedUser authenticatedUser,
+                             @RequestParam("groupId") Integer groupId,
+                             RedirectAttributes redirectAttributes) {
+        String userId = authenticatedUser.getUsername(); 
+
+        try {
+            socialGroupService.leaveGroup(userId, groupId); 
+            redirectAttributes.addFlashAttribute("message", "그룹에서 탈퇴되었습니다.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "탈퇴에 실패했습니다: " + e.getMessage());
+        }
+        return "redirect:/dashboard/groupManagement"; 
     }
 
     // 결제 관리 페이지
@@ -134,7 +181,7 @@ public class DashboardController {
                                RedirectAttributes redirectAttributes) {
         String userId = authenticatedUser.getUsername();
         userService.updateNickname(userId, nickname);
-        authenticatedUser.updateNickname(nickname);  // 세션의 닉네임 업데이트
+        authenticatedUser.updateNickname(nickname);  
         redirectAttributes.addFlashAttribute("message", "닉네임이 변경되었습니다.");
         return "redirect:/dashboard/mypage";
     }

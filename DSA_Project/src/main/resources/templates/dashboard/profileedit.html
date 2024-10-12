@@ -3,21 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>프로필 수정</title>
+    <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+    <script th:src="@{/js/profileEdit.js}"></script>
     <link th:href="@{/css/header.css}" rel="stylesheet">
     <link th:href="@{/css/main.css}" rel="stylesheet">
     <link th:href="@{/css/profileEdit.css}" rel="stylesheet">
-    <script src="/kkirikkiri/js/jquery-3.7.1.min.js"></script>
-    <script th:src="@{/js/profileEdit.js}"></script>
+  
 </head>
 <body>
     <div th:replace="~{fragments/header :: header}"></div>
     
-  
-    
     <div class="profile-section">
         <form th:action="@{/dashboard/editProfileImage}" method="post" enctype="multipart/form-data">
             <img th:src="${#authentication.principal.profileImage != null ? '/kkirikkiri/upload/' + #authentication.principal.profileImage : '/kkirikkiri/upload/default.png'}"
-                 alt="프로필 이미지" class="mypage-profile-img" id="profileEditImg" />
+                 class="mypage-profile-img" id="profileEditImg" />
             <p th:text="${#authentication.principal.name}" class="profile-nickname"></p>
 
             <input type="file" id="profileImageInput" name="profileImage" accept="image/*" style="display:none;">
@@ -27,13 +26,10 @@
                 </button>
             </div>
             <div class="button-container" style="margin-top: 10px;">
-                <button type="submit" class="save-button">프로필 변경</button>
+                <button type="submit" id="submitProfileChange" class="save-button">프로필 변경</button>
             </div>
-            
         </form>
     </div>
-    
-
 
     <!-- 홈 버튼 -->
     <div class="home-icon-container">

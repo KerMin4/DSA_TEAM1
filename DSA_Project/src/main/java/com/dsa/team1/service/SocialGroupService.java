@@ -43,7 +43,9 @@ public interface SocialGroupService {
 	Map<Interest, Long> getInterestGroupStatistics(String userId);
 	List<SocialGroupEntity> getGroupsCreatedByUser(String userId);
 	List<SocialGroupEntity> getJoinedGroupsByUser(String userId);
+    void leaveGroup(String userId, Integer groupId);
 	// ---------
+
 
 
 }
