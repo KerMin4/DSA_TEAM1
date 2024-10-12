@@ -13,7 +13,7 @@ import com.dsa.team1.entity.SocialGroupEntity;
 public interface GroupHashtagRepository extends JpaRepository<GroupHashtagEntity, Integer> {
 	
 	// 그룹에 속한 해시태그 리스트를 가져오는 메소드
-    List<GroupHashtagEntity> findByGroup(SocialGroupEntity socialGroupEntity);
+    List<GroupHashtagEntity> findByGroup(SocialGroupEntity group);
     
     // 해시태그를 기반으로 그룹 검색
     List<GroupHashtagEntity> findByNameContaining(String hashtag);

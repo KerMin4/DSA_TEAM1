@@ -10,11 +10,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -69,11 +66,17 @@ public class SocialGroupController {
     @Value("${socialgroup.uploadPath}")
     String uploadPath;
 
+    /**
+     * 그룹 생성폼 진입 
+     */
     @GetMapping("create")
     public String create() {
         return "socialgroup/createForm";
     }
 
+    /**
+     * 그룹 생성 
+     */
     @PostMapping("create")
     public String create(
             @RequestParam("interest") List<Interest> interestList,		 // List<Interest>로 받음
@@ -188,7 +191,9 @@ public class SocialGroupController {
         return "socialgroup/socialing";
     }
     
-    // 그룹에 속한 멤버 수를 계산하는 메서드 추가
+    /**
+     * 그룹에 속한 멤버 수를 계산하는 메서드 추가
+     */
     public int getMemberCountByGroup(SocialGroupEntity group) {
         // 그룹의 현재 활성화된 멤버 수 계산 (방장을 제외한 멤버 수)
         int memberCount = userGroupRepository.countActiveMembersByGroupId(group.getGroupId());
@@ -297,120 +302,6 @@ public class SocialGroupController {
 
         return "socialgroup/socialing";
     }
-
-//    @GetMapping("/filter")
-//    public String filterGroups(
-//            @RequestParam(value = "query", required = false) String query,
-//            @RequestParam(value = "category", required = false) String category,
-//            @RequestParam(value = "location", required = false) String location,
-//            Model model) {
-//
-//        List<SocialGroupEntity> groups = new ArrayList<>();
-//
-//        // 검색어가 있는 경우 처리
-//        if (query != null && !query.trim().isEmpty()) {
-//            // 그룹 이름 또는 설명에 검색어가 포함된 그룹을 찾음
-//            List<SocialGroupEntity> nameOrDescriptionGroups = socialGroupRepository
-//                    .findByGroupNameContainingOrDescriptionContaining(query, query);
-//
-//            // 해시태그에 검색어가 포함된 그룹을 찾음
-//            List<SocialGroupEntity> hashtagGroups = groupHashtagRepository
-//                    .findByNameContaining(query)
-//                    .stream()
-//                    .map(GroupHashtagEntity::getGroup)
-//                    .collect(Collectors.toList());
-//
-//            // 검색된 그룹 리스트를 합침
-//            groups = nameOrDescriptionGroups;
-//            groups.addAll(hashtagGroups);
-//            groups = groups.stream().distinct().collect(Collectors.toList()); // 중복 제거
-//        } else {
-//        	// 검색어가 없으면 전체 그룹 조회
-//            groups = socialGroupRepository.findAll();
-//        }
-//
-//        // 카테고리 및 지역 필터링 적용
-//        Interest interestCategory = null;
-//        if (category != null && !category.isEmpty()) {
-//            try {
-//                interestCategory = Interest.valueOf(category.toUpperCase());
-//            } catch (IllegalArgumentException e) {
-//                log.error("유효하지 않은 카테고리 값: {}", category);
-//            }
-//        }
-//
-//        if (interestCategory != null || (location != null && !location.isEmpty())) {
-//            final Interest finalInterestCategory = interestCategory;
-//            
-//            // 지역 필터링
-//            if (location != null && !location.isEmpty()) {
-//                List<String> locationList = Arrays.asList(location.split(",")); // 콤마로 구분된 지역 목록
-//
-//                groups = groups.stream()
-//                    .filter(group -> {
-//                        // 그룹의 위치를 비문자 문자로 분할
-//                        List<String> groupLocations = Arrays.asList(group.getLocation().split("[^\\p{L}]+"));
-//
-//                        // 그룹의 위치 단어 리스트와 선택된 지역명 리스트에 공통된 단어가 있는지 확인
-//                        for (String loc : locationList) {
-//                            if (groupLocations.contains(loc)) {
-//                                return true;
-//                            }
-//                        }
-//                        return false;
-//                    })
-//                    .collect(Collectors.toList());
-//            }
-//            
-//            // 카테고리 필터링
-//            groups = groups.stream()
-//                    .filter(group -> (finalInterestCategory == null || group.getInterest() == finalInterestCategory))
-//                    .collect(Collectors.toList());
-//        }
-//        
-//        // 빈 location 값 처리
-//        location = (location != null && !location.trim().isEmpty()) ? location : null;
-//        
-//        // 필터링된 그룹 목록 가져오기
-//        groups = socialGroupRepository.filterGroups(query, null, location, interestCategory);
-//        
-//        // 각 그룹의 인원 수 계산하여 모델에 추가
-//        Map<Integer, Integer> memberCountMap = new HashMap<>();
-//        for (SocialGroupEntity group : groups) {
-//            int memberCount = socialGroupService.getMemberCountByGroup(group);
-//            memberCountMap.put(group.getGroupId(), memberCount);
-//        }
-//
-//        // 모델에 필요한 데이터 추가
-//        model.addAttribute("groups", groups);
-//        model.addAttribute("memberCountMap", memberCountMap);
-//        model.addAttribute("allHashtags", groupHashtagRepository.findAllHashtags());
-//
-//        return "socialgroup/socialing";
-//    }
-    
-    /**
-     * 그룹 게시판 페이지로 이동
-     * 조회수 카운트
-     */
-    @GetMapping("/groupBoard")
-    public String groupBoard(@RequestParam("groupId") Integer groupId, Model model) {
-        // 해당 그룹을 조회하고 조회수를 증가시킴
-        SocialGroupEntity group = socialGroupRepository.findById(groupId)
-                .orElseThrow(() -> new IllegalArgumentException("잘못된 그룹 ID입니다."));
-        
-        // 조회수가 null인 경우 0으로 초기화
-        if (group.getViewCount() == null) {
-            group.setViewCount(0);
-        }
-
-        // 조회수 증가
-        group.setViewCount(group.getViewCount() + 1);
-        socialGroupRepository.save(group);
-
-        model.addAttribute("group", group);
-        return "socialgroup/groupBoard";
-    }
     
     /**
      * 북마크 토글
@@ -434,48 +325,6 @@ public class SocialGroupController {
         socialGroupService.toggleBookmark(userEntity, group);
 
         return ResponseEntity.ok(group.getBookmarkCount().toString());  // 변경된 북마크 수를 반환
-    }
-
-
-
-    /**
-     * 공지사항 탭 클릭 시 공지사항 HTML 반환
-     */
-    @GetMapping("/announcement")
-    public String announcementTab() {
-        return "socialgroup/announcement";
-    }
-
-    /**
-     * 일정 탭 클릭 시 일정 HTML 반환
-     */
-    @GetMapping("/schedule")
-    public String scheduleTab() {
-        return "socialgroup/schedule";
-    }
-
-    /**
-     * 앨범 탭 클릭 시 앨범 HTML 반환
-     */
-    @GetMapping("/album")
-    public String albumTab() {
-        return "socialgroup/album";
-    }
-
-    /**
-     * 설정 탭 클릭 시 설정 HTML 반환
-     */
-    @GetMapping("/settings")
-    public String settingsTab() {
-        return "socialgroup/settings";
-    }
-    
-    /**
-     * 설정 탭에서 그룹 정보 수정 
-     */
-    @PostMapping("/settings")
-    public String settingstab() {
-    	return "socialgroup/settings";
     }
     
 }

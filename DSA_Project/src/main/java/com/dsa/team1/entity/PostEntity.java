@@ -1,9 +1,11 @@
 package com.dsa.team1.entity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.data.annotation.CreatedDate;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -47,7 +50,13 @@ public class PostEntity {
 	@JoinColumn(name = "user_id")
 	private UserEntity user;
 	
+	@Column(name = "content")
+	private String content;
+	
 	@CreatedDate
 	@Column(name = "create_at", columnDefinition = "timestamp default current_timestamp")
     private LocalDateTime createdAt;
+	
+	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PhotoEntity> photos;  // 게시글에 포함된 사진들
 }
