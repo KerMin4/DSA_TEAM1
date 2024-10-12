@@ -1,7 +1,6 @@
 package com.dsa.team1.service;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -249,20 +248,21 @@ public class SocialGroupServiceImpl implements SocialGroupService {
 	 * @param status 그룹 가입 상태 (APPROVED, PENDING 등)
 	 */
 	private void addUserToGroup(UserEntity user, SocialGroupEntity group, UserGroupStatus status) {
-	    // 새로운 멤버를 그룹에 추가 (빌더 패턴 사용)
-	    UserGroupEntity userGroupEntity = UserGroupEntity.builder()
-	            .user(user)
-	            .group(group)
-	            .status(status)
-	            .build();
+	    
+		// 새로운 멤버를 그룹에 추가
+		UserGroupEntity userGroupEntity = UserGroupEntity.builder()
+			    .user(user)
+			    .group(group)
+			    .status(UserGroupStatus.APPROVED)
+			    .joinedAt(LocalDateTime.now())
+			    .build();
 
-	    userGroupRepository.save(userGroupEntity);
+		userGroupRepository.save(userGroupEntity);
+
 	}
 
 	/**
      * 그룹에 새로운 멤버를 추가하는 메서드
-     * @param userId 추가할 사용자의 ID
-     * @param groupId 해당 그룹의 ID
      */
 	@Override
 	public void addMemberToGroup(String userId, Integer groupId) {
@@ -299,8 +299,6 @@ public class SocialGroupServiceImpl implements SocialGroupService {
 
 	/**
      * 그룹에 가입 요청을 보내는 메서드
-     * @param userId 가입 요청을 보낼 사용자의 ID
-     * @param groupId 해당 그룹의 ID
      */
 	@Override
 	public void requestApprovalToJoinGroup(String userId, Integer groupId) {

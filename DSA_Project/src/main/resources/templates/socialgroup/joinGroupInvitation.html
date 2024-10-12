@@ -2,13 +2,19 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	  xmlns:sec="http://thymeleaf.org/extra/spring-security">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+	<link th:href="@{/css/sidebar.css}" rel="stylesheet">
+    <link th:href="@{/css/header.css}" rel="stylesheet">
+    <script th:src="@{/js/joinGroupInvitation.js}"></script>
 </head>
 <body>
-	<form th:action="@{/socialgroup/joinGroup}" method="post">
+	<div th:replace="~{fragments/header :: header}"></div>
+	<button id="joinGroupButton" th:data-group-id="${group.groupId}">그룹 가입하기</button>
+	<!-- <form th:action="@{/socialgroup/joinGroup}" method="post">
 	    <input type="hidden" name="groupId" th:value="${group.groupId}">
 	    <button type="submit">그룹 가입하기</button>
-	</form>
+	</form> -->
 </body>
 </html>

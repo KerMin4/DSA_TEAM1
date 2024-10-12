@@ -121,90 +121,103 @@ public class GroupBoardController {
         }
     }
     
-    
     /**
-     * 그룹 가입 권유 페이지로 이동하는 메서드
-     * 그룹 멤버가 아닌 사용자가 그룹에 가입할 때, 권유 페이지로 리다이렉트됨.
-     * 
-     * @param groupId 가입하려는 그룹의 ID
-     * @param model 모델에 그룹 정보를 추가하여 뷰에 전달
-     * @return 그룹 가입 권유 페이지로 이동
-     */
-    @GetMapping("/joinGroupInvitation")
-    public String joinGroupInvitation(
-        @RequestParam("groupId") Integer groupId,
-        Model model) {
-        
-        // 그룹 정보 로드
-        SocialGroupEntity group = socialGroupRepository.findById(groupId)
-                .orElseThrow(() -> new IllegalArgumentException("잘못된 그룹 ID입니다."));
-        
-        model.addAttribute("group", group);
-        return "socialgroup/joinGroupInvitation";  // 템플릿 반환
-    }
-
-    
-    /**
-     * 가입 권유 페이지 로직
-     * 바로 가입(AUTO) / 승인 후 가입(APPROVAL)
-     */
-    @PostMapping("/joinGroup")
-    public ResponseEntity<String> joinGroup(
-            @RequestParam("groupId") Integer groupId,
-            @AuthenticationPrincipal AuthenticatedUser user) {
-
-        SocialGroupEntity group = socialGroupRepository.findById(groupId)
-                .orElseThrow(() -> new IllegalArgumentException("잘못된 그룹 ID입니다."));
-        
-        // 가입 방식에 따른 로직 처리
-        if (group.getGroupJoinMethod() == GroupJoinMethod.AUTO) {
-            // 바로 가입 처리
-            socialGroupService.addMemberToGroup(user.getId(), groupId);
-            return ResponseEntity.ok("그룹에 성공적으로 가입되었습니다.");
-        } else if (group.getGroupJoinMethod() == GroupJoinMethod.APPROVAL) {
-            // 그룹 리더에게 가입 요청 알림
-            socialGroupService.requestApprovalToJoinGroup(user.getId(), groupId);
-            return ResponseEntity.ok("그룹 리더의 승인이 필요합니다.");
-        }
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("가입할 수 없습니다.");
-    }
-    
-    /**
-     * 그룹리더의 가입 승인/거절 처리 
-     */
-    @PostMapping("/approveJoinRequest")
-    public ResponseEntity<String> approveJoinRequest(
-            @RequestParam("userId") Integer userId,
-            @RequestParam("groupId") Integer groupId,
-            @RequestParam("action") String action, // 승인 or 거절
-            @AuthenticationPrincipal AuthenticatedUser leader) {
-
-        // 그룹 리더 확인 및 승인/거절 처리
-        SocialGroupEntity group = socialGroupRepository.findById(groupId)
-                .orElseThrow(() -> new IllegalArgumentException("그룹을 찾을 수 없습니다."));
-        
-        if (!group.getGroupLeader().getUserId().equals(leader.getId())) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("그룹 리더만 승인/거절할 수 있습니다.");
-        }
-
-        if (action.equals("approve")) {
-            socialGroupService.addMemberToGroup(userId, groupId);
-            return ResponseEntity.ok("가입 요청이 승인되었습니다.");
-        } else if (action.equals("reject")) {
-            socialGroupService.rejectJoinRequest(userId, groupId);
-            return ResponseEntity.ok("가입 요청이 거절되었습니다.");
-        }
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("잘못된 요청입니다.");
-    }
-    
-    /**
-     * 공지사항 탭 클릭 시 공지사항 HTML 반환
+     * 공지사항 탭으로 이동
+     * 공지사항 목록 조회
      */
     @GetMapping("/announcement")
-    public String announcementTab() {
-        return "socialgroup/announcement";
+    public String announcementPage(
+        @RequestParam("groupId") Integer groupId,
+        Model model) {
+
+	    // groupId를 모델에 추가하여 Thymeleaf 템플릿에서 사용 가능하도록 설정
+	    model.addAttribute("groupId", groupId);
+	    return "socialgroup/announcement";
+    }
+    
+    @GetMapping("/announcement/list")
+    public ResponseEntity<List<PostDTO>> getAnnouncements(@RequestParam("groupId") Integer groupId) {
+        List<PostEntity> announcements = postRepository.findByGroup_GroupId(groupId);
+
+        // PostEntity를 PostDTO로 변환
+        List<PostDTO> announcementDTOs = announcements.stream()
+            .map(announcement -> PostDTO.builder()
+                .postId(announcement.getPostId())
+                .groupId(announcement.getGroup().getGroupId())
+                .userId(announcement.getUser().getUserId())
+                .content(announcement.getContent())
+                .createdAt(announcement.getCreatedAt())
+                .build())
+            .collect(Collectors.toList());
+
+        // 반드시 배열 형태로 반환
+        return ResponseEntity.ok(announcementDTOs);
+    }
+
+    
+    /**
+     * 공지사항 등록
+     */
+    @PostMapping("/announcement/post")
+    public ResponseEntity<?> uploadAnnouncement(
+        @RequestParam("groupId") Integer groupId,
+        @RequestParam("content") String content,
+        @AuthenticationPrincipal AuthenticatedUser user) {
+        
+    	if (groupId == null || content == null || content.trim().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("잘못된 요청입니다.");
+        }
+        
+        // 그룹과 사용자 정보 가져오기
+        SocialGroupEntity group = socialGroupRepository.findById(groupId)
+            .orElseThrow(() -> new IllegalArgumentException("해당 그룹을 찾을 수 없습니다."));
+        UserEntity userEntity = userRepository.findById(user.getId())
+            .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+    	// 공지사항 엔티티 생성 (PostDTO 대신 직접 변환)
+        PostEntity announcementPost = PostEntity.builder()
+            .group(group)
+            .user(userEntity)
+            .content(content)
+            .createdAt(LocalDateTime.now())
+            .build();
+
+        // 공지사항 저장
+        postRepository.save(announcementPost);
+
+        return ResponseEntity.ok("공지사항이 성공적으로 등록되었습니다.");
+    }
+    
+    /**
+     * 공지사항 수정
+     */
+    @PostMapping("/announcement/edit")
+    public ResponseEntity<?> editAnnouncement(
+        @RequestParam("postId") Integer postId,
+        @RequestParam("content") String content) {
+        
+        // 기존 공지사항 조회
+        PostEntity postEntity = postRepository.findById(postId)
+            .orElseThrow(() -> new IllegalArgumentException("해당 공지사항을 찾을 수 없습니다."));
+
+        // 공지사항 내용 수정
+        postEntity.setContent(content);
+        postRepository.save(postEntity);
+
+        return ResponseEntity.ok("공지사항이 성공적으로 수정되었습니다.");
+    }
+    
+    /**
+     * 공지사항 삭제
+     */
+    @PostMapping("/announcement/delete")
+    public ResponseEntity<?> deleteAnnouncement(
+        @RequestParam("postId") Integer postId) {
+
+        // 공지사항 삭제
+        postRepository.deleteById(postId);
+
+        return ResponseEntity.ok("공지사항이 성공적으로 삭제되었습니다.");
     }
 
     /**

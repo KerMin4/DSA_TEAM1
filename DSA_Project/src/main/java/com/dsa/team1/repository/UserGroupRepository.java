@@ -37,9 +37,15 @@ public interface UserGroupRepository extends JpaRepository<UserGroupEntity, Inte
                                                             @Param("groupId") Integer groupId, 
                                                             @Param("status") UserGroupStatus status);
 
+<<<<<<< HEAD
+	boolean existsByUser_UserIdAndGroup_GroupId(String userId, Integer groupId);
+	
+
+=======
 	
 	// 여기부터 내가 씀 -나연-
 	void deleteByGroup(SocialGroupEntity group);
     
 	
+>>>>>>> branch 'master' of https://github.com/KerMin4/DSA_TEAM1.git
 }

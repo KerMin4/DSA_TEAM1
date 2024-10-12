@@ -89,6 +89,47 @@ public class GroupBoardServiceImpl implements GroupBoardService {
 
 	    socialGroupRepository.save(group);
 	}
+
+    /**
+     * 공지사항 업로드
+     */
+    public void uploadAnnouncement(PostDTO postDTO) {
+        // 그룹과 사용자 정보를 사용해 PostEntity 직접 생성
+        SocialGroupEntity group = socialGroupRepository.findById(postDTO.getGroupId())
+                .orElseThrow(() -> new IllegalArgumentException("그룹을 찾을 수 없습니다."));
+        UserEntity user = userRepository.findByUserId(postDTO.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+        
+        // PostEntity 생성
+        PostEntity postEntity = PostEntity.builder()
+                .group(group)
+                .user(user)
+                .content(postDTO.getContent())
+                .createdAt(LocalDateTime.now())
+                .build();
+        
+        postRepository.save(postEntity);
+    }
+
+    /**
+     * 공지사항 수정
+     */
+    public void editAnnouncement(PostDTO postDTO) {
+        PostEntity postEntity = postRepository.findById(postDTO.getPostId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 공지사항을 찾을 수 없습니다."));
+        
+        // 공지사항 수정
+        postEntity.setContent(postDTO.getContent());
+        postRepository.save(postEntity);
+    }
+
+    /**
+     * 공지사항 삭제
+     */
+    public void deleteAnnouncement(Integer postId) {
+        postRepository.deleteById(postId);
+    }
+
     
     @Override
     public Integer uploadPost(MultipartFile photo, String description, Integer groupId, AuthenticatedUser user) throws IOException {
