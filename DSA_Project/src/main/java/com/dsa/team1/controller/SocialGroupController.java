@@ -327,4 +327,112 @@ public class SocialGroupController {
         return ResponseEntity.ok(group.getBookmarkCount().toString());  // 변경된 북마크 수를 반환
     }
     
+    /**
+     * 그룹 가입 권유 페이지로 이동하는 메서드
+     * 그룹 멤버가 아닌 사용자가 그룹에 가입할 때, 권유 페이지로 리다이렉트됨.
+     */
+    @GetMapping("/joinGroupInvitation")
+    public String joinGroupInvitation(
+        @RequestParam("groupId") Integer groupId,
+        Model model) {
+        
+        // 그룹 정보 로드
+        SocialGroupEntity group = socialGroupRepository.findById(groupId)
+                .orElseThrow(() -> new IllegalArgumentException("잘못된 그룹 ID입니다."));
+        
+        model.addAttribute("group", group);
+        return "socialgroup/joinGroupInvitation";  // 템플릿 반환
+    }
+
+    
+    /**
+     * 가입 권유 페이지 로직
+     * 바로 가입(AUTO) / 승인 후 가입(APPROVAL)
+     */
+    @PostMapping("/joinGroup")
+    public ResponseEntity<Map<String, String>> joinGroup(
+//    public String joinGroup(
+            @RequestParam("groupId") Integer groupId,
+            @AuthenticationPrincipal AuthenticatedUser user) {
+    	
+    	Map<String, String> response = new HashMap<>();
+
+        SocialGroupEntity group = socialGroupRepository.findById(groupId)
+                .orElseThrow(() -> new IllegalArgumentException("잘못된 그룹 ID입니다."));
+        
+        boolean isMember = userGroupRepository.existsByUser_UserIdAndGroup_GroupId(user.getId(), groupId);
+        if (isMember) {
+            response.put("errorMessage", "이미 그룹의 멤버입니다.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+//        // 이미 그룹에 가입된 멤버인지 확인
+//        boolean isMember = userGroupRepository.existsByUser_UserIdAndGroup_GroupId(user.getId(), groupId);
+//        if (isMember) {
+//            redirectAttributes.addFlashAttribute("error", "이미 그룹의 멤버입니다.");
+//            return "redirect:/socialgroup/socialing";
+//        }
+        
+        if (group.getGroupJoinMethod() == GroupJoinMethod.AUTO) {
+            socialGroupService.addMemberToGroup(user.getId(), groupId);
+            response.put("successMessage", "그룹에 성공적으로 가입되었습니다.");
+            return ResponseEntity.ok(response);
+        } else if (group.getGroupJoinMethod() == GroupJoinMethod.APPROVAL) {
+            socialGroupService.requestApprovalToJoinGroup(user.getId(), groupId);
+            response.put("infoMessage", "그룹 리더의 승인이 필요합니다.");
+            return ResponseEntity.ok(response);
+        }
+
+        response.put("errorMessage", "가입할 수 없습니다.");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        
+//        // 바로 가입(AUTO)에 따른 로직 처리
+//        if (group.getGroupJoinMethod() == GroupJoinMethod.AUTO) {
+//            
+//            socialGroupService.addMemberToGroup(user.getId(), groupId);
+//            
+//	        redirectAttributes.addFlashAttribute("success", "그룹에 성공적으로 가입되었습니다.");
+//	        return "redirect:/socialgroup/groupBoard?groupId=" + groupId;
+//            
+//        // 승인 후 가입(APPROVAL)에 따른 로직 처리   
+//        } else if (group.getGroupJoinMethod() == GroupJoinMethod.APPROVAL) {
+//            // 그룹 리더에게 가입 요청 알림
+//        	socialGroupService.requestApprovalToJoinGroup(user.getId(), groupId);
+//        	
+//            redirectAttributes.addFlashAttribute("info", "그룹 리더의 승인이 필요합니다.");
+//            return "redirect:/socialgroup/socialing";
+//        }
+//
+//        redirectAttributes.addFlashAttribute("error", "가입할 수 없습니다.");
+//        return "redirect:/socialgroup/socialing";
+    }
+    
+    /**
+     * 그룹리더의 가입 승인/거절 처리 
+     */
+    @PostMapping("/approveJoinRequest")
+    public ResponseEntity<String> approveJoinRequest(
+            @RequestParam("userId") Integer userId,
+            @RequestParam("groupId") Integer groupId,
+            @RequestParam("action") String action, // 승인 or 거절
+            @AuthenticationPrincipal AuthenticatedUser leader) {
+
+        // 그룹 리더 확인 및 승인/거절 처리
+        SocialGroupEntity group = socialGroupRepository.findById(groupId)
+                .orElseThrow(() -> new IllegalArgumentException("그룹을 찾을 수 없습니다."));
+        
+        if (!group.getGroupLeader().getUserId().equals(leader.getId())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("그룹 리더만 승인/거절할 수 있습니다.");
+        }
+
+        if (action.equals("approve")) {
+            socialGroupService.addMemberToGroup(userId, groupId);
+            return ResponseEntity.ok("가입 요청이 승인되었습니다.");
+        } else if (action.equals("reject")) {
+            socialGroupService.rejectJoinRequest(userId, groupId);
+            return ResponseEntity.ok("가입 요청이 거절되었습니다.");
+        }
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("잘못된 요청입니다.");
+    }
+    
 }

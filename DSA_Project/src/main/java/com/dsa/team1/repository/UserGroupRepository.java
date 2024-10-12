@@ -37,4 +37,7 @@ public interface UserGroupRepository extends JpaRepository<UserGroupEntity, Inte
                                                             @Param("groupId") Integer groupId, 
                                                             @Param("status") UserGroupStatus status);
 
+	boolean existsByUser_UserIdAndGroup_GroupId(String userId, Integer groupId);
+	
+
 }
