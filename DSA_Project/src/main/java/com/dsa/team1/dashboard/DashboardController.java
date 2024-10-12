@@ -9,44 +9,105 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import com.dsa.team1.entity.SocialGroupEntity;
+import com.dsa.team1.entity.enums.Interest;
 import com.dsa.team1.security.AuthenticatedUser;
+import com.dsa.team1.service.SocialGroupService;
 import com.dsa.team1.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("dashboard") 
+@RequestMapping("dashboard")
 public class DashboardController {
 
     private final UserService userService;
+    private final SocialGroupService socialGroupService;
 
-    // 마이페이지
-    @GetMapping("mypage")
-    public String myPage(Model model) {
-        model.addAttribute("activePage", "home");  // 홈을 활성화
-        return "dashboard/mypage"; 
+    @GetMapping("/mypage")
+    public String myPage(@AuthenticationPrincipal AuthenticatedUser authenticatedUser, Model model) {
+        String userId = authenticatedUser.getUsername();
+        
+        // 관심사 통계 데이터를 가져옴
+        Map<Interest, Long> interestStatistics = socialGroupService.getInterestGroupStatistics(userId);
+        
+        // 모델에 관심사 통계 추가
+        model.addAttribute("interestStatistics", interestStatistics);
+        model.addAttribute("activePage", "home");
+
+        return "dashboard/mypage";
     }
 
-    // 그룹 관리 페이지
     @GetMapping("groupManagement")
-    public String groupManagement(Model model) {
-        model.addAttribute("activePage", "group-management");  // 그룹 관리를 활성화
-        return "dashboard/groupManagement"; 
+    public String groupManagement(@AuthenticationPrincipal AuthenticatedUser authenticatedUser, Model model) {
+        // 유저 ID 가져오기
+        String userId = authenticatedUser.getUsername();
+
+        // 유저가 생성한 그룹 가져오기
+        List<SocialGroupEntity> createdGroups = socialGroupService.getGroupsCreatedByUser(userId);
+        
+        // 유저가 가입한 그룹 가져오기
+        List<SocialGroupEntity> joinedGroups = socialGroupService.getJoinedGroupsByUser(userId);
+
+        // 관심사 통계 데이터 가져오기
+        Map<Interest, Long> interestStatistics = socialGroupService.getInterestGroupStatistics(userId);
+
+        // 현재 멤버 수 계산
+        Map<Integer, Integer> memberCountMap = new HashMap<>();
+        for (SocialGroupEntity group : createdGroups) {
+            int memberCount = socialGroupService.getMemberCountByGroup(group);
+            memberCountMap.put(group.getGroupId(), memberCount);
+        }
+
+        // 모델에 생성된 그룹 목록, 가입한 그룹 목록 및 관심사 통계 추가
+        model.addAttribute("createdGroups", createdGroups);
+        model.addAttribute("joinedGroups", joinedGroups); 
+        model.addAttribute("interestStatistics", interestStatistics);
+        model.addAttribute("activePage", "group-management");
+        model.addAttribute("memberCountMap", memberCountMap); // 멤버 수 맵 추가
+        
+        return "dashboard/groupManagement";
+    }
+
+
+    @PostMapping("deleteGroup")
+    public String deleteGroup(@AuthenticationPrincipal AuthenticatedUser authenticatedUser,
+                              @RequestParam("groupId") Integer groupId,
+                              RedirectAttributes redirectAttributes) {
+        try {
+            log.info("삭제하려는 그룹 ID: {}", groupId);
+            String userId = authenticatedUser.getUsername(); 
+            socialGroupService.deleteGroupById(groupId, userId); 
+            log.info("그룹 ID {} 삭제 성공", groupId);
+            redirectAttributes.addFlashAttribute("message", "그룹이 성공적으로 삭제되었습니다.");
+        } catch (SecurityException e) {
+            redirectAttributes.addFlashAttribute("error", "그룹 리더만 삭제할 수 있습니다.");
+        } catch (Exception e) {
+            log.error("그룹 삭제 중 오류 발생: 그룹 ID {}", groupId, e);
+            redirectAttributes.addFlashAttribute("error", "그룹 삭제에 실패했습니다.");
+        }
+        return "redirect:/dashboard/groupManagement";
     }
 
     // 결제 관리 페이지
     @GetMapping("paymentManagement")
     public String paymentManagement(Model model) {
-        model.addAttribute("activePage", "payment-management");  // 결제 관리를 활성화
-        return "dashboard/paymentManagement"; 
+        model.addAttribute("activePage", "payment-management");
+        return "dashboard/paymentManagement";
     }
 
     // 프로필 수정 페이지
     @GetMapping("profileedit")
     public String editProfile(Model model) {
-        model.addAttribute("activePage", "profile-edit");  // 프로필 수정을 활성화
-        return "dashboard/profileedit"; 
+        model.addAttribute("activePage", "profile-edit");
+        return "dashboard/profileedit";
     }
 
     // 프로필 이미지 수정
@@ -57,10 +118,10 @@ public class DashboardController {
         String userId = authenticatedUser.getUsername();
         try {
             String newProfileImage = userService.updateProfileImage(userId, profileImage);
-            authenticatedUser.updateProfileImage(newProfileImage);  
-
+            authenticatedUser.updateProfileImage(newProfileImage);
             redirectAttributes.addFlashAttribute("message", "프로필 이미지가 변경되었습니다.");
         } catch (IOException e) {
+            log.error("프로필 이미지 변경 실패", e);
             redirectAttributes.addFlashAttribute("error", "프로필 이미지 변경에 실패했습니다.");
         }
         return "redirect:/dashboard/mypage";
@@ -74,7 +135,6 @@ public class DashboardController {
         String userId = authenticatedUser.getUsername();
         userService.updateNickname(userId, nickname);
         authenticatedUser.updateNickname(nickname);  // 세션의 닉네임 업데이트
-
         redirectAttributes.addFlashAttribute("message", "닉네임이 변경되었습니다.");
         return "redirect:/dashboard/mypage";
     }
@@ -86,7 +146,6 @@ public class DashboardController {
                             RedirectAttributes redirectAttributes) {
         String userId = authenticatedUser.getUsername();
         userService.updatePhone(userId, phone);
-
         redirectAttributes.addFlashAttribute("message", "전화번호가 변경되었습니다.");
         return "redirect:/dashboard/mypage";
     }
@@ -98,7 +157,6 @@ public class DashboardController {
                                RedirectAttributes redirectAttributes) {
         String userId = authenticatedUser.getUsername();
         userService.updatePassword(userId, password);
-
         redirectAttributes.addFlashAttribute("message", "비밀번호가 변경되었습니다.");
         return "redirect:/dashboard/mypage";
     }
@@ -110,7 +168,6 @@ public class DashboardController {
                                RedirectAttributes redirectAttributes) {
         String userId = authenticatedUser.getUsername();
         userService.updateLocation(userId, location);
-
         redirectAttributes.addFlashAttribute("message", "위치가 변경되었습니다.");
         return "redirect:/dashboard/mypage";
     }

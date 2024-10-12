@@ -2,6 +2,7 @@ package com.dsa.team1.service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -9,6 +10,7 @@ import com.dsa.team1.dto.SocialGroupDTO;
 import com.dsa.team1.entity.SocialGroupEntity;
 import com.dsa.team1.entity.UserEntity;
 import com.dsa.team1.entity.enums.GroupJoinMethod;
+import com.dsa.team1.entity.enums.Interest;
 import com.dsa.team1.security.AuthenticatedUser;
 
 public interface SocialGroupService {
@@ -35,5 +37,13 @@ public interface SocialGroupService {
 
 	void addMemberToGroup(Integer userId, Integer groupId);
 	
+	
+	// 내꺼 -나연-
+	void deleteGroupById(Integer groupId, String userId);
+	Map<Interest, Long> getInterestGroupStatistics(String userId);
+	List<SocialGroupEntity> getGroupsCreatedByUser(String userId);
+	List<SocialGroupEntity> getJoinedGroupsByUser(String userId);
+	// ---------
+
 
 }
