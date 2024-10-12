@@ -81,4 +81,7 @@ public interface SocialGroupRepository extends JpaRepository<SocialGroupEntity, 
 //    @Query("SELECT g FROM SocialGroupEntity g ORDER BY g.bookmarkCount DESC")
 //    List<SocialGroupEntity> findAllOrderByBookmarkCountDesc();
 
+
+    // 유저가 생성한 그룹을 가져오는 메서드 - 나연 -
+    List<SocialGroupEntity> findByGroupLeaderUserId(String userId);
 }

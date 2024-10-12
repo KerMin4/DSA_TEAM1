@@ -1,17 +1,18 @@
+
 .mypage-container {
-    display: flex; 
-    margin: 0; 
-    max-width: 1200px; 
+    display: flex;
+    margin: 0;
+    max-width: 1200px;
     font-family: 'S-CoreDream-3Light', sans-serif;
-    justify-content: flex-start; 
-    align-items: flex-start; 
-    position: relative; 
+    justify-content: flex-start;
+    align-items: flex-start;
+    position: relative;
 }
 
 .mypage-nav {
-    width: 200px; 
+    width: 200px;
     padding: 20px;
-    text-align: left; 
+    text-align: left;
 }
 
 .mypage-nav ul {
@@ -56,26 +57,19 @@
 }
 
 .mypage-nav li a:hover {
-    background-color: #f0f0f0; 
+    background-color: #f0f0f0;
     color: #F8B1A3;
-    border: none; 
+    border: none;
     padding: 0;
-    background-color: transparent; 
+    background-color: transparent;
 }
 
 .mypage-nav li a.active {
-    background-color: transparent; 
-    color: #F8B1A3; 
-    font-weight: bold; 
-    border: none; 
-    padding: 0; 
-}
-
-.content {
-    flex: 1;
-    padding: 40px;
-    background-color: #fafafa;
-    font-family: 'S-CoreDream-3Light', sans-serif;
+    background-color: transparent;
+    color: #F8B1A3;
+    font-weight: bold;
+    border: none;
+    padding: 0;
 }
 
 .mypage-profile-img {
@@ -83,23 +77,12 @@
     height: 170px;
     border-radius: 50%;
     display: block;
-    margin-left: 1240px;
-    position: relative; 
-    top: -220px;
-    left: 28px;
     border: 1px solid #ccc;
+    position: relative;
+    top: -220px;
+    left: 670px;
 }
 
-.horizontal-line {
-    width: 1485px; 
-    height: 1px; 
-    background-color: #D9D9D9; 
-    position: absolute; 
-    top: 250px; 
-    left: -10; 
-    right: 10; 
-    margin: 0 auto; 
-}
 
 .profile-section {
     display: flex;
@@ -110,10 +93,38 @@
 }
 
 .profile-nickname {
-    font-size: 1.2em; 
+    font-size: 1.2em;
     font-weight: bold;
-    text-align: center; 
-    margin-top: -210px;  
-    margin-left: 730px; 
+    text-align: center;
+    margin-top: -205px;
+    margin-left: 750px;
     white-space: nowrap;
+}
+
+.horizontal-line {
+    width: 1485px;
+    height: 1px;
+    background-color: #D9D9D9;
+    position: absolute;
+    top: 250px;
+    left: -10;
+    right: 10;
+    margin: 0 auto;
+}
+
+
+.statistics-section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#interestChart {
+    max-width: 350px; 
+    max-height: 350px;
+    margin-top: 270px;
+    padding: 10px;
+    margin-left: -700px;
+    
 }

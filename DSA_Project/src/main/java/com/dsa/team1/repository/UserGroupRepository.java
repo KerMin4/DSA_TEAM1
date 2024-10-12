@@ -37,4 +37,9 @@ public interface UserGroupRepository extends JpaRepository<UserGroupEntity, Inte
                                                             @Param("groupId") Integer groupId, 
                                                             @Param("status") UserGroupStatus status);
 
+	
+	// 여기부터 내가 씀 -나연-
+	void deleteByGroup(SocialGroupEntity group);
+    
+	
 }

@@ -2,17 +2,20 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>메인페이지</title>
+    <title>관심사 관리</title>
     <link th:href="@{/css/header.css}" rel="stylesheet">
-    <link th:href="@{/css/main.css}" rel="stylesheet"> 
+    <link th:href="@{/css/main.css}" rel="stylesheet">
     <link th:href="@{/css/mypage.css}" rel="stylesheet">
+    <link th:href="@{/css/groupManagement.css}" rel="stylesheet">
     <script src="/kkirikkiri/js/jquery-3.7.1.min.js"></script>
-    <script th:src="@{/js/mypage.js}"></script>
+    <script th:src="@{/js/groupManagement.js}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 </head>
 <body>
-  
-    <div th:replace="~{fragments/header :: header}"></div>
 
+    <div th:replace="~{fragments/header :: header}"></div>
+    
     <div class="mypage-container">
         <nav class="mypage-nav">
             <ul>
@@ -22,17 +25,142 @@
                 <li><a th:classappend="${activePage == 'payment-management'} ? 'active'" th:href="@{/dashboard/paymentManagement}" id="payment-management">결제 관리</a></li>
             </ul>
 
-           
             <th:block sec:authorize="isAuthenticated()">
                 <div class="profile-section">
                     <img th:src="${#authentication.principal.profileImage != null ? '/kkirikkiri/upload/' + #authentication.principal.profileImage : '/kkirikkiri/upload/default.png'}"
                          alt="프로필 이미지" class="mypage-profile-img" id="profileImg" />
                 </div>
-                  <p th:text="${#authentication.principal.name}" class="profile-nickname"></p>
+                <p th:text="${#authentication.principal.name}" class="profile-nickname"></p>
             </th:block>
 
             <div class="horizontal-line"></div>
         </nav>
+
+        <div class="statistics-section" style="display: flex; flex-direction: column; align-items: center;">
+            <h2 id="interest-heading"></h2>   
+           
+            <canvas id="interestChart" width="500" height="500"></canvas>
+        </div>
     </div>
+<script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        var ctx = document.getElementById('interestChart').getContext('2d');
+
+       
+        var hasData = /*[[${interestStatistics.size() > 0}]]*/ false;
+
+        var interestLabels;
+        var interestData;
+
+       
+        if (hasData) {
+            interestLabels = /*[[${interestStatistics.keySet()}]]*/ [];
+            interestData = /*[[${interestStatistics.values()}]]*/ [];
+
+           
+            var total = interestData.reduce((sum, value) => sum + value, 0);
+
+           
+            interestData = interestData.map(value => Math.round((value / total) * 100));
+
+        } else {
+         
+            interestLabels = ["데이터 없음"];
+            interestData = [100];  
+        }
+
+       
+        var myPieChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: interestLabels,
+                datasets: [{
+                    label: '내 관심사',
+                    data: interestData,
+                    backgroundColor: interestLabels[0] === "데이터 없음" ? 
+                    ['rgba(211, 211, 211, 0.5)'] :  
+                    [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: interestLabels[0] === "데이터 없음" ? 
+                    ['rgba(211, 211, 211, 1)'] :  
+                    [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1  
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            font: {
+                                family: 'S-CoreDream-3Light', 
+                                size: 14,
+                                weight: 'normal'
+                            },
+                            color: '#999999'
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                let label = tooltipItem.label;
+                            
+                                if (label === "데이터 없음") {
+                                    return label; 
+                                } else {
+                                    return label + ': ' + Math.round(tooltipItem.raw) + '%'; 
+                                }
+                            }
+                        }
+                    },
+                    datalabels: {
+                        color: '#999999', 
+                        formatter: (value, ctx) => {
+                            let label = ctx.chart.data.labels[ctx.dataIndex];
+                        
+                            if (label === "데이터 없음") {
+                                return label;  
+                            } else {
+                                return label + '\n' + Math.round(value) + '%'; 
+                            }
+                        },
+                        font: {
+                            family: 'S-CoreDream-3Light',  
+                            weight: 'normal',
+                            size: 16,
+                        }
+                    }
+                }
+            },
+            plugins: [ChartDataLabels] 
+        });
+
+      
+        if (!hasData) {
+            ctx.font = "normal 20px 'S-CoreDream-3Light'"; 
+            ctx.fillStyle = "#000000"; 
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText("데이터 없음", 250, 250);  
+        }
+    });
+</script>
+
+
+
 </body>
 </html>

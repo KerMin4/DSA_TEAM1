@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -132,16 +134,11 @@ public class SocialGroupServiceImpl implements SocialGroupService {
      * @return 그룹의 활성 멤버 수
      */
     public int getMemberCountByGroup(SocialGroupEntity group) {
-    	
+        // 그룹에 속한 활성 멤버 수를 조회합니다 (방장을 제외한 멤버 수)
         int memberCount = userGroupRepository.countActiveMembersByGroupId(group.getGroupId());
         
-        // 그룹 리더는 무조건 포함하므로 1명을 더한다
+        // 그룹 리더는 항상 포함되므로 방장 1명을 추가합니다.
         memberCount += 1;
-
-        // 멤버 수가 그룹의 제한인원(memberLimit)을 넘지 않게 한다
-        if (memberCount > group.getMemberLimit()) {
-            memberCount = group.getMemberLimit();
-        }
 
         return memberCount;
     }
@@ -279,20 +276,26 @@ public class SocialGroupServiceImpl implements SocialGroupService {
 	        throw new IllegalArgumentException("이미 그룹의 멤버입니다.");
 	    }
 
+	    // 현재 멤버 수 계산
+	    int currentMemberCount = getMemberCountByGroup(group);
+
+	    // 현재 멤버 수가 그룹의 제한 인원을 초과하는지 확인 (초과할 경우 예외 발생)
+	    if (currentMemberCount >= group.getMemberLimit()) {
+	        throw new IllegalStateException("그룹의 최대 인원 수를 초과할 수 없습니다.");
+	    }
+
 	    // 사용자 조회
 	    UserEntity user = userRepository.findById(userId)
 	            .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
-	    // 공통 메서드를 사용하여 멤버 추가
+	    // 멤버 추가
 	    addUserToGroup(user, group, UserGroupStatus.APPROVED);
-
-	    // 그룹 멤버 수 증가 처리 (이미 구현된 getMemberCountByGroup 사용 가능)
-	    int currentMemberCount = getMemberCountByGroup(group);
-	    group.setMemberLimit(currentMemberCount);
 
 	    // 그룹 정보 업데이트
 	    socialGroupRepository.save(group);
 	}
+
+	 
 
 	/**
      * 그룹에 가입 요청을 보내는 메서드
@@ -352,6 +355,7 @@ public class SocialGroupServiceImpl implements SocialGroupService {
 	 * 새로운 멤버를 그룹에 추가하는 메서드 (Integer 버전)
 	 * @param userId 추가할 사용자의 ID
 	 * @param groupId 해당 그룹의 ID
+	 * 여기 약간 수정함 근데 뭐했는지 까먹음....?? 그 그룹 가입할때 참여인원 10명 설정해도 한명만 가입해도 2/2로 변하는 그런거 수정함 -나얀-
 	 */
 	@Override
 	public void addMemberToGroup(Integer userId, Integer groupId) {
@@ -460,5 +464,62 @@ public class SocialGroupServiceImpl implements SocialGroupService {
 //	    log.info("그룹 리더 {}에게 가입 요청 알림을 보냅니다.", group.getGroupLeader().getUserId());
 //	}
 	
+	
+	
+	
+	
+	// 여기 아래부터 내가 쓰고 있음 -나연-
+	
+		 @Override
+		    public List<SocialGroupEntity> getGroupsCreatedByUser(String userId) {
+		        return socialGroupRepository.findByGroupLeaderUserId(userId);
+		    }
+		 
+		 @Override
+		 public void deleteGroupById(Integer groupId, String userId) {
+		     
+		     SocialGroupEntity group = socialGroupRepository.findById(groupId)
+		             .orElseThrow(() -> new NoSuchElementException("그룹을 찾을 수 없습니다."));
+
+		     
+		     if (!group.getGroupLeader().getUserId().equals(userId)) {
+		         throw new SecurityException("그룹 리더만 삭제할 수 있습니다.");
+		     }
+
+		 
+		     userGroupRepository.deleteByGroup(group);
+
+		     
+		     groupHashtagRepository.deleteByGroup(group);
+
+		     
+		     socialGroupRepository.delete(group);
+		 }
+
+		 
+		 
+		  @Override
+		    public Map<Interest, Long> getInterestGroupStatistics(String userId) {
+		        List<SocialGroupEntity> userGroups = socialGroupRepository.findByGroupLeaderUserId(userId);
+
+		        // 로깅 추가
+		        log.info("User's groups: {}", userGroups);
+
+		        Map<Interest, Long> groupStatistics = userGroups.stream()
+		                .collect(Collectors.groupingBy(SocialGroupEntity::getInterest, Collectors.counting()));
+
+		        // 로깅 추가
+		        log.info("Group statistics: {}", groupStatistics);
+
+		        return groupStatistics;
+		    }
+		  
+		  @Override
+		    public List<SocialGroupEntity> getJoinedGroupsByUser(String userId) {
+		       
+		        return userRepository.findApprovedGroupsByUserId(userId);
+		    }
+		  
+		  
 
 }

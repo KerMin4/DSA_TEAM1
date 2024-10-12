@@ -37,13 +37,14 @@ nav ul li {
 }
 
 .profile-img {
-    width: 45px;
-    height: 45px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     margin-left: 10px;
     margin-right: 10px;
     cursor: pointer;
     display: block;
+    position: relative;  /* 고정된 헤더 내에서 위치 */
 }
 
 nav ul li a {
