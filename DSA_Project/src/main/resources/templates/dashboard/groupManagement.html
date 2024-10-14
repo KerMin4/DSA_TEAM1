@@ -72,7 +72,8 @@
             <!-- 여기부터 가입한 그룹 -->
             <div class="group-list-section joined-group-section">
                 <h1 class="group-title"></h1>
-                <div th:if="${joinedGroups.isEmpty()}"></div>
+                <div th:if="${joinedGroups.isEmpty()}">
+                </div>
                 <div th:each="group : ${joinedGroups}">
                     <div class="group-card joined-group-card">
                         <img th:src="@{/upload/{imagePath}(imagePath=${group.profileImage})}" alt="그룹 이미지" class="group-image">
@@ -80,13 +81,21 @@
                             <h2 th:text="${group.groupName}"></h2>
                             <p th:text="${group.description}"></p>
                             <p>위치: <span th:text="${group.location}"></span></p>
-               
                             <p>
                                 <i class="fas fa-user-friends"></i> 
                                 <span th:text="${memberCountMap[group.groupId]}"></span>
                                 /
                                 <span th:text="${group.memberLimit}"></span>
                             </p>
+                        </div>
+                        <div class="dropdown-card">
+                            <button class="dropdown-btn">⋮</button>
+                            <div class="dropdown-content">
+                                <form th:action="@{/dashboard/leaveGroup}" method="post">
+                                    <input type="hidden" name="groupId" th:value="${group.groupId}">
+                                    <button type="submit" class="leave-btn">탈퇴</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
