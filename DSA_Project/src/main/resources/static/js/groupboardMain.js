@@ -1,5 +1,8 @@
 $(function() {
-    var groupId = $('#groupId').val(); // groupId 값을 가져옴
+ 
+});
+
+   /*var groupId = $('#groupId').val(); // groupId 값을 가져옴
 
     $('.tabs a').on('click', function(event) {
         event.preventDefault(); // 기본 동작 중지
@@ -32,5 +35,4 @@ $(function() {
 	            console.error("에러 메시지: " + xhr.responseText); // 에러 메시지 확인
 	        }
 	    });
-	}
-});
+	}*/

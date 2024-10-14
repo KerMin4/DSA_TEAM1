@@ -160,7 +160,7 @@
 			                        	<img th:src="@{${group.profileImage != null} ? '/upload/' + ${group.profileImage} : '/images/noImage_icon.png'}" alt="Profile Image" class="group-image">
 			                        </td>
 			                        <td>
-			                            <h3><a th:href="@{/socialgroup/groupBoard(groupId=${group.groupId})}" th:text="${group.groupName}">그룹 이름</a></h3>
+			                            <h3><a th:href="@{/groupboard/main(groupId=${group.groupId})}" th:text="${group.groupName}">그룹 이름</a></h3>
 			                            <p th:text="'위치: ' + ${group.location}">위치</p>
 			                            <p th:text="${#temporals.format(group.eventDate, 'yyyy-MM-dd')}">날짜</p>
 			                            <p th:text="'인원: ' + (${memberCountMap != null ? memberCountMap[group.groupId] : 0}) + '/' + ${group.memberLimit} + '명'">인원</p>
