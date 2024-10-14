@@ -1,11 +1,17 @@
 package com.dsa.team1.controller;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
@@ -18,10 +24,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.dsa.team1.dto.PhotoDTO;
 import com.dsa.team1.dto.PostDTO;
+import com.dsa.team1.dto.ReplyDTO;
 import com.dsa.team1.entity.GroupHashtagEntity;
 import com.dsa.team1.entity.PhotoEntity;
 import com.dsa.team1.entity.PostEntity;
@@ -38,13 +46,14 @@ import com.dsa.team1.security.AuthenticatedUser;
 import com.dsa.team1.service.GroupBoardService;
 import com.dsa.team1.service.SocialGroupService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("socialgroup")
+@RequestMapping("groupboard")
 public class GroupBoardController {
 	
 	private final SocialGroupService socialGroupService;
@@ -57,10 +66,10 @@ public class GroupBoardController {
     private final GroupHashtagRepository groupHashtagRepository;
     
     /**
-     * 그룹 게시판 페이지로 이동
+     * 그룹 보드 게시판 페이지로 이동
      * 조회수 카운트
      */
-    @GetMapping("/groupBoard")
+    @GetMapping("/main")
     public String groupBoard(
     		@RequestParam("groupId") Integer groupId,
     		@AuthenticationPrincipal AuthenticatedUser user,
@@ -69,6 +78,9 @@ public class GroupBoardController {
         // 해당 그룹을 조회
         SocialGroupEntity group = socialGroupRepository.findById(groupId)
                 .orElseThrow(() -> new IllegalArgumentException("잘못된 그룹 ID입니다."));
+        
+        // 그룹 이름 추가
+        model.addAttribute("groupName", group.getGroupName()); // 그룹 이름 추가
         
         // 조회수 증가
         if (group.getViewCount() == null) {
@@ -113,11 +125,11 @@ public class GroupBoardController {
             model.addAttribute("group", group);
             model.addAttribute("members", memberProfiles);
             model.addAttribute("groupLeaderId", groupLeader.getUserId());
-            return "socialgroup/groupBoard";  // 멤버일 때 그룹 게시판으로 이동
+            return "groupboard/main";
         } else {
             // 비회원일 경우
             model.addAttribute("group", group);
-            return "socialgroup/joinGroupInvitation";  // 비회원일 경우 가입 폼 표시
+            return "socialgroup/joinGroupInvitation";
         }
     }
     
@@ -126,34 +138,26 @@ public class GroupBoardController {
      * 공지사항 목록 조회
      */
     @GetMapping("/announcement")
-    public String announcementPage(
-        @RequestParam("groupId") Integer groupId,
+    public String announcementTab(
+        @RequestParam("groupId") Integer groupId, 
         Model model) {
 
-	    // groupId를 모델에 추가하여 Thymeleaf 템플릿에서 사용 가능하도록 설정
-	    model.addAttribute("groupId", groupId);
-	    return "socialgroup/announcement";
-    }
-    
-    @GetMapping("/announcement/list")
-    public ResponseEntity<List<PostDTO>> getAnnouncements(@RequestParam("groupId") Integer groupId) {
-        List<PostEntity> announcements = postRepository.findByGroup_GroupId(groupId);
+        List<PostDTO> announcements = groupBoardService.getAnnouncementsByGroupId(groupId);
+        model.addAttribute("posts", announcements);  // 공지사항 목록
 
-        // PostEntity를 PostDTO로 변환
-        List<PostDTO> announcementDTOs = announcements.stream()
-            .map(announcement -> PostDTO.builder()
-                .postId(announcement.getPostId())
-                .groupId(announcement.getGroup().getGroupId())
-                .userId(announcement.getUser().getUserId())
-                .content(announcement.getContent())
-                .createdAt(announcement.getCreatedAt())
-                .build())
-            .collect(Collectors.toList());
-
-        // 반드시 배열 형태로 반환
-        return ResponseEntity.ok(announcementDTOs);
+        return "groupboard/announcement";  // 공지사항 탭으로 이동
     }
 
+//    @GetMapping("/announcement")
+//    public String announcementPage(
+//        @RequestParam("groupId") Integer groupId,
+//        Model model) {
+//
+//	    // groupId를 모델에 추가하여 Thymeleaf 템플릿에서 사용 가능하도록 설정
+//	    model.addAttribute("groupId", groupId);
+//	    
+//	    return "groupboard/announcement";
+//    }
     
     /**
      * 공지사항 등록
@@ -219,27 +223,63 @@ public class GroupBoardController {
 
         return ResponseEntity.ok("공지사항이 성공적으로 삭제되었습니다.");
     }
+    
+    /**
+     * 공지사항 리스트 반환
+     */
+    @GetMapping("/announcement/list")
+    public ResponseEntity<List<PostDTO>> getAnnouncements(
+    		@RequestParam("groupId") Integer groupId) {
+    	
+        List<PostEntity> announcements = postRepository.findByGroup_GroupId(groupId);
+
+        // PostEntity를 PostDTO로 변환
+        List<PostDTO> announcementDTOs = announcements.stream()
+            .map(announcement -> PostDTO.builder()
+                .postId(announcement.getPostId())
+                .groupId(announcement.getGroup().getGroupId())
+                .userId(announcement.getUser().getUserId())
+                .content(announcement.getContent())
+                .createdAt(announcement.getCreatedAt())
+                .build())
+            .collect(Collectors.toList());
+
+        // 반드시 JSON 배열 형태로 반환
+        return ResponseEntity.ok(announcementDTOs);
+    }
 
     /**
-     * 일정 탭 클릭 시 일정 HTML 반환
+     * 일정탭으로 이동
      */
     @GetMapping("/schedule")
     public String scheduleTab() {
-        return "socialgroup/schedule";
+        return "groupboard/schedule";
     }
 
     /**
-     * 앨범 탭 클릭 시 앨범 HTML 반환
+     * 앨범탭으로 이동
      */
     @GetMapping("/album")
-    public String albumTab() {
-        return "socialgroup/album";
+    public String albumTab(
+        @RequestParam("groupId") Integer groupId, 
+        Model model) {
+
+        List<PostDTO> albumPosts = groupBoardService.getAlbumPostsByGroupId(groupId);
+        model.addAttribute("posts", albumPosts);  // 앨범 포스트 목록
+
+        return "groupboard/album";  // 앨범 탭으로 이동
     }
+
+
+//    @GetMapping("/album")
+//    public String albumTab() {
+//        return "groupboard/album";
+//    }
     
     /**
      * 앨범 탭 포스트 업로드
      */ 
-    @PostMapping("/uploadPost")
+    @PostMapping("/album/uploadPost")
     public ResponseEntity<?> uploadPost(
         @RequestParam("photo") MultipartFile photo,
         @RequestParam("description") String description,
@@ -263,6 +303,19 @@ public class GroupBoardController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("포스트 업로드 중 오류가 발생했습니다.");
         }
     }
+    
+    /**
+     * 포스트의 ID로 앨범 사진을 조회
+     */
+    public List<PhotoDTO> getPhotosByPostId(Integer postId) {
+        return photoRepository.findByPost_PostId(postId).stream()
+            .filter(photo -> photo.getPost() != null)  // 포스트가 존재하는 사진만
+            .map(photo -> PhotoDTO.builder()
+                .photoId(photo.getPhotoId())
+                .imageName("/kkirikkiri/upload/" + photo.getImageName())  // 경로 추가
+                .build())
+            .collect(Collectors.toList());
+    }
 
     /**
      * 그룹 ID로 포스트 리스트 가져오기
@@ -282,7 +335,7 @@ public class GroupBoardController {
 	/**
 	 * 사진 클릭 시 포스트 상세 정보 가져오기
 	 */
-    @GetMapping("/postDetail/{postId}")
+    @GetMapping("/album/postDetail/{postId}")
     public ResponseEntity<PostDTO> getPostDetail(
     		@PathVariable("postId") Integer postId) {
         PostDTO postDetail = groupBoardService.getPostDetail(postId);
@@ -292,6 +345,69 @@ public class GroupBoardController {
         
         return ResponseEntity.ok(postDetail);
     }
+    
+    /**
+     * 댓글 작성 
+     */
+    @PostMapping("/post/{postId}/reply")
+    public ResponseEntity<?> addReply(
+        @PathVariable("postId") Integer postId,
+        @RequestParam("content") String content,
+        @AuthenticationPrincipal AuthenticatedUser user) {
+        
+        ReplyDTO replyDTO = ReplyDTO.builder()
+                .postId(postId)
+                .content(content)
+                .build();
+        
+        groupBoardService.addReply(replyDTO, user);
+        
+        return ResponseEntity.ok("댓글 작성 성공");
+    }
+    
+    /**
+     * 댓글 수정 
+     */
+    @PostMapping("/reply/{replyId}/edit")
+    public ResponseEntity<?> editReply(
+        @PathVariable("replyId") Integer replyId,
+        @RequestParam("content") String content) {
+        
+        try {
+            groupBoardService.editReply(ReplyDTO.builder().replyId(replyId).content(content).build());
+            return ResponseEntity.ok("댓글 수정 완료");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("댓글 수정 중 오류 발생");
+        }
+    }
+    
+    /**
+     * 댓글 삭제 
+     */
+    @PostMapping("/reply/{replyId}/delete")
+    public ResponseEntity<?> deleteReply(@PathVariable("replyId") Integer replyId) {
+        try {
+            groupBoardService.deleteReply(replyId);
+            return ResponseEntity.ok("댓글 삭제 완료");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("댓글 삭제 중 오류 발생");
+        }
+    }
+
+    
+    
+    /**
+     * Post에 대한 댓글을 따로 가져오는 메서드
+     */
+    @GetMapping("/post/{postId}/replies")
+    public ResponseEntity<List<ReplyDTO>> getRepliesByPostId(
+        @PathVariable("postId") Integer postId) {
+        List<ReplyDTO> replies = groupBoardService.getRepliesByPostId(postId);
+        return ResponseEntity.ok(replies);  // 댓글 목록만 반환
+    }
+
+
+    
     
     /**
      * 그룹 설정 불러오기 (헤더 이미지 포함)
@@ -319,11 +435,12 @@ public class GroupBoardController {
         model.addAttribute("groupProfileImage", groupProfileImage);
         model.addAttribute("hashtags", hashtags);
 
-        return "socialgroup/settings";  // settings.html로 이동
+        return "groupboard/settings";
     }
-
     
-    // 해시태그 리스트 조회
+    /**
+     * 해시태그 리스트 조회
+     */
     @GetMapping("/socialgroup/{groupId}/hashtags")
     public String getGroupHashtags(@PathVariable Integer groupId, Model model) {
         // 그룹 조회
@@ -338,16 +455,16 @@ public class GroupBoardController {
         model.addAttribute("hashtags", hashtags);
 
         // 뷰로 데이터 전달 (groupDetails.html로 이동)
-        return "groupDetails";  // 해당 페이지로 전달
+        return "groupDetails";
+
     }
-    
     
     /**
      * 설정 탭
      * 설정 업데이트
      */
-    @PostMapping("/update")
-    public String updateGroup(
+    @PostMapping("/settings/update")
+    public ResponseEntity<?> updateGroup(
             @RequestParam("groupId") Integer groupId,
             @RequestParam("groupName") String groupName,
             @RequestParam("description") String description,
@@ -356,15 +473,52 @@ public class GroupBoardController {
             @RequestParam("interest") String interest,
             @RequestParam("joinMethod") String joinMethod,
             @RequestParam("memberLimit") Integer memberLimit,
-            @RequestParam("hashtags") String hashtags
-            ) {
+            @RequestParam("hashtags") String hashtags,
+            @RequestParam(value = "profileImage", required = false) MultipartFile profileImage) {
 
-        // 그룹 정보 업데이트 처리 로직
-        groupBoardService.updateGroup(groupId, groupName, description, location, eventDate, interest, joinMethod, memberLimit, hashtags);
-        
-        // 해당 그룹의 설정 페이지로 리다이렉트
-        return "redirect:/socialgroup/settings?groupId=" + groupId;
-    
+    	try {
+            // 그룹 정보 업데이트
+            groupBoardService.updateGroup(groupId, groupName, description, location, eventDate, interest, joinMethod, memberLimit, hashtags, profileImage);
+            return ResponseEntity.ok("그룹 설정이 성공적으로 업데이트되었습니다.");
+        } catch (IOException e) {
+            log.error("그룹 설정 업데이트 중 오류 발생", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("그룹 설정 업데이트 중 오류가 발생했습니다.");
+        }
     }
+
+    /**
+     * 그룹헤더이미지 관리 
+     */
+    @PostMapping("/settings")
+    public ResponseEntity<?> uploadImage(@RequestParam("groupId") Integer groupId,
+                                          @RequestParam("profileImage") MultipartFile profileImage) {
+    	if (profileImage.isEmpty()) {
+            return ResponseEntity.badRequest().body("업로드할 이미지가 없습니다.");
+        }
+
+        try {
+            // 파일 이름 생성 (UUID 사용 예시)
+            String originalFileName = profileImage.getOriginalFilename();
+            String savedFileName = UUID.randomUUID() + "_" + originalFileName; // 고유한 파일 이름 생성
+
+            // 파일 저장 경로 설정
+            Path path = Paths.get("C:/upload/" + savedFileName);
+            Files.copy(profileImage.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING); // 파일 저장
+
+            // 저장된 파일의 URL을 생성
+            String imageUrl = "/kkirikkiri/upload/" + savedFileName;
+
+            // 응답으로 이미지 URL 반환
+            Map<String, String> response = new HashMap<>();
+            response.put("imageUrl", imageUrl);
+            return ResponseEntity.ok(response);
+
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("이미지 업로드 중 오류가 발생했습니다.");
+        }
+    }
+
+
+
 
 }
