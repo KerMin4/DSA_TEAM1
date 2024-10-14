@@ -1,17 +1,10 @@
 package com.dsa.team1.service;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -20,9 +13,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.dsa.team1.dto.PhotoDTO;
 import com.dsa.team1.dto.PostDTO;
-import com.dsa.team1.dto.UserDTO;
+import com.dsa.team1.dto.ReplyDTO;
 import com.dsa.team1.entity.PhotoEntity;
 import com.dsa.team1.entity.PostEntity;
+import com.dsa.team1.entity.ReplyEntity;
 import com.dsa.team1.entity.SocialGroupEntity;
 import com.dsa.team1.entity.UserEntity;
 import com.dsa.team1.entity.enums.GroupJoinMethod;
@@ -31,6 +25,7 @@ import com.dsa.team1.repository.BookmarkRepository;
 import com.dsa.team1.repository.GroupHashtagRepository;
 import com.dsa.team1.repository.PhotoRepository;
 import com.dsa.team1.repository.PostRepository;
+import com.dsa.team1.repository.ReplyRepository;
 import com.dsa.team1.repository.SocialGroupRepository;
 import com.dsa.team1.repository.UserGroupRepository;
 import com.dsa.team1.repository.UserRepository;
@@ -53,24 +48,15 @@ public class GroupBoardServiceImpl implements GroupBoardService {
     private final BookmarkRepository bookmarkRepository;
     private final PhotoRepository photoRepository;
     private final PostRepository postRepository;
+    private final ReplyRepository replyRepository;
     private final FileManager fileManager;
     
     /**
      * 그룹 업데이트 시 DB에 해당 그룹의 정보를 저장
-     * @param groupId      업데이트할 그룹의 고유 ID
-     * @param groupName    그룹의 이름
-     * @param description  그룹의 설명
-     * @param location     그룹의 위치 정보
-     * @param eventDate    그룹 이벤트 날짜 (yyyy-MM-dd 형식의 문자열)
-     * @param interest     그룹의 관심사 (Interest enum 값)
-     * @param joinMethod   그룹 가입 방식 (GroupJoinMethod enum 값)
-     * @param memberLimit  그룹의 최대 회원 수
-     * @param hashtags     그룹과 연관된 해시태그들 (콤마로 구분된 문자열)
-     * @throws IllegalArgumentException 전달된 groupId에 해당하는 그룹이 존재하지 않을 경우
      */
     @Override
 	public void updateGroup(Integer groupId, String groupName, String description, String location, String eventDate,
-	        String interest, String joinMethod, Integer memberLimit, String hashtags) {
+	        String interest, String joinMethod, Integer memberLimit, String hashtags, MultipartFile profileImage) throws IOException {
 
 	    SocialGroupEntity group = socialGroupRepository.findById(groupId)
 	            .orElseThrow(() -> new IllegalArgumentException("잘못된 그룹 ID입니다."));
@@ -86,6 +72,12 @@ public class GroupBoardServiceImpl implements GroupBoardService {
 	    group.setInterest(Interest.valueOf(interest));
 	    group.setGroupJoinMethod(GroupJoinMethod.valueOf(joinMethod.toUpperCase()));
 	    group.setMemberLimit(memberLimit);
+	    
+	    // 프로필 이미지 처리
+	    if (profileImage != null && !profileImage.isEmpty()) {
+	        String fileName = fileManager.saveFile("C:/upload", profileImage);  // 파일 저장
+	        group.setProfileImage(fileName);  // 저장된 파일 이름을 그룹 프로필 이미지로 설정
+	    }
 
 	    socialGroupRepository.save(group);
 	}
@@ -129,8 +121,41 @@ public class GroupBoardServiceImpl implements GroupBoardService {
     public void deleteAnnouncement(Integer postId) {
         postRepository.deleteById(postId);
     }
-
     
+    /**
+     * 공지사항에서 텍스트로만 이루어진 게시물을 필터링
+     */
+    public List<PostDTO> getAnnouncementsByGroupId(Integer groupId) {
+        return postRepository.findByGroup_GroupId(groupId).stream()
+            .filter(post -> photoRepository.findByPost_PostId(post.getPostId()).isEmpty())  // 해당 포스트에 사진이 없는지 확인
+            .map(post -> PostDTO.builder()
+                .postId(post.getPostId())
+                .groupId(post.getGroup().getGroupId())
+                .userId(post.getUser().getUserId())
+                .content(post.getContent())
+                .createdAt(post.getCreatedAt())
+                .build())
+            .collect(Collectors.toList());
+    }
+//    public List<PostDTO> getAnnouncementsByGroupId(Integer groupId) {
+//        SocialGroupEntity group = socialGroupRepository.findById(groupId)
+//            .orElseThrow(() -> new IllegalArgumentException("그룹을 찾을 수 없습니다."));
+//
+//        return postRepository.findByGroup_GroupId(groupId).stream()
+//        	.filter(post -> photoRepository.findByPost_PostId(post.getPostId()).isEmpty())  // 사진이 없는 포스트만
+//            .map(post -> PostDTO.builder()
+//                .postId(post.getPostId())
+//                .groupId(post.getGroup().getGroupId())
+//                .userId(post.getUser().getUserId())
+//                .content(post.getContent())
+//                .createdAt(post.getCreatedAt())
+//                .build())
+//            .collect(Collectors.toList());
+//    }
+
+    /**
+     * 앨범 포스트 업로드 
+     */
     @Override
     public Integer uploadPost(MultipartFile photo, String description, Integer groupId, AuthenticatedUser user) throws IOException {
         // 사용자 인증 확인
@@ -151,39 +176,46 @@ public class GroupBoardServiceImpl implements GroupBoardService {
             .createdAt(LocalDateTime.now())
             .build();
         
-        try {
-            // 포스트 저장
-            postRepository.save(post);
-            log.info("포스트가 성공적으로 저장되었습니다. postId: {}", post.getPostId());
-        } catch (Exception e) {
-            log.error("포스트 저장 중 오류 발생", e);
-            throw new RuntimeException("포스트 저장 중 오류가 발생했습니다.", e);  // 예외를 다시 던져서 컨트롤러 계층에서도 처리 가능하도록 함
-        }
+        postRepository.save(post); // 포스트 저장
 
-        try {
-            if (photo != null && !photo.isEmpty()) {
-                String fileName = fileManager.saveFile("C:/upload", photo); // 파일 저장
-                log.info("파일이 성공적으로 저장되었습니다: {}", fileName);
+        // 사진 업로드 처리
+        if (photo != null && !photo.isEmpty()) {
+            String fileName = fileManager.saveFile("C:/upload", photo); // 파일 저장
+            log.info("파일이 성공적으로 저장되었습니다: {}", fileName);
 
-                // PhotoEntity 저장
-                PhotoEntity photoEntity = PhotoEntity.builder()
-                    .imageName(fileName)
-                    .post(post)  // 포스트와 사진 연결
-                    .group(group)
-                    .build();
-                photoRepository.save(photoEntity);
-            } else {
-                throw new RuntimeException("업로드할 파일이 없습니다.");
-            }
-        } catch (IOException e) {
-            log.error("사진 업로드 중 오류 발생", e);
-            throw new RuntimeException("사진 업로드 중 오류 발생", e);
+            // PhotoEntity에 사진 정보 저장
+            PhotoEntity photoEntity = PhotoEntity.builder()
+                .imageName(fileName)
+                .post(post)  // 포스트와 연결
+                .group(group)
+                .build();
+            photoRepository.save(photoEntity); // 사진 저장
+        } else {
+            throw new RuntimeException("업로드할 파일이 없습니다.");
         }
         
-        // 업로드된 포스트의 postId 반환
-        return post.getPostId();
+        return post.getPostId(); // 업로드된 포스트의 postId 반환
+    }
+    
+    /**
+     * 앨범에서는 사진이 있는 게시물만 조회하는 서비스 로직 
+     */
+    public List<PostDTO> getAlbumPostsByGroupId(Integer groupId) {
+        return photoRepository.findByGroup_GroupId(groupId).stream()
+            .filter(photo -> photo.getPost() != null)  // PostEntity가 null이 아닌 경우
+            .map(PhotoEntity::getPost)  // 사진에 연결된 PostEntity 가져오기
+            .distinct()  // 중복된 포스트 제거
+            .map(post -> PostDTO.builder()
+                .postId(post.getPostId())
+                .groupId(post.getGroup().getGroupId())
+                .userId(post.getUser().getUserId())
+                .content(post.getContent())
+                .createdAt(post.getCreatedAt())
+                .build())
+            .collect(Collectors.toList());
     }
 
+    
     /**
      * 특정 그룹의 앨범 사진 목록을 반환
      */
@@ -200,36 +232,97 @@ public class GroupBoardServiceImpl implements GroupBoardService {
     	        })
     	        .collect(Collectors.toList());
     }
-
     
     /**
-     * 특정 그룹의 앨범 포스트 상세 정보를 반환
+     * 포스트의 ID로 앨범 사진을 조회 
+     */
+    public List<PhotoDTO> getPhotosByPostId(Integer postId) {
+        return photoRepository.findByPost_PostId(postId).stream()
+            .map(photo -> PhotoDTO.builder()
+                .photoId(photo.getPhotoId())
+                .imageName(photo.getImageName())
+                .build())
+            .collect(Collectors.toList());
+    }
+
+    /**
+     *  Post 상세 정보 가져오기
      */
     @Override
     public PostDTO getPostDetail(Integer postId) {
-    	PostEntity post = postRepository.findById(postId)
-    	        .orElseThrow(() -> new IllegalArgumentException("포스트를 찾을 수 없습니다: " + postId));
-    	
-    	// 필요한 정보를 DTO로 변환
-        PostDTO postDTO = new PostDTO();
-        postDTO.setPostId(post.getPostId());
-        postDTO.setUserId(post.getUser().getUserId());
-        postDTO.setCreatedAt(post.getCreatedAt());
-        postDTO.setContent(post.getContent());
-        
-        // 사진 리스트를 DTO로 변환
-        List<PhotoDTO> photoDTOs = post.getPhotos().stream()
-                .map(photo -> PhotoDTO.builder()
-                        .photoId(photo.getPhotoId())
-                        .imageName(photo.getImageName())
-                        .build())
-                .collect(Collectors.toList());
-        postDTO.setPhotos(photoDTOs);
-        
-        return postDTO;
+        PostEntity post = postRepository.findById(postId)
+            .orElseThrow(() -> new IllegalArgumentException("포스트를 찾을 수 없습니다: " + postId));
+
+        List<PhotoDTO> photoDTOs = photoRepository.findByPost_PostId(postId).stream()
+            .map(photo -> PhotoDTO.builder()
+                .photoId(photo.getPhotoId())
+                .imageName(photo.getImageName())
+                .build())
+            .collect(Collectors.toList());
+
+        // PostDTO 반환 (사진 포함)
+        return PostDTO.builder()
+            .postId(post.getPostId())
+            .userId(post.getUser().getUserId())
+            .createdAt(post.getCreatedAt())
+            .content(post.getContent())
+            .photos(photoDTOs)  // 추가된 사진 리스트
+            .build();
+    }
+
+
+    /**
+     * 댓글 목록 가져오기
+     */ 
+    @Override
+    public List<ReplyDTO> getRepliesByPostId(Integer postId) {
+        return replyRepository.findByPost_PostId(postId).stream()
+            .map(reply -> ReplyDTO.builder()
+                .replyId(reply.getReplyId())
+                .postId(reply.getPost().getPostId())
+                .userId(reply.getUser().getUserId())
+                .content(reply.getContent())
+                .createdAt(reply.getCreatedAt())
+                .build())
+            .collect(Collectors.toList());
     }
     
+    /**
+     * 댓글 작성 
+     */
+    public void addReply(ReplyDTO replyDTO, AuthenticatedUser user) {
+        PostEntity post = postRepository.findById(replyDTO.getPostId())
+                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
+        
+        UserEntity userEntity = userRepository.findByUserId(user.getId())
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+        
+        ReplyEntity replyEntity = ReplyEntity.builder()
+                .post(post)
+                .user(userEntity)
+                .content(replyDTO.getContent())
+                .createdAt(LocalDateTime.now())
+                .build();
+        
+        replyRepository.save(replyEntity);
+    }
+    
+    /**
+     * 댓글 수정
+     */
+    public void editReply(ReplyDTO replyDTO) {
+        ReplyEntity replyEntity = replyRepository.findById(replyDTO.getReplyId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 댓글을 찾을 수 없습니다."));
+        
+        replyEntity.setContent(replyDTO.getContent());
+        replyRepository.save(replyEntity);
+    }
 
-
+    /**
+     * 댓글 삭제 
+     */
+    public void deleteReply(Integer replyId) {
+        replyRepository.deleteById(replyId);
+    }
 
 }

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://thymeleaf.org/extra/spring-security">
+<head>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+	<link th:href="@{/css/sidebar.css}" rel="stylesheet">
+	<link th:href="@{/css/groupboardSchedule.css}" rel="stylesheet">
+	<link th:href="@{/css/header.css}" rel="stylesheet">
+	<script th:src="@{/js/groupboardSchedule.js}"></script>
+</head>
+<body>
+	<div th:replace="~{fragments/header :: header}"></div>
+	
+	<div class="container">
+		<!-- Sidebar Section -->
+		<div class="sidebar">
+            <h2>그룹 게시판</h2>
+            
+            <br>
+            
+            <h2 th:text="${groupName}"></h2>
+
+            <div>가입 멤버</div>
+            <ul class="members-list">
+			    <li th:each="member : ${members}">
+			        <img th:src="@{/upload/{profileImage}(profileImage=${member.profileImage})}" alt="프로필 이미지" class="profile-img">
+			        <span th:text="${member.userId}"></span>
+			    </li>
+			</ul>
+        </div>
+		
+		<!-- Main Content Section -->
+        <div class="main-content">
+        	<table>
+        		<tr>
+                    <td><label for="eventDate">이벤트 날짜:</label></td>
+                    <td><input type="text" id="eventDate" name="eventDate" th:value="${eventDateFormatted}"></td>
+                </tr>
+        	</table>
+        </div>
+    </div>
+
+</body>
+</html>

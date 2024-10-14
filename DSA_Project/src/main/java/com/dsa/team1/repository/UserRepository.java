@@ -16,9 +16,10 @@ public interface UserRepository extends JpaRepository<UserEntity, String> {
 	
     Optional<UserEntity> findByUserId(String userId);
     
-    
     // 나연
     @Query("SELECT ug.group FROM UserGroupEntity ug WHERE ug.user.userId = :userId AND ug.status = 'APPROVED'")
     List<SocialGroupEntity> findApprovedGroupsByUserId(@Param("userId") String userId);
 
 }
+
+

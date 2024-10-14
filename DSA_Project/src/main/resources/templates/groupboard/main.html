@@ -6,9 +6,9 @@
     <title>그룹 게시판</title>
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
     <link th:href="@{/css/sidebar.css}" rel="stylesheet">
-    <link th:href="@{/css/groupBoard.css}" rel="stylesheet">
+    <link th:href="@{/css/groupboardMain.css}" rel="stylesheet">
     <link th:href="@{/css/header.css}" rel="stylesheet">
-    <script th:src="@{/js/groupBoard.js}"></script>
+    <script th:src="@{/js/groupboardMain.js}"></script>
 </head>
 <body>
 	<div th:replace="~{fragments/header :: header}"></div>
@@ -20,6 +20,8 @@
             
             <br>
             
+            <h2 th:text="${groupName}"></h2>
+
             <div>가입 멤버</div>
             <ul class="members-list">
 			    <li th:each="member : ${members}">
@@ -34,14 +36,18 @@
 		    <div th:if="${isMember}">
 		        <!-- 그룹 게시판 컨텐츠 -->
 		        <nav class="tabs">
-		            <a href="#" class="tab" th:data-url="@{'/socialgroup/announcement?groupId=' + ${group.groupId}}" data-content="announcement">공지사항</a>
-		            <a href="#" class="tab" th:data-url="@{'/socialgroup/schedule?groupId=' + ${group.groupId}}" data-content="schedule">일정</a>
-		            <a href="#" class="tab" th:data-url="@{'/socialgroup/album?groupId=' + ${group.groupId}}" data-content="album">앨범</a>
-		            <a href="#" class="tab" th:data-url="@{'/socialgroup/settings?groupId=' + ${group.groupId}}" data-content="settings">설정</a>
-		        </nav>
-		        <div id="content-box" class="content-box">
-		            <!-- 각 탭에 맞는 내용이 AJAX로 로드됩니다. -->
-		        </div>
+		        	<a th:href="@{/groupboard/announcement(groupId=${group.groupId}, type='announcement')}" class="tab">공지사항</a>
+					<a th:href="@{/groupboard/schedule(groupId=${group.groupId}, type='schedule')}" class="tab">일정</a>
+					<a th:href="@{/groupboard/album(groupId=${group.groupId}, type='album')}" class="tab">앨범</a>
+					<a th:href="@{/groupboard/settings(groupId=${group.groupId}, type='settings')}" class="tab">설정</a>
+                    <!-- <a th:href="@{/groupboard/announcement(groupId=${group.groupId})}" class="tab">공지사항</a>
+					<a th:href="@{/groupboard/schedule(groupId=${group.groupId})}" class="tab">일정</a>
+					<a th:href="@{/groupboard/album(groupId=${group.groupId})}" class="tab">앨범</a>
+					<a th:href="@{/groupboard/settings(groupId=${group.groupId})}" class="tab">설정</a> -->
+                </nav>
+                <div id="content-box" class="content-box">
+                    <!-- 이제는 각 탭에 맞는 페이지로 직접 이동합니다. -->
+                </div>
 		    </div>
 		
 		    <div th:if="${!isMember}">

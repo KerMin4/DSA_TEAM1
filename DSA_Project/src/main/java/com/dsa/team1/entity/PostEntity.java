@@ -54,9 +54,7 @@ public class PostEntity {
 	private String content;
 	
 	@CreatedDate
-	@Column(name = "create_at", columnDefinition = "timestamp default current_timestamp")
-    private LocalDateTime createdAt;
+	@Column(name = "created_at", columnDefinition = "timestamp default current_timestamp")
+	private LocalDateTime createdAt;
 	
-	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PhotoEntity> photos;  // 게시글에 포함된 사진들
 }

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://thymeleaf.org/extra/spring-security">
+<head>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+	<link th:href="@{/css/sidebar.css}" rel="stylesheet">
+	<link th:href="@{/css/groupboardAnnouncement.css}" rel="stylesheet">
+	<link th:href="@{/css/header.css}" rel="stylesheet">
+	<script th:src="@{/js/groupboardAnnouncement.js}"></script>
+</head>
+<body>
+	<div th:replace="~{fragments/header :: header}"></div>
+	
+	<div class="container">
+		<!-- Sidebar Section -->
+		<div class="sidebar">
+            <h2>그룹 게시판</h2>
+            
+            <br>
+            
+            <h2 th:text="${groupName}"></h2>
+
+            <div>가입 멤버</div>
+            <ul class="members-list">
+			    <li th:each="member : ${members}">
+			        <img th:src="@{/upload/{profileImage}(profileImage=${member.profileImage})}" alt="프로필 이미지" class="profile-img">
+			        <span th:text="${member.userId}"></span>
+			    </li>
+			</ul>
+        </div>
+		
+		<!-- Main Content Section -->
+        <div class="main-content">
+	
+			<!-- 공지사항 등록 섹션 -->
+		    <div>
+		        <textarea id="announcementText" placeholder="공지사항을 입력하세요."></textarea>
+		        <button id="postAnnouncement">공지 등록</button>
+		    </div>
+		
+		    <!-- 공지사항 목록 표시 -->
+		    <div id="announcementList">
+		        <!-- 동적으로 공지사항 목록이 여기 추가됩니다. -->
+		    </div>
+		
+		</div>
+    </div>
+</body>
+</html>
