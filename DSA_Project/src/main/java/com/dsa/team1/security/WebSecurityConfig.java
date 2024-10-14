@@ -1,3 +1,4 @@
+
 package com.dsa.team1.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,8 @@ public class WebSecurityConfig {
 			"/member/join",
 			"/kkirikkiri/member/idCheck",
 			"/member/idCheck",
+		  "/kkirikkiri/upload/**", 
+		  "/upload/**",
 			"/member/mapTest"
 	};
 	

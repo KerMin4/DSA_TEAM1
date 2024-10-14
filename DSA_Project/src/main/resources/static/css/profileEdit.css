@@ -1,23 +1,92 @@
-/* 프로필 이미지 영역 */
-.profile-edit-section {
-    display: flex;
-    justify-content: center; /* 가로 중앙 정렬 */
-    align-items: center; /* 세로 중앙 정렬 */
-    margin-top: 20px; /* 상단 여백 */
-}
+/* 여기부터 */
+.profile-section {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+} 
 
-/* 프로필 이미지 스타일 */
-.profile-image {
-    cursor: pointer;
-    width: 150px;
-    height: 150px;
+.mypage-profile-img {
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px;
 }
 
-/* 선 스타일 */
-.divider {
-    border: none;
-    border-top: 1px solid #D9D9D9;
-    width: 90%;
-    margin: 20px auto;
+.profile-nickname {
+    font-size: 24px;
+    font-weight: bold;
+    color: #555;
 }
+
+/* 버튼 스타일 */
+.button-container button {
+    background-color: #ff9aa2;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 16px; /* 버튼 크기 약간 줄임 */
+    font-size: 14px; /* 폰트 크기도 조금 줄임 */
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+.button-container button:hover {
+    background-color: #ff6f85;
+}
+
+/* 카메라 버튼 스타일 */
+#editProfileButton {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: transform 0.4s;
+    padding: 3px; /* 버튼 패딩 줄임 */
+}
+
+#editProfileButton img {
+    width: 24px; /* 카메라 아이콘 크기 줄임 */
+    height: 24px;
+    transition: transform 0.4s;
+}
+
+#editProfileButton:hover img {
+    transform: scale(1.2);
+}
+
+/* 홈 버튼 스타일 */
+.home-icon-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+}
+
+.home-icon-container img {
+    width: 25px;
+    height: 25px;
+    transition: transform 0.4s;
+}
+
+.home-icon-container:hover {
+    transform: scale(1.1);
+}
+/*여기까진 건드리지마셈 무조건 고정임 수정하지마셈*/
+

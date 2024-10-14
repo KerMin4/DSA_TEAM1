@@ -1,41 +1,57 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://thymeleaf.org/extra/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>그룹 게시판</title>
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
     <link th:href="@{/css/sidebar.css}" rel="stylesheet">
     <link th:href="@{/css/groupBoard.css}" rel="stylesheet">
+    <link th:href="@{/css/header.css}" rel="stylesheet">
     <script th:src="@{/js/groupBoard.js}"></script>
 </head>
 <body>
 	<div th:replace="~{fragments/header :: header}"></div>
-
+	
     <div class="container">
         <!-- Sidebar Section -->
         <div class="sidebar">
             <h2>그룹 게시판</h2>
+            
+            <br>
+            
+            <div>가입 멤버</div>
             <ul class="members-list">
-			    <li>가입 멤버</li>
-			    <li>오구</li>
-				<li>복이</li>
+			    <li th:each="member : ${members}">
+			        <img th:src="@{/upload/{profileImage}(profileImage=${member.profileImage})}" alt="프로필 이미지" class="profile-img">
+			        <span th:text="${member.userId}"></span>
+			    </li>
 			</ul>
         </div>
 
         <!-- Main Content Section -->
         <div class="main-content">
-            <nav class="tabs">
-                <a href="#" class="tab" data-url="/socialgroup/announcement" data-content="announcement">공지사항</a>
-                <a href="#" class="tab" data-url="/socialgroup/schedule" data-content="schedule">일정</a>
-                <a href="#" class="tab" data-url="/socialgroup/album" data-content="album">앨범</a>
-                <a href="#" class="tab" data-url="/socialgroup/settings" data-content="settings">설정</a>
-            </nav>
+		    <div th:if="${isMember}">
+		        <!-- 그룹 게시판 컨텐츠 -->
+		        <nav class="tabs">
+		            <a href="#" class="tab" th:data-url="@{'/socialgroup/announcement?groupId=' + ${group.groupId}}" data-content="announcement">공지사항</a>
+		            <a href="#" class="tab" th:data-url="@{'/socialgroup/schedule?groupId=' + ${group.groupId}}" data-content="schedule">일정</a>
+		            <a href="#" class="tab" th:data-url="@{'/socialgroup/album?groupId=' + ${group.groupId}}" data-content="album">앨범</a>
+		            <a href="#" class="tab" th:data-url="@{'/socialgroup/settings?groupId=' + ${group.groupId}}" data-content="settings">설정</a>
+		        </nav>
+		        <div id="content-box" class="content-box">
+		            <!-- 각 탭에 맞는 내용이 AJAX로 로드됩니다. -->
+		        </div>
+		    </div>
+		
+		    <div th:if="${!isMember}">
+		        <form th:action="@{/socialgroup/joinGroup}" method="post">
+		            <input type="hidden" name="groupId" th:value="${group.groupId}">
+		            <button type="submit">그룹 가입하기</button>
+		        </form>
+		    </div>
+		</div>
 
-            <!-- Content Box -->
-            <div id="content-box" class="content-box">
-                <!-- 각 탭에 맞는 내용이 AJAX로 로드됩니다. -->
-            </div>
-        </div>
     </div>
 
 </body>

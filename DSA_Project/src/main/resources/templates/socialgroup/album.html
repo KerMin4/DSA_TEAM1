@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://thymeleaf.org/extra/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>그룹 앨범</title>
@@ -9,8 +10,8 @@
 </head>
 <body>
     <div class="album-container">
-        <!-- 사진 업로드 모달을 열기 위한 버튼 -->
-        <button id="openAlbumModal" class="upload-button">사진 업로드</button>
+        <!-- 포스트 업로드 모달을 열기 위한 버튼 -->
+        <button id="openPostModal" class="upload-button">포스트 업로드</button>
 
         <!-- 앨범 그리드 -->
         <div id="uploadedPhotos" class="album-grid">
@@ -18,16 +19,30 @@
         </div>
     </div>
 
-    <!-- 사진 업로드 모달 -->
-    <div id="albumModal" class="modal" style="display:none;">
+    <!-- 포스트 업로드 모달 -->
+    <div id="postModal" class="modal" style="display:none;">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h2>사진 업로드</h2>
-            <input type="file" id="modalAlbumImageInput" accept="image/*">
+            <h2>포스트 업로드</h2>
+            <input type="file" id="modalPostImageInput" accept="image/*">
             <img id="modalImagePreview" src="" alt="이미지 미리보기" style="display:none; width:200px; height:200px;">
-            <button id="modalUploadAlbumImage">업로드</button>
+        	<textarea id="modalPostTextInput" placeholder="포스트에 대한 설명을 작성하세요" rows="3" style="width:100%;"></textarea>
+        
+            <button id="modalUploadPost">업로드</button>
             <button id="modalCancelUpload">취소</button>
         </div>
     </div>
+    
+    <!-- 사진 클릭 시 표시되는 모달 -->
+    <div id="photoDetailModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <img id="photoDetailImage" src="" alt="상세 이미지" style="width:100%;">
+            <p>작성자: <span id="photoUploader"></span></p>
+	        <p>업로드 날짜: <span id="uploadDate"></span></p>
+	        <p>내용: <span id="photoContent"></span></p>
+        </div>
+    </div>
+    
 </body>
 </html>

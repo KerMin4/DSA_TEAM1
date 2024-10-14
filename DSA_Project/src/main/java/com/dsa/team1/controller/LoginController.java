@@ -1,5 +1,6 @@
 package com.dsa.team1.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.dsa.team1.service.UserService;
 
@@ -62,19 +64,28 @@ public class LoginController{
 	
 	@PostMapping("/join1")
 	public String join(
-			@RequestParam("interests") List<String> interests,
-			@RequestParam("location")String location,
-			@RequestParam("userid") String userid,
-			@RequestParam("password")String password,
-			@RequestParam("email")String email,
-			@RequestParam("phone")String phone,
-			@RequestParam("name")String name,
-			@RequestParam("username")String username
-			) {
-		log.debug("흥미: {}", interests);
-		log.debug(location);
-		us.join(userid, password, phone, email, location, name, username);
-		return "redirect:/";
+	        @RequestParam("interests") List<String> interests,
+	        @RequestParam("location") String location,
+	        @RequestParam("userid") String userid,
+	        @RequestParam("password") String password,
+	        @RequestParam("email") String email,
+	        @RequestParam("phone") String phone,
+	        @RequestParam("name") String name,
+	        @RequestParam("username") String username,
+	        @RequestParam("profileImage") MultipartFile profileImage // 프로필 사진 추가함 -나연-
+	) {
+	    log.debug("흥미: {}", interests);
+	    log.debug(location);
+
+	
+	    try {
+			us.join(userid, password, phone, email, location, name, username, profileImage);
+		} catch (IOException e) {
+	
+			e.printStackTrace();
+		}
+
+	    return "redirect:/";
 	}
 	
 	@ResponseBody

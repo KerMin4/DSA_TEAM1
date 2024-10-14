@@ -1,12 +1,16 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://thymeleaf.org/extra/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>그룹 생성 게시판</title>
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
     <link th:href="@{/css/sidebar.css}" rel="stylesheet">
     <link th:href="@{/css/createForm.css}" rel="stylesheet">
+    <!-- 여기 아래 코드 위치만 바꿈 위에 있으면 적용안돼서 -나연- -->
+    <link th:href="@{/css/header.css}" rel="stylesheet">
     <script th:src="@{/js/createForm.js}"></script>
+    
 </head>
 <body>
 	<div th:replace="~{fragments/header :: header}"></div>
@@ -31,22 +35,22 @@
 	        <div class="form-section">
 	            <form id="createForm" th:action="@{/socialgroup/create}" method="post" enctype="multipart/form-data">
 	                <div class="category-container">
-					    <label><input type="radio" class="radio" name="interest" value="취미"> 취미</label>
-					    <label><input type="radio" class="radio" name="interest" value="자기계발"> 자기계발</label>
-					    <label><input type="radio" class="radio" name="interest" value="푸드"> 푸드</label>
-					    <label><input type="radio" class="radio" name="interest" value="액티비티"> 액티비티</label>
-					    <label><input type="radio" class="radio" name="interest" value="반려동물"> 반려동물</label>
-					    <label><input type="radio" class="radio" name="interest" value="문화"> 문화</label>
-					    <label><input type="radio" class="radio" name="interest" value="재테크"> 재테크</label>
-					    <label><input type="radio" class="radio" name="interest" value="연애"> 연애</label>
-					    <label><input type="radio" class="radio" name="interest" value="게임"> 게임</label>
-					    <label><input type="radio" class="radio" name="interest" value="여행"> 여행</label>
+					    <label><input type="radio" class="radio" name="interest" value="HOBBY"> 취미</label>
+					    <label><input type="radio" class="radio" name="interest" value="DEVELOPMENT"> 자기계발</label>
+					    <label><input type="radio" class="radio" name="interest" value="FOOD"> 푸드</label>
+					    <label><input type="radio" class="radio" name="interest" value="ACTIVITY"> 액티비티</label>
+					    <label><input type="radio" class="radio" name="interest" value="PETS"> 반려동물</label>
+					    <label><input type="radio" class="radio" name="interest" value="CULTURE"> 문화</label>
+					    <label><input type="radio" class="radio" name="interest" value="MONEY"> 재테크</label>
+					    <label><input type="radio" class="radio" name="interest" value="LOVE"> 연애</label>
+					    <label><input type="radio" class="radio" name="interest" value="GAME"> 게임</label>
+					    <label><input type="radio" class="radio" name="interest" value="TRAVEL"> 여행</label>
 					</div>
 	
 	                <table>
 		                <tr>
 		                    <td>
-                                <img id="imagePreview" src="" alt="이미지 미리보기" style="display:none; width:200px; height:200px;">
+                                <img id="imagePreview" style="display: block;">
                                 <button type="button" id="removeImage" style="display:none;">이미지 삭제</button>
                         	</td>
 		                </tr>
@@ -56,7 +60,6 @@
 		                    </td>
 		                    <td>
 		                        <input type="date" name="eventDate" id="eventDate">
-		                        <input type="time" name="eventTime" id="eventTime">
 		                    </td>
 		                    <td>인원 수
 		                        <div class="person-counter">

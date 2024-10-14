@@ -1,32 +1,7 @@
-@charset "UTF-8";
-
-/* mainheader.css */
-
-@font-face {
-    font-family: 'S-CoreDream-3Light';
-    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'S-CoreDream-6Bold';
-    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-6Bold.woff') format('woff');
-    font-weight: bold;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'S-CoreDream-5Medium';
-    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-5Medium.woff') format('woff'); 
-    font-weight: normal;
-    font-style: normal;
-}
-
 header {
     background-color: #fff;
-    padding: 20px;
-    margin-bottom: 15px;
+    padding: 0;
+    height: 60px; 
 }
 
 nav ul {
@@ -34,7 +9,7 @@ nav ul {
     margin: 0;
     padding: 0;
     display: flex;
-    align-items: center;
+    align-items: center; 
     justify-content: space-between;
 }
 
@@ -51,11 +26,25 @@ nav ul {
 .right-menu {
     display: flex;
     justify-content: flex-end;
+    align-items: center;
     flex: 1;
+    position: relative;
 }
 
 nav ul li {
-    margin: 0 15px;
+    margin: 0 15px; 
+    line-height: 60px; 
+}
+
+.profile-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-left: 10px;
+    margin-right: 10px;
+    cursor: pointer;
+    display: block;
+    position: relative;  /* 고정된 헤더 내에서 위치 */
 }
 
 nav ul li a {
@@ -65,12 +54,36 @@ nav ul li a {
     color: #333;
 }
 
-/* 로고 스타일 */
-.left-logo a {
-    font-family: 'S-CoreDream-6Bold', sans-serif;
-    color: #333;  
-    font-size: 18px;
-    text-decoration: none;
+nav ul li a:hover {
+    color: #F8B1A3; 
 }
 
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 49px; 
+    right: 0; 
+    background-color: white;
+    padding: 5px; 
+    list-style-type: none;
+    border-radius: 4px;
+    width: 120px; 
+}
 
+.dropdown-menu li {
+    margin: -18px 0; 
+}
+
+.dropdown-menu li a {
+    color: #333;
+    text-decoration: none; 
+    white-space: nowrap; 
+    display: block;
+    padding: 5px 10px; 
+    font-family: 'S-CoreDream-3Light', sans-serif;
+    letter-spacing: -0.5px; 
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
