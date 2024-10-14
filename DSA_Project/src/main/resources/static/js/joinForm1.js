@@ -62,7 +62,6 @@ $(document).ready(function(){
 			formData.email = email;
 			formData.name = name;
 			formData.username = username;
-			alert(formData);
 			console.log(formData);
 			console.log(formData.interests);
 			console.log(formData.location);
