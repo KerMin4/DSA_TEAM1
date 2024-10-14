@@ -1,10 +1,9 @@
 /*
- * 2024-10-07
- * CreateTables_9
+ * 2024-10-14
+ * CreateTables_11
  * MySQL, DBeaver
- * Update table Place - add column profile_image, category, member_limit, view_count, bookmark_count
- * Upadate User - change userId int -> str, delete not null(username, join_method)
- * Add table posts, photos, interests, Reply
+ * Update table Post - add column PostType
+ * Update table Photo - add column CreatedAt
  * Tables: User, SocialGroup, UserGroup, Interests, Bookmark, Notification, Place, UserPlace, Posts, Photos, Reply MemberHashtag, GroupHashtag, Transaction, Reservation
  */
 
@@ -18,13 +17,15 @@ CREATE TABLE User (
     user_id VARCHAR(255) PRIMARY KEY,
     username VARCHAR(255),				-- real name
     password VARCHAR(255) NOT NULL,
-    name VARCHAR(255),							-- nickname
+    name VARCHAR(255),					-- nickname
+    birth int,
+    gender int,
     phone_number VARCHAR(20),
     email VARCHAR(255),
     preferred_location VARCHAR(255),
     join_method VARCHAR(255),
     profile_image VARCHAR(255),
-    user_type ENUM('user', 'vendor') default 'user',
+    user_type ENUM('USER', 'VENDOR') default 'USER',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -37,7 +38,7 @@ CREATE TABLE SocialGroup (
     profile_image VARCHAR(255),
     location VARCHAR(255),
     group_leader_id VARCHAR(255),
-    group_join_method ENUM('auto', 'approval') NOT NULL,
+    group_join_method ENUM('AUTO', 'APPROVAL') NOT NULL,
     member_limit INT not NULL,
     view_count INT DEFAULT 0,
     bookmark_count INT DEFAULT 0,
@@ -52,7 +53,7 @@ CREATE TABLE UserGroup (
     user_id VARCHAR(255),
     group_id INT,
     joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    status ENUM('pending', 'approved', 'rejected') DEFAULT 'approved',
+    status ENUM('PENDING', 'APPROVED', 'REJECTED') DEFAULT 'APPROVED',
     constraint FK_User2UserGroup_user_id FOREIGN KEY (user_id) REFERENCES User(user_id),
     constraint FK_SocialGroup2UserGroup_group_id FOREIGN KEY (group_id) REFERENCES SocialGroup(group_id)
 );
@@ -101,7 +102,7 @@ CREATE TABLE UserPlace (
     user_id VARCHAR(255),
     place_id INT,
     joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    status ENUM('pending', 'confirmed', 'canceled') DEFAULT 'confirmed',
+    status ENUM('PENDING', 'CONFIRMED', 'CANCELED') DEFAULT 'CONFIRMED',
     constraint FK_User2UserPlace_user_id FOREIGN KEY (user_id) REFERENCES User(user_id),
     constraint FK_Place2UserPlace_place_id FOREIGN KEY (place_id) REFERENCES Place(place_id)
 );
@@ -114,6 +115,7 @@ create table Post (
 	user_id VARCHAR(255),
 	content TEXT,
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	post_type ENUM('GENERAL', 'NOTIFICATION') not null,
 	constraint FK_User2Posts_user_id foreign key (user_id) references User(user_id),
 	constraint FK_SocialGroup2Posts_group_id foreign key (group_id) references SocialGroup(group_id),
 	constraint FK_Place2Posts_user_id foreign key (place_id) references Place(place_id),
@@ -127,6 +129,7 @@ create table Photo (
 	photo_id int auto_increment primary key,
 	post_id int,
 	image_name VARCHAR(255),
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	constraint FK_Post2Photos_post_id foreign key (post_id) references Post(post_id)
 );
 
