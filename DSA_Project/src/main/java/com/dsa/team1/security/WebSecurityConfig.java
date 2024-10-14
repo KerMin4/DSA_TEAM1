@@ -29,7 +29,8 @@ public class WebSecurityConfig {
 		    "/member/idCheck",
 		    "/kkirikkiri/upload/**", 
 		    "/upload/**",
-		    "/socialgroup/**"
+		    "/socialgroup/**",
+		    "/place/placeMain"
 		};
 
     
