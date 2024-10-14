@@ -3,7 +3,9 @@ package com.dsa.team1.controller;
 import java.io.IOException;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +25,8 @@ import lombok.extern.slf4j.Slf4j;
 public class LoginController{
 	
 	private final UserService us;
+	@Value("${kakao.javascript.key}")
+	private String kakaoAppkey;
 	
 	@GetMapping("loginForm")
 	public String loginForm() {
@@ -51,8 +55,10 @@ public class LoginController{
 	}
 	*/
 	
+	// when we want to use kakao map api in html view,use apikey like this.
 	@GetMapping("joinForm1")
-	public String joinFoorm() {
+	public String joinFoorm(Model model) {
+		model.addAttribute("kakaoAppkey", kakaoAppkey);
 		return "member/joinForm1";
 	}
 	
@@ -87,5 +93,11 @@ public class LoginController{
 	public boolean idCheck(@RequestParam("userid")String id) {
 		boolean result = us.idCheck(id);
 		return result;
+	}
+	
+	@GetMapping("/mapTest")
+	public String mapTest(Model model) {
+		model.addAttribute("kakaoAppkey", kakaoAppkey);
+		return "member/mapTest";
 	}
 }
