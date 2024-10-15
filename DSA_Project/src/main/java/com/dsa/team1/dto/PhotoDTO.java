@@ -17,6 +17,7 @@ public class PhotoDTO {
 	private Integer photoId;
 	private Integer postId;
 	private String imageName;
+	private LocalDateTime createdAt;
 	
 	private List<PhotoDTO> photos;
 }
