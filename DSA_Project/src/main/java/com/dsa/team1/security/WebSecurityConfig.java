@@ -34,10 +34,11 @@ public class WebSecurityConfig {
 			"/member/join",
 			"/kkirikkiri/member/idCheck",
 			"/member/idCheck",
-		  "/kkirikkiri/upload/**", 
-		  "/upload/**",
+			"/kkirikkiri/upload/**", 
+		  	"/upload/**",
 			"/member/mapTest",
-      "/place/placeMain"
+			"/place/placeMain", 
+			"/trend/trend"
 	};
 	
 	@Bean

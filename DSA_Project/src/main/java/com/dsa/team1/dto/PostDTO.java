@@ -3,7 +3,7 @@ package com.dsa.team1.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.dsa.team1.entity.enums.UserGroupStatus;
+import com.dsa.team1.entity.enums.PostType;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,6 +25,7 @@ public class PostDTO {
 	private String userId;
 	private String content;
 	private LocalDateTime createdAt;
+	private PostType postType;
 	
 	private String imageName;
 	private List<PhotoDTO> photos;
