@@ -1,19 +1,20 @@
 package com.dsa.team1.entity;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import org.springframework.data.annotation.CreatedDate;
 
-import jakarta.persistence.CascadeType;
+import com.dsa.team1.entity.enums.PostType;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -52,6 +53,10 @@ public class PostEntity {
 	
 	@Column(name = "content")
 	private String content;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "post_type", nullable = false)
+	private PostType postType;
 	
 	@CreatedDate
 	@Column(name = "created_at", columnDefinition = "timestamp default current_timestamp")

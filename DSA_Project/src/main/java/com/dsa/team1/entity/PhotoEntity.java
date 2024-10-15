@@ -1,5 +1,9 @@
 package com.dsa.team1.entity;
 
+import java.time.LocalDateTime;
+
+import org.springframework.data.annotation.CreatedDate;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -37,6 +41,10 @@ public class PhotoEntity {
 	
 	@Column(name = "image_name")
 	private String imageName;
+	
+	@CreatedDate
+	@Column(name = "created_at", columnDefinition = "timestamp default current_timestamp")
+	private LocalDateTime createdAt;
 
 	@ManyToOne
     @JoinColumn(name = "group_id")  // group_id로 SocialGroupEntity와 연결
