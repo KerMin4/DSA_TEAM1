@@ -39,21 +39,10 @@
     padding: 0;
 }
 
-#home {
-    margin-left: 70px;
-}
-
-#profile-edit {
-    margin-left: 30px;
-}
-
-#group-management {
-    margin-left: 40px;
-}
-
-#payment-management {
-    margin-left: 40px;
-}
+#home { margin-left: 70px; }
+#profile-edit { margin-left: 30px; }
+#group-management { margin-left: 40px; }
+#payment-management { margin-left: 40px; }
 
 .mypage-nav li a:hover {
     background-color: #f0f0f0;
@@ -77,25 +66,21 @@
     border-radius: 50%;
     display: block;
     border: 1px solid #ccc;
-    position: relative;
-    top: -220px;
-    left: 670px;
 }
 
 .profile-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-top: 20px;
+    position: absolute; 
+    top: 20px;
+    left: 670px;
+    text-align: center; 
 }
 
 .profile-nickname {
     font-size: 1.2em;
     font-weight: bold;
     text-align: center;
-    margin-top: -205px;
-    margin-left: 750px;
+    margin-top: -30px !important;  
+    margin-left: 715px !important;  
     white-space: nowrap;
 }
 
@@ -133,8 +118,8 @@
     max-width: 500px;
     height: 300px;
     position: relative;
-    top: 210px;
-    left: 150px;
+    top: 230px;
+    left: 70px;
     margin-top: 50px;
     margin-bottom: 50px;
 }
@@ -163,92 +148,140 @@
     padding: 5px;
 }
 
-/* 모달창 스타일 */
-#eventModal {
-    background-color: #fff;
+
+.bookmark-floating-panel {
+    position: fixed;
+    top: 60px;  
+    right: -10px;  
+    width: 300px;
+    max-height: 400px;
+    background-color: #ffffff; 
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     border-radius: 10px;
-    padding: 20px;
-    font-family: 'S-CoreDream-3Light', sans-serif;
-    text-align: center;
+    display: none;  
+    z-index: 1000;
+    overflow-y: auto;
+    
 }
 
-.ui-dialog-titlebar {
-    background-color: #F8B1A3;
+
+.bookmark-floating-panel::-webkit-scrollbar {
+    display: none;
+}
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #f8b1a3;
     color: white;
-    font-family: 'S-CoreDream-5Medium', sans-serif;
-    font-weight: bold;
     border-radius: 10px 10px 0 0;
 }
 
-#eventTitle {
-    font-size: 16px;
-    color: #333;
-    font-family: 'S-CoreDream-3Light', sans-serif;
-    margin-bottom: 20px;
+.panel-header span {
+    font-size: 13px;
+    font-weight: bold;
+    color: #000000; 
 }
 
-.ui-dialog-buttonpane button {
-    background-color: #F8B1A3;
-    color: white;
+.close-btn {
+    background: none;
     border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-size: 14px;
-    font-family: 'S-CoreDream-3Light', sans-serif;
+    color: white;
+    font-size: 20px;
     cursor: pointer;
 }
 
-.ui-dialog-buttonpane button:hover {
-    background-color: #F8B1A3;
+.close-btn:hover {
+    color: #f19483;
 }
 
-.ui-dialog {
-    max-width: 300px;
-    max-height: 300px;
-    margin: auto;
+.bookmarked-groups {
+    display: flex;
+    flex-direction: column;
+    text-align: left; 
+    padding: 10px;
+    height: 100%;
+    margin-left: -40px; 
 }
 
-/* 스크롤바 스타일 */
-.fc-prev-button, .fc-next-button {
-    background: none !important;
-    border: none !important;
-    color: #333;
-    font-size: 18px;
+.bookmark-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+ 
+}
+
+.folder-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 10px;
+}
+
+.bookmark-item span {
+    flex-grow: 1;
+    white-space: nowrap; 
+    
+}
+
+.unbookmark-btn {
+    background-color: transparent;
+    border: none; 
+    color: black; 
+    cursor: pointer;
     padding: 0;
-    box-shadow: none !important;
-    outline: none !important;
-    width: auto;
-    height: auto;
+    margin-right: 185px; 
+    white-space: nowrap;
+    font-size: 16px; 
 }
 
-.fc-prev-button:hover, .fc-next-button:hover {
-    color: #F8B1A3;
+#bookmarkManageBtn {
+    padding: 10px 20px;
+    background-color: transparent;
+    color: #333; 
+    border: none; 
+    cursor: pointer;
+    border-radius: 5px;
+    position: fixed;  
+    bottom: auto;    
+    top: 330px;      
+    right: 20px;      
+    z-index: 1000;    
+    border: none; 
+    font-size: 15px;
+    font-family: 'S-CoreDream-5Medium', sans-serif;
 }
 
-.fc-prev-button:focus, .fc-next-button:focus {
-    outline: none;
+#bookmarkManageBtn:hover {
+    background-color: transparent; 
+    
 }
 
-/* FullCalendar 내부 스크롤바 */
-.fc-view-container::-webkit-scrollbar, 
-.fc-scroller::-webkit-scrollbar {
-    width: 15px;
+ .delete-btn {
+            display: none; 
+            background-color: #6ba3e5; 
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-left: 10px;
+           font-family: 'S-CoreDream-3Light', sans-serif;
+        }
+        
+.bookmark-item:hover .delete-btn {
+            display: inline; 
+        }
+        
+        .bookmark-button-container {
+    display: flex;
+    align-items: center;
 }
 
-.fc-view-container::-webkit-scrollbar-track, 
-.fc-scroller::-webkit-scrollbar-track {
-    background: #f0f0f0;
-    border-radius: 10px;
+.bookmark-icon {
+    width: 20px;
+    height: 20px; 
+    margin-right: 5px;
+    margin-top: 0;
+    vertical-align: middle;
 }
-
-.fc-view-container::-webkit-scrollbar-thumb, 
-.fc-scroller::-webkit-scrollbar-thumb {
-    background-color: #FFE6E6;
-    border-radius: 10px;
-    border: 2px solid #f0f0f0;
-}
-
-.fc-view-container::-webkit-scrollbar-thumb:hover, 
-.fc-scroller::-webkit-scrollbar-thumb:hover {
-    background-color: #e18b8c;
-}
+        

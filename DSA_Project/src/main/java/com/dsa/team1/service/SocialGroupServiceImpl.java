@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.dsa.team1.dto.BookmarkDTO;
 import com.dsa.team1.entity.BookmarkEntity;
 import com.dsa.team1.entity.GroupHashtagEntity;
 import com.dsa.team1.entity.SocialGroupEntity;
@@ -532,6 +533,86 @@ public class SocialGroupServiceImpl implements SocialGroupService {
 		   
 		      userGroupRepository.delete(userGroup);
 		  }
+		  
+		  @Override
+		    public List<BookmarkDTO> getBookmarksByUserId(String userId) {
+		        UserEntity user = userRepository.findByUserId(userId)
+		                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+		        return bookmarkRepository.findByUser(user).stream()
+		                .map(bookmark -> BookmarkDTO.builder()
+		                    .bookmarkId(bookmark.getBookmarkId())
+		                    .groupId(bookmark.getGroup() != null ? bookmark.getGroup().getGroupId() : null)
+		                    .placeId(bookmark.getPlace() != null ? bookmark.getPlace().getPlaceId() : null)
+		                    .createdAt(bookmark.getCreatedAt())
+		                    .build())
+		                .collect(Collectors.toList());
+		    }
+		  
+		  @Override
+		    public void removeBookmark(String userId, Integer groupId) {
+		        UserEntity user = userRepository.findByUserId(userId)
+		                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+		        SocialGroupEntity group = socialGroupRepository.findById(groupId)
+		                .orElseThrow(() -> new IllegalArgumentException("그룹을 찾을 수 없습니다."));
+
+		        Optional<BookmarkEntity> existingBookmark = bookmarkRepository.findByUserAndGroup(user, group);
+		        
+		        if (existingBookmark.isPresent()) {
+		            // 북마크가 존재하면 삭제
+		            bookmarkRepository.delete(existingBookmark.get());
+		            if (group.getBookmarkCount() > 0) {
+		                group.setBookmarkCount(group.getBookmarkCount() - 1);
+		            }
+		        } else {
+		            throw new IllegalArgumentException("북마크가 존재하지 않습니다.");
+		        }
+
+		        // DB에 그룹의 북마크 수 업데이트 반영
+		        socialGroupRepository.save(group);
+		    }
+		  
+		  @Override
+		    public void addBookmark(String userId, Integer groupId) {
+		        UserEntity user = userRepository.findByUserId(userId)
+		                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+		        SocialGroupEntity group = socialGroupRepository.findById(groupId)
+		                .orElseThrow(() -> new IllegalArgumentException("그룹을 찾을 수 없습니다."));
+
+		        // 이미 북마크가 있는지 확인
+		        Optional<BookmarkEntity> existingBookmark = bookmarkRepository.findByUserAndGroup(user, group);
+		        if (existingBookmark.isPresent()) {
+		            throw new IllegalArgumentException("이미 북마크가 존재합니다.");
+		        }
+
+		        // 새 북마크 생성
+		        BookmarkEntity newBookmark = BookmarkEntity.builder()
+		                .user(user)
+		                .group(group)
+		                .createdAt(LocalDateTime.now())
+		                .build();
+
+		        bookmarkRepository.save(newBookmark);
+		        group.setBookmarkCount(group.getBookmarkCount() + 1); // 북마크 수 증가
+
+		        // 그룹 정보 업데이트
+		        socialGroupRepository.save(group);
+		    }
+		  
+		  @Override
+		    public boolean isBookmarked(String userId, Integer groupId) {
+		        UserEntity user = userRepository.findByUserId(userId)
+		                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+		        SocialGroupEntity group = socialGroupRepository.findById(groupId)
+		                .orElseThrow(() -> new IllegalArgumentException("그룹을 찾을 수 없습니다."));
+
+		        // 사용자가 그룹을 북마크했는지 확인
+		        Optional<BookmarkEntity> existingBookmark = bookmarkRepository.findByUserAndGroup(user, group);
+		        return existingBookmark.isPresent(); // 북마크가 존재하면 true, 아니면 false 반환
+		    }
 
 
 }

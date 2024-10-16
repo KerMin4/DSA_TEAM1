@@ -3,150 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <title>프로필 수정</title>
-    <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
-    <script th:src="@{/js/profileEdit.js}"></script>
     <link th:href="@{/css/header.css}" rel="stylesheet">
-    <link th:href="@{/css/main.css}" rel="stylesheet">
+    <link th:href="@{/css/main.css}" rel="stylesheet"> 
+    <link th:href="@{/css/mypage.css}" rel="stylesheet">
     <link th:href="@{/css/profileEdit.css}" rel="stylesheet">
-  
+    <script src="/kkirikkiri/js/jquery-3.7.1.min.js"></script>
+    <script th:src="@{/js/profileEdit.js}"></script>
 </head>
 <body>
-    <div th:replace="~{fragments/header :: header}"></div>
-    
-    <div class="profile-section">
-        <form th:action="@{/dashboard/editProfileImage}" method="post" enctype="multipart/form-data">
-            <img th:src="${#authentication.principal.profileImage != null ? '/kkirikkiri/upload/' + #authentication.principal.profileImage : '/kkirikkiri/upload/default.png'}"
-                 class="mypage-profile-img" id="profileEditImg" />
-            <p th:text="${#authentication.principal.name}" class="profile-nickname"></p>
 
-            <input type="file" id="profileImageInput" name="profileImage" accept="image/*" style="display:none;">
-            <div class="button-container" style="margin-top: 20px;">
-                <button type="button" id="editProfileButton">
-                    <img th:src="@{/images/camera.png}" alt="사진 수정" />
-                </button>
+    <!-- 기존 유지 -->
+    <div th:replace="~{fragments/header :: header}"></div>
+
+    <div class="mypage-container">
+        <nav class="mypage-nav">
+            <ul>
+                <li><a th:classappend="${activePage == 'home'} ? 'active'" th:href="@{/dashboard/mypage}" id="home">홈</a></li>
+                <li><a th:classappend="${activePage == 'profile-edit'} ? 'active'" th:href="@{/dashboard/profileedit}" id="profile-edit">프로필 수정</a></li>
+                <li><a th:classappend="${activePage == 'group-management'} ? 'active'" th:href="@{/dashboard/groupManagement}" id="group-management">그룹 관리</a></li>
+                <li><a th:classappend="${activePage == 'payment-management'} ? 'active'" th:href="@{/dashboard/paymentManagement}" id="payment-management">결제 관리</a></li>
+            </ul>
+
+            <th:block sec:authorize="isAuthenticated()">
+                <!-- 기존 프로필 사진과 닉네임 유지 -->
+                <div class="profile-section">
+                    <img th:src="${#authentication.principal.profileImage != null ? '/kkirikkiri/upload/' + #authentication.principal.profileImage : '/kkirikkiri/upload/default.png'}"
+                         alt="프로필 이미지" class="mypage-profile-img" id="profileImg" />
+                    <img th:src="@{/images/pen.png}" alt="수정 아이콘" class="edit-profile-icon" id="editProfileIcon" />
+                    <img th:src="@{/images/camera.png}" alt="사진 수정" class="camera-icon" id="cameraIcon" />
+                </div>
+                <p th:text="${#authentication.principal.name}" class="profile-nickname"></p>
+            </th:block>
+
+            <div class="horizontal-line"></div>
+        </nav>
+    </div>
+
+    <!-- 프로필 수정 모달 -->
+    <div id="editProfileModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>수정이 필요한 정보를 변경해보세요!</h2>
+
+            <!-- 닉네임 변경 -->
+            <form id="nicknameChangeForm" th:action="@{/dashboard/editNickname}" method="post">
+                <div class="form-group">
+                    <label for="nickname"></label>
+                    <input type="text" id="nickname" name="nickname" placeholder="새 닉네임 입력">
+                    <button type="submit" class="save-button">변경</button>
+                </div>
+            </form>
+
+            <!-- 비밀번호 변경 -->
+            <form id="passwordChangeForm" th:action="@{/dashboard/editPassword}" method="post">
+                <div class="form-group">
+                    <label for="password"></label>
+                    <input type="password" id="password" name="password" placeholder="새 비밀번호 입력">
+                </div>
+                <div class="form-group">
+                    <label for="password2"></label>
+                    <input type="password" id="password2" name="password2" placeholder="새 비밀번호 재확인">
+                    <button type="submit" class="save-button">변경</button>
+                </div>
+            </form>
+
+            <!-- 전화번호 변경 -->
+            <form id="phoneChangeForm" th:action="@{/dashboard/editPhone}" method="post">
+                <div class="form-group">
+                    <label for="phone"></label>
+                    <input type="text" id="phone" name="phone" placeholder="새 전화번호 입력">
+                    <button type="submit" class="save-button">변경</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+   <!-- 프로필 이미지 변경 모달 -->
+<div id="profileImageModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+      
+
+        <form id="profileImageForm" th:action="@{/dashboard/editProfileImage}" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="profileImageInput" class="file-label"></label>
+                <input type="file" id="profileImageInput" name="profileImage" accept="image/*" style="display: none;">
+                <button type="button" class="file-label" id="fileSelectButton">이미지 변경</button>
             </div>
-            <div class="button-container" style="margin-top: 10px;">
-                <button type="submit" id="submitProfileChange" class="save-button">프로필 변경</button>
-            </div>
+            <img id="profilePreview" class="preview-img" style="display: none;"/> <!-- 미리보기 이미지 -->
+            <button type="submit" class="save-button">변경</button>
         </form>
     </div>
-
-    <!-- 홈 버튼 -->
-    <div class="home-icon-container">
-        <a th:href="@{/dashboard/mypage}">
-            <img th:src="@{/images/house.png}" alt="홈 버튼" class="home-icon"/>
-        </a>
-    </div>
-
-    <!-- 개인 정보 수정 섹션 -->
-    <div class="field-box-container">
-        <div class="field-box">
-            <form th:action="@{/dashboard/editNickname}" method="post">
-                <div class="personal-info-section">
-                    <h3 class="personal-info-title">변경이 필요한 정보를 업데이트하세요!</h3>
-                    <div class="nickname-section">
-                        <label for="nickname"></label>
-                        <input type="text" id="nickname" name="nickname" placeholder="닉네임 변경" />
-                    </div>
-                    <div class="nickname-button-container">
-                        <button type="submit" class="nickname-save-button">변경</button>
-                    </div>
-                </div>
-            </form>
-
-            <form th:action="@{/dashboard/editPhone}" method="post">
-                <div class="phone-section">
-                    <label for="phone"></label>
-                    <input type="text" id="phone" name="phone" placeholder="핸드폰 번호 변경" />
-                    <div class="phone-button-container">
-                        <button type="submit" class="phone-save-button">변경</button>
-                    </div>
-                </div>
-            </form>
-
-            <form th:action="@{/dashboard/editPassword}" method="post">
-                <div class="password-section">
-                    <h4 class="password-title">비밀번호 변경</h4>
-                    <label for="password"></label>
-                    <input type="password" id="password" name="password" placeholder="새 비밀번호 입력" /><br />
-                    <label for="password2"></label>
-                    <input type="password" id="password2" name="password2" placeholder="새 비밀번호 확인" />
-                    <div class="password-button-container">
-                        <button type="submit" class="password-save-button">변경</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- 취향 변경 폼 -->
-    <form th:action="@{/dashboard/editInterests}" method="post">
-        <div class="field-box">
-            <h3 class="interest-title">취향이 달라졌다면, 다시 설정해보세요!</h3>
-            <div class="interests-container">
-                <div class="interests-row">
-                    <div class="interest-option">
-                        <input type="checkbox" id="hobby" name="interests" value="취미">
-                        <label for="hobby" class="interest-text">취미</label>
-                    </div>
-                    <div class="interest-option">
-                        <input type="checkbox" id="development" name="interests" value="자기계발">
-                        <label for="development" class="interest-text">자기계발</label>
-                    </div>
-                    <div class="interest-option">
-                        <input type="checkbox" id="food" name="interests" value="푸드">
-                        <label for="food" class="interest-text">푸드</label>
-                    </div>
-                    <div class="interest-option">
-                        <input type="checkbox" id="activity" name="interests" value="액티비티">
-                        <label for="activity" class="interest-text">액티비티</label>
-                    </div>
-                    <div class="interest-option">
-                        <input type="checkbox" id="love" name="interests" value="연애">
-                        <label for="love" class="interest-text">연애</label>
-                    </div>
-                </div>
-                <div class="interests-row">
-                    <div class="interest-option">
-                        <input type="checkbox" id="pets" name="interests" value="반려동물">
-                        <label for="pets" class="interest-text">반려동물</label>
-                    </div>
-                    <div class="interest-option">
-                        <input type="checkbox" id="culture" name="interests" value="문화">
-                        <label for="culture" class="interest-text">문화</label>
-                    </div>
-                    <div class="interest-option">
-                        <input type="checkbox" id="money" name="interests" value="재테크">
-                        <label for="money" class="interest-text">재테크</label>
-                    </div>
-                    <div class="interest-option">
-                        <input type="checkbox" id="game" name="interests" value="게임">
-                        <label for="game" class="interest-text">게임</label>
-                    </div>
-                    <div class="interest-option">
-                        <input type="checkbox" id="travel" name="interests" value="여행">
-                        <label for="travel" class="interest-text">여행</label>
-                    </div>
-                </div>
-            </div>
-            <div class="interest-button-container">
-                <button type="submit" class="interest-save-button">수정</button>
-            </div>
-        </div>
-    </form>
-
-    <!-- 위치 변경 폼 -->
-    <form th:action="@{/dashboard/editLocation}" method="post">
-        <div class="field-box">
-            <h3 class="location-title">새로운 곳에서 활동하고 싶다면, 위치를 변경해보세요!</h3>
-            <div class="location-section">
-                <input type="text" id="location" name="location" placeholder="관심 지역 입력">
-            </div>
-            <div class="location-button-container">
-                <button type="submit" class="location-save-button">수정</button>
-            </div>
-        </div>
-    </form>
+</div>
 
 </body>
 </html>
