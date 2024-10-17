@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.dsa.team1.dto.BookmarkDTO;
 import com.dsa.team1.dto.SocialGroupDTO;
 import com.dsa.team1.entity.SocialGroupEntity;
 import com.dsa.team1.entity.UserEntity;
@@ -44,8 +45,11 @@ public interface SocialGroupService {
 	List<SocialGroupEntity> getGroupsCreatedByUser(String userId);
 	List<SocialGroupEntity> getJoinedGroupsByUser(String userId);
     void leaveGroup(String userId, Integer groupId);
+	List<BookmarkDTO> getBookmarksByUserId(String userId);
+	void removeBookmark(String userId, Integer groupId);
+	void addBookmark(String userId, Integer groupId);
+	boolean isBookmarked(String userId, Integer groupId);
 	// ---------
-
 
 
 }

@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import com.dsa.team1.dto.BookmarkDTO;
 import com.dsa.team1.entity.SocialGroupEntity;
 import com.dsa.team1.entity.enums.Interest;
 import com.dsa.team1.security.AuthenticatedUser;
@@ -63,18 +64,53 @@ public class DashboardController {
             })
             .collect(Collectors.toList()));
 
+        // 북마크한 그룹 목록 가져오기
+        List<BookmarkDTO> bookmarkedGroups = socialGroupService.getBookmarksByUserId(userId);
+
+        // 북마크한 그룹에 대한 추가 정보
+        Map<Integer, Map<String, Object>> bookmarkedGroupDetails = bookmarkedGroups.stream()
+            .filter(bookmark -> bookmark.getGroupId() != null)
+            .collect(Collectors.toMap(
+                BookmarkDTO::getGroupId,
+                bookmark -> {
+                    SocialGroupEntity group = socialGroupService.findById(bookmark.getGroupId());
+                    Map<String, Object> details = new HashMap<>();
+                    details.put("name", group.getGroupName());
+                    details.put("thumbnail", group.getProfileImage() != null ? group.getProfileImage() : "/images/default-group-thumbnail.png");
+                    details.put("description", group.getDescription());
+                    return details;
+                }
+            ));
+
         // 모델에 데이터 추가
         model.addAttribute("interestStatistics", interestStatistics);
         model.addAttribute("activePage", "home");
         model.addAttribute("joinedGroups", joinedGroups);
         model.addAttribute("groupEvents", groupEvents);  
+        model.addAttribute("bookmarkedGroups", bookmarkedGroups);
+        model.addAttribute("bookmarkedGroupDetails", bookmarkedGroupDetails); // 북마크 그룹 정보
 
         return "dashboard/mypage";
     }
 
+    // 북마크 해제 기능
+    @PostMapping("/removeBookmark")
+    public String removeBookmark(@AuthenticationPrincipal AuthenticatedUser authenticatedUser,
+                                 @RequestParam("groupId") Integer groupId,
+                                 RedirectAttributes redirectAttributes) {
+        String userId = authenticatedUser.getUsername();
+        
+        try {
+            socialGroupService.removeBookmark(userId, groupId);
+            redirectAttributes.addFlashAttribute("message", "북마크가 해제되었습니다.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "북마크 해제에 실패했습니다: " + e.getMessage());
+        }
+        return "redirect:/dashboard/mypage";
+    }
+
     @GetMapping("groupManagement")
     public String groupManagement(@AuthenticationPrincipal AuthenticatedUser authenticatedUser, Model model) {
-        // 유저 ID 가져오기
         String userId = authenticatedUser.getUsername();
 
         // 유저가 생성한 그룹 가져오기
@@ -98,7 +134,6 @@ public class DashboardController {
             memberCountMap.put(group.getGroupId(), memberCount);
         }
 
-      
         model.addAttribute("createdGroups", createdGroups);
         model.addAttribute("joinedGroups", joinedGroups); 
         model.addAttribute("interestStatistics", interestStatistics);

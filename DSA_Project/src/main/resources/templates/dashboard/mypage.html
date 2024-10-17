@@ -2,12 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>관심사 관리</title>
+    <title>마이페이지</title>
     <link th:href="@{/css/header.css}" rel="stylesheet">
     <link th:href="@{/css/main.css}" rel="stylesheet">
     <link th:href="@{/css/mypage.css}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.3.1/fullcalendar.min.css"/>
-    
+
     <!-- jQuery and jQuery UI -->
     <script src="/kkirikkiri/js/jquery-3.7.1.min.js"></script>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -15,10 +15,10 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
-  
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.3.1/fullcalendar.min.js"></script>
-
+    <script th:src="@{/js/mypage.js}"></script>
 </head>
 <body>
 
@@ -44,6 +44,13 @@
             <div class="horizontal-line"></div>
         </nav>
 
+        <div class="bookmark-button-container">
+            <button id="bookmarkManageBtn" style="white-space: nowrap;">
+                <img th:src="@{/images/bookmarks.png}" class="bookmark-icon" alt="북마크 아이콘"> <!-- 아이콘 -->
+                모든 북마크
+            </button>
+        </div>
+
         <!-- 관심사 통계 섹션 -->
         <div class="statistics-section" style="display: flex; flex-direction: column; align-items: center;">
             <h2 id="interest-heading"></h2>
@@ -52,147 +59,187 @@
 
         <!-- 캘린더 섹션 -->
         <div class="calendar-section" style="margin-top: 50px;">
-            <h2></h2>
             <div id="calendar"></div>
         </div>
-    </div>
 
-  
-    <div id="eventModal" title="일정" style="display:none;">
-        <p id="eventTitle"></p>
-    </div>
+        <!-- 북마크 패널 -->
+        <div class="bookmark-floating-panel" id="bookmarkPanel">
+            <div class="panel-header">
+                <span>모든 북마크 보기</span>
+                <button class="close-btn" onclick="closeBookmarkPanel()"></button>
+            </div>
+            <div class="bookmarked-groups">
+                <ul>
+                    <li th:each="bookmark : ${bookmarkedGroups}" class="bookmark-item">
+                        <span th:text="${bookmarkedGroupDetails[bookmark.groupId].name}">그룹 이름</span>
+                        <form th:action="@{/dashboard/removeBookmark}" method="post" style="display: inline;">
+                            <input type="hidden" th:name="groupId" th:value="${bookmark.groupId}" />
+                            <button type="submit" class="delete-btn">삭제</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
 
-<script th:inline="javascript">
-    document.addEventListener('DOMContentLoaded', function() {
-        var ctx = document.getElementById('interestChart').getContext('2d');
+        <script th:inline="javascript">
+            document.addEventListener('DOMContentLoaded', function() {
+                var ctx = document.getElementById('interestChart').getContext('2d');
 
-        var hasData = /*[[${interestStatistics.size() > 0}]]*/ false;
+                var hasData = /*[[${interestStatistics.size() > 0}]]*/ false;
 
-        var interestLabels;
-        var interestData;
+                var interestLabels;
+                var interestData;
 
-        if (hasData) {
-            interestLabels = /*[[${interestStatistics.keySet()}]]*/ [];
-            interestData = /*[[${interestStatistics.values()}]]*/ [];
+                if (hasData) {
+                    interestLabels = /*[[${interestStatistics.keySet()}]]*/ [];
+                    interestData = /*[[${interestStatistics.values()}]]*/ [];
 
-            var total = interestData.reduce((sum, value) => sum + value, 0);
-            interestData = interestData.map(value => Math.round((value / total) * 100));
+                    var total = interestData.reduce((sum, value) => sum + value, 0);
+                    interestData = interestData.map(value => Math.round((value / total) * 100));
 
-        } else {
-            interestLabels = ["데이터 없음"];
-            interestData = [100];  
-        }
+                } else {
+                    interestLabels = ["데이터 없음"];
+                    interestData = [100];  
+                }
 
-        var myPieChart = new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: interestLabels,
-                datasets: [{
-                    label: '내 관심사',
-                    data: interestData,
-                    backgroundColor: interestLabels[0] === "데이터 없음" ? 
-                    ['rgba(253, 221, 230, 0.5)'] :  // 연한 핑크 투명 배경
-                    [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: interestLabels[0] === "데이터 없음" ? 
-                    ['rgba(253, 221, 230, 1)'] :  // 연한 핑크 테두리
-                    [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1  
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                        labels: {
-                            font: {
-                                family: 'S-CoreDream-3Light', 
-                                size: 14,
-                                weight: 'normal'
-                            },
-                            color: '#999999'
-                        }
+                var myPieChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: interestLabels,
+                        datasets: [{
+                            label: '내 관심사',
+                            data: interestData,
+                            backgroundColor: interestLabels[0] === "데이터 없음" ? 
+                            ['rgba(253, 221, 230, 0.5)'] :  
+                            [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(255, 159, 64, 0.2)'
+                            ],
+                            borderColor: interestLabels[0] === "데이터 없음" ? 
+                            ['rgba(253, 221, 230, 1)'] :  
+                            [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)'
+                            ],
+                            borderWidth: 1  
+                        }]
                     },
-                    tooltip: {
-                        callbacks: {
-                            label: function(tooltipItem) {
-                                let label = tooltipItem.label;
-                            
-                                if (label === "데이터 없음") {
-                                    return label; 
-                                } else {
-                                    return label + ': ' + Math.round(tooltipItem.raw) + '%'; 
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                labels: {
+                                    font: {
+                                        family: 'S-CoreDream-3Light', 
+                                        size: 14,
+                                        weight: 'normal'
+                                    },
+                                    color: '#999999'
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(tooltipItem) {
+                                        let label = tooltipItem.label;
+                                    
+                                        if (label === "데이터 없음") {
+                                            return label; 
+                                        } else {
+                                            return label + ': ' + Math.round(tooltipItem.raw) + '%'; 
+                                        }
+                                    }
+                                }
+                            },
+                            datalabels: {
+                                color: '#999999', 
+                                formatter: (value, ctx) => {
+                                    let label = ctx.chart.data.labels[ctx.dataIndex];
+                                
+                                    if (label === "데이터 없음") {
+                                        return label;  
+                                    } else {
+                                        return label + '\n' + Math.round(value) + '%'; 
+                                    }
+                                },
+                                font: {
+                                    family: 'S-CoreDream-3Light',  
+                                    weight: 'normal',
+                                    size: 16,
                                 }
                             }
                         }
                     },
-                    datalabels: {
-                        color: '#999999', 
-                        formatter: (value, ctx) => {
-                            let label = ctx.chart.data.labels[ctx.dataIndex];
-                        
-                            if (label === "데이터 없음") {
-                                return label;  
-                            } else {
-                                return label + '\n' + Math.round(value) + '%'; 
-                            }
-                        },
-                        font: {
-                            family: 'S-CoreDream-3Light',  
-                            weight: 'normal',
-                            size: 16,
-                        }
-                    }
+                    plugins: [ChartDataLabels] 
+                });
+
+                if (!hasData) {
+                    ctx.font = "normal 20px 'S-CoreDream-3Light'"; 
+                    ctx.fillStyle = "#FDDDE6"; 
+                    ctx.textAlign = "center";
+                    ctx.textBaseline = "middle";
+                    ctx.fillText("데이터 없음", 250, 250);  
                 }
-            },
-            plugins: [ChartDataLabels] 
-        });
 
-        if (!hasData) {
-            ctx.font = "normal 20px 'S-CoreDream-3Light'"; 
-            ctx.fillStyle = "#FDDDE6"; // 연한 핑크 색상
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
-            ctx.fillText("데이터 없음", 250, 250);  
-        }
+                $('#calendar').fullCalendar({
+                    header: {
+                        right: 'prev,next'
+                    },
+                    events: /*[[${groupEvents}]]*/ [], 
+                    editable: false,
+                    droppable: false,
+                    displayEventTime: false,  
+                    eventClick: function(event) {
+                        $('#eventTitle').text(event.title + " 그룹");
 
-      
-        $('#calendar').fullCalendar({
-            header: {
-                right: 'prev,next'
-            },
-            events: /*[[${groupEvents}]]*/ [], 
-            editable: false,
-            droppable: false,
-            displayEventTime: false,  
-            eventClick: function(event) {
-            	$('#eventTitle').text(event.title + " 그룹");
-
-                $('#eventModal').dialog({
-                    modal: true,
-                    buttons: {
-                        확인: function() {
-                            $(this).dialog("close");
-                        }
+                        $('#eventModal').dialog({
+                            modal: true,
+                            buttons: {
+                                확인: function() {
+                                    $(this).dialog("close");
+                                }
+                            }
+                        });
                     }
                 });
+            });
+
+            document.getElementById('bookmarkManageBtn').addEventListener('click', function() {
+                openBookmarkPanel();
+            });
+        
+            function openBookmarkPanel() {
+                document.getElementById("bookmarkPanel").style.display = "block";
             }
-        });
-    });
-</script>
+
+            function closeBookmarkPanel() {
+                document.getElementById("bookmarkPanel").style.display = "none";
+            }
+
+            // 패널 외부 클릭 시 닫기
+            document.addEventListener('click', function(event) {
+                const panel = document.getElementById("bookmarkPanel");
+                const button = document.getElementById("bookmarkManageBtn");
+
+                if (!panel.contains(event.target) && !button.contains(event.target)) {
+                    closeBookmarkPanel();
+                }
+            });
+        </script>
+
+        <!-- 모달 다이얼로그 -->
+        <div id="eventModal" title="일정" style="display:none;">
+            <p id="eventTitle"></p>
+        </div>
+
+    </div>
 </body>
 </html>

@@ -1,5 +1,6 @@
 package com.dsa.team1.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,5 +17,8 @@ public interface BookmarkRepository extends JpaRepository<BookmarkEntity, Intege
 	
 	// 북마크 상태 확인 (존재 여부만 체크)
     boolean existsByUserAndGroup(UserEntity user, SocialGroupEntity group);
-
+    
+    List<BookmarkEntity> findByUser(UserEntity user);
+  
 }
+
