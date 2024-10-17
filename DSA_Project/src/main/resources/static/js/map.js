@@ -146,7 +146,8 @@ function getListItem(index, places) {
         itemStr += `<span>${places.address_name}</span>`;
     }
 
-    itemStr += `<span class="tel">${places.phone}</span>`;
+    itemStr += `<span class="tel">${places.phone}</span>
+ 	<button class = "transmitBtn" id = "transmitBtn">확인</button>`;
 
     el.innerHTML = itemStr;
     el.className = 'item';
@@ -157,9 +158,16 @@ function getListItem(index, places) {
         window.open(url, '_blank'); 
     });
 
+	el.querySelector('.transmitBtn').addEventListener('click', function(){
+		sendDataToServer(places);
+	});
     return el;
 }
 
+function sendDataToServer(places){
+	$(opener.document).find('#location').val(places.place_name);
+	window.close();
+}
 function addMarker(position, idx, title) {
     var imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png', 
         imageSize = new kakao.maps.Size(36, 37),  
