@@ -17,6 +17,10 @@ $(document).ready(function(){
         showStep(2);
     });
 
+	$('#findPlace').click(function(){
+		window.open('mapTest', '지역찾기', 'fullscreen');	
+	});
+	
     $('#nextStep2').click(function(e){
         e.preventDefault();
         var location = $('#location').val();
