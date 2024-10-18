@@ -22,6 +22,13 @@ public interface GroupHashtagRepository extends JpaRepository<GroupHashtagEntity
     @Query("SELECT h.name FROM GroupHashtagEntity h")
     List<String> findAllHashtags();
     
-    // 그룹 삭제하려고 내가 추가함 -나연- 
+    // 그룹과 해시태그 이름으로 중복 검사
+    boolean existsByGroupAndName(SocialGroupEntity group, String name);
+    
+    // 그룹에 속한 해시태그 삭제
     void deleteByGroup(SocialGroupEntity group);
+
+    // 그룹과 해시태그 이름으로 해시태그 삭제
+    void deleteByGroupAndName(SocialGroupEntity group, String name);
+
 }
