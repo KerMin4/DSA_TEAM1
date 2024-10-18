@@ -139,8 +139,13 @@ public class GroupBoardController {
     public String announcementPage(
         @RequestParam("groupId") Integer groupId,
         Model model) {
+    	
+    	// 그룹 객체 조회
+        SocialGroupEntity group = socialGroupRepository.findById(groupId)
+            .orElseThrow(() -> new IllegalArgumentException("해당 그룹을 찾을 수 없습니다."));
 
-	    // groupId를 모델에 추가하여 Thymeleaf 템플릿에서 사용 가능하도록 설정
+    	// groupId와 함께 group 객체를 모델에 추가하여 Thymeleaf 템플릿에서 사용 가능하도록 설정
+        model.addAttribute("group", group);
 	    model.addAttribute("groupId", groupId);
 	    
 	    return "groupboard/announcement";
@@ -241,8 +246,17 @@ public class GroupBoardController {
      * 일정탭으로 이동
      */
     @GetMapping("/schedule")
-    public String scheduleTab() {
+    public String scheduleTab(
+    		@RequestParam("groupId") Integer groupId,
+    		Model model) {
     	
+    	// 그룹 객체 조회
+        SocialGroupEntity group = socialGroupRepository.findById(groupId)
+            .orElseThrow(() -> new IllegalArgumentException("해당 그룹을 찾을 수 없습니다."));
+    	
+        model.addAttribute("group", group);
+	    model.addAttribute("groupId", groupId);
+        
         return "groupboard/schedule";
     }
 
@@ -254,6 +268,10 @@ public class GroupBoardController {
     		@RequestParam("groupId") Integer groupId,
     		Model model
     		) {
+    	
+    	// 그룹 객체 조회
+        SocialGroupEntity group = socialGroupRepository.findById(groupId)
+            .orElseThrow(() -> new IllegalArgumentException("해당 그룹을 찾을 수 없습니다."));
     	
     	// groupId를 모델에 추가하여 Thymeleaf 템플릿에서 사용 가능하도록 설정
         model.addAttribute("groupId", groupId);
@@ -269,6 +287,7 @@ public class GroupBoardController {
             .collect(Collectors.toList());
 
         model.addAttribute("photos", photos);
+        model.addAttribute("group", group);
     	
         return "groupboard/album";
     }
@@ -481,6 +500,8 @@ public class GroupBoardController {
     public String getGroupSettings(
     		@RequestParam("groupId") Integer groupId,
     		Model model) {
+    	
+    	// 그룹 객체 조회
         SocialGroupEntity group = socialGroupRepository.findById(groupId)
                 .orElseThrow(() -> new IllegalArgumentException("Group not found"));
 
@@ -496,6 +517,7 @@ public class GroupBoardController {
 
         // 모델에 그룹, 이벤트 날짜, 헤더 이미지 및 해시태그 추가
         model.addAttribute("group", group);
+	    model.addAttribute("groupId", groupId);
         model.addAttribute("eventDateFormatted", formattedDate);
         model.addAttribute("groupProfileImage", groupProfileImage);
         model.addAttribute("hashtags", hashtags);
