@@ -33,6 +33,13 @@
 		
 		<!-- Main Content Section -->
         <div class="main-content">
+        
+        	<nav class="tabs">
+			    <a th:href="@{/groupboard/announcement(groupId=${group.groupId}, type='announcement')}" class="tab">공지사항</a>
+			    <a th:href="@{/groupboard/schedule(groupId=${group.groupId}, type='schedule')}" class="tab">일정</a>
+			    <a th:href="@{/groupboard/album(groupId=${group.groupId}, type='album')}" class="tab">앨범</a>
+			    <a th:href="@{/groupboard/settings(groupId=${group.groupId}, type='settings')}" class="tab">설정</a>
+			</nav>
 	
 		    <!-- 그룹 정보 수정 폼 -->
 		    <form id="settingsForm" th:action="@{/groupboard/update}" method="post" enctype="multipart/form-data">

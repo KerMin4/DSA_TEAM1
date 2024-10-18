@@ -48,7 +48,7 @@ $(function() {
     $('#modalUploadPost').on('click', function() {
         var file = $('#modalPostImageInput')[0].files[0];
         var groupId = getParameterByName('groupId');
-        var description = $('#modalPostTextInput').val();
+        var content = $('#modalPostTextInput').val();
         
         console.log('groupId:', groupId);
         
@@ -64,11 +64,11 @@ $(function() {
     
         var formData = new FormData();
         formData.append('photo', file);
-        formData.append('description', description);
+        formData.append('content', content);
         formData.append('groupId', groupId);
 
         $.ajax({
-            url: '/kkirikkiri/groupboard/album/uploadPost', // 서버 업로드 경로 수정
+            url: '/kkirikkiri/groupboard/album/uploadPost', // 서버 업로드 경로
             type: 'POST',
             data: formData,
             processData: false, // 파일 전송을 위해 필요
@@ -86,8 +86,8 @@ $(function() {
                 $('#postModal').hide();
                 resetModal(); // 모달이 닫힐 때 초기화
             },
-            error: function(xhr, status, error) {
-                console.error("포스트 업로드 중 오류 발생:", error);
+            error: function (xhr) {
+                console.error("포스트 업로드 중 오류 발생:", xhr.responseText);
                 alert('포스트 업로드에 실패했습니다.');
             }
         }); 
@@ -122,9 +122,53 @@ $(function() {
         return decodeURIComponent(results[2].replace(/\+/g, ' '));
     }
 
+    // 앨범 사진 클릭 시, 사진 세부 사항 및 댓글 로드 (이벤트 위임 사용)
+    $('#uploadedPhotos').on('click', '.album-photo', function() {
+        var photoId = $(this).data('photo-id');  // photoId 가져오기
+        var imageUrl = $(this).find('img').attr('src');  // 클릭한 사진의 이미지 경로 가져오기
+
+        if (!photoId) {
+            console.error('photoId가 누락되었습니다. photoId:', photoId);
+            return;
+        }
+
+        console.log('Selected photoId:', photoId);
+
+        // 1. photoId로 postId를 먼저 가져오는 API 호출
+        $.ajax({
+            url: `/kkirikkiri/groupboard/album/photoDetail/${photoId}`,  // photoId로 postId 가져오기
+            type: 'GET',
+            success: function(data) {
+                var postId = data.postId;	// 서버에서 받아온 postId 사용
+                
+                if (!postId) {
+                    console.error('PostId is null for this photo.');
+                    return;
+                }
+                
+                console.log('Related postId:', postId);
+                
+                // 2. 가져온 postId로 게시글 상세 정보 및 댓글 로드
+                $('#photoDetailModal').data('post-id', postId);  // 모달에 postId 저장
+                loadPostDetails(postId);  // 게시글 상세 정보 로드
+                
+                // 이미지 표시
+                $('#photoDetailImage').attr('src', imageUrl);  // 사진 경로 설정
+                $('#photoDetailModal').show(); // 모달 표시
+                loadReplies(postId); // 모달을 표시할 때 바로 댓글 로드 추가
+            },
+            error: function(xhr, status, error) {
+                console.error("사진 상세 정보 로드 중 오류 발생:", error);
+            }
+        });
+    });
+
     // URL에서 groupId 추출
     var groupId = getParameterByName('groupId');
     console.log("groupId:", groupId);
+
+    // 앨범 사진 로드 (처음 앨범 탭 로드시 호출)
+    loadPhotos(groupId);
 
     // 앨범 사진 로드
     function loadPhotos(groupId) {
@@ -138,73 +182,86 @@ $(function() {
         $.ajax({
             url: '/kkirikkiri/groupboard/album/photos',  // groupId를 URL 쿼리로 직접 전달
             type: 'GET',
-            data: { groupId: groupId },
+            data: { groupId: groupId, type: 'album' },
             success: function(photos) {
+				console.log('Received photos from server:', photos);  // 서버에서 받은 데이터 확인
                 renderPhotos(photos);  // 렌더링 함수로 분리
             },
-            error: function(xhr, status, error) {
-                console.error("사진 로드 중 오류 발생:", error);
+            error: function (xhr) {
+                console.error("사진 로드 중 오류 발생:", xhr.responseText);
             }
         });
     }
-
-	// 사진을 앨범에 추가하는 로직
+    
+    // 사진을 앨범에 그리드 형식으로 추가하는 로직
 	function renderPhotos(photos) {
 	    var albumContainer = $('#uploadedPhotos'); // 앨범 컨테이너 선택
 	    albumContainer.empty(); // 앨범 초기화
 	
 	    photos.forEach(function(photo) {
-	        var imageUrl = photo.imageName;
+	        var imageUrl = photo.imageName.startsWith("/kkirikkiri/upload/") ? photo.imageName : "/kkirikkiri/upload/" + photo.imageName;
+	        
+	        console.log("Photo ID:", photo.photoId, "Post ID:", photo.postId);
 	        
 	        // 이미지 경로에 '/kkirikkiri/upload/'가 이미 포함되어 있는지 확인
 	        if (!imageUrl.startsWith("/kkirikkiri/upload/")) {
 	            imageUrl = "/kkirikkiri/upload/" + imageUrl;
 	        }
+	        
+	        // 콘솔에서 postId를 출력해 postId가 제대로 있는지 확인
+	        console.log("Photo ID:", photo.photoId, "Post ID:", photo.postId);
 	
 	        // 포스트에 연결된 사진을 앨범에 표시
-	        var photoElement = `<div class="photo-item album-photo" data-photo-id="${photo.postId}">
-	                                <img src="${imageUrl}" alt="사진">
-	                            </div>`;
-	        albumContainer.append(photoElement);
+	        if (photo.photoId && photo.postId) {
+	            var photoElement = `
+	                <div class="photo-item album-photo" data-photo-id="${photo.photoId}" data-post-id="${photo.postId}">
+	                    <img src="${imageUrl}" alt="사진">
+	                </div>`;
+	            albumContainer.append(photoElement);
+	        } else {
+	            console.error("Photo does not have a postId:", photo);
+	        }
 	    });
 	}
 	
-	// 앨범 사진 클릭 시, 사진 세부 사항 및 댓글 로드
-	$('#uploadedPhotos').on('click', '.album-photo', function() {
-	    var postId = $(this).data('photo-id');  // 사진 아이템에서 postId 가져오기
-	    $('#photoDetailModal').data('post-id', postId);  // 모달에 postId 저장
+	// 데이터 포맷 확인 및 변환
+	function formatDateTime(dateTimeString) {
+	    var date = new Date(dateTimeString);
+	    return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+	}
 
-	    loadPostDetails(postId);  // 포스트 상세 정보 로드
-	    loadReplies(postId);  // 댓글 정보 로드
-	});
-	
-    function loadPostDetails(postId) {
+	// 게시글 상세 정보 로드 함수
+	function loadPostDetails(postId) {
 	    $.ajax({
-	        url: `/kkirikkiri/groupboard/album/postDetail/${postId}`,
+	        url: `/kkirikkiri/groupboard/album/postDetail/${postId}`,  // postId로 게시글 상세 정보 가져오기
 	        type: 'GET',
 	        success: function(data) {
-	            $('#photoUploader').text(data.userId);   // 작성자 정보
-	            $('#uploadDate').text(data.createdAt);   // 업로드 날짜
-	            $('#photoContent').text(data.content);   // 포스트 내용
-	            
-            	if (data.photos.length > 0) {
-                var imageUrl = data.photos[0].imageName;  // 첫 번째 사진의 경로 사용
-                
-                // 사진 경로에 '/kkirikkiri/upload/'가 포함되지 않았을 경우 추가
-                if (!imageUrl.startsWith("/kkirikkiri/upload/")) {
-                    imageUrl = "/kkirikkiri/upload/" + imageUrl;
-                }
-                
-                $('#photoDetailImage').attr('src', imageUrl);  // 모달에 이미지 설정
-            } else {
-                $('#photoDetailImage').attr('src', '/kkirikkiri/upload/default.jpg');  // 기본 이미지
-            }
-
-	            
-	            $('#photoDetailModal').show(); // 모달 표시
+				console.log('Received data:', data); // 데이터 확인
+				if (data) {
+					console.log('User ID:', data.userId);
+			        console.log('Created At:', data.createdAt);
+			        console.log('Content:', data.content);
+					
+	                // 작성자, 업로드 날짜, 내용 데이터 매핑
+	                $('#photoUploader').text(data.userId || '알 수 없음');
+			        $('#uploadDate').text(formatDateTime(data.createdAt) || '알 수 없음');
+			        $('#photoContent').text(data.content || '내용 없음');
+	                
+	                // 이미지 데이터 설정
+	                if (data.photos && data.photos.length > 0) {
+	                    var imageUrl = data.photos[0].imageName;
+	                    $('#photoDetailImage').attr('src', imageUrl);
+	                }
+	                
+	                // 댓글 로드 및 모달 표시
+	                loadReplies(postId);
+	                $('#photoDetailModal').show();
+	            } else {
+	                console.error("데이터가 존재하지 않습니다.");
+	            }
 	        },
 	        error: function(xhr, status, error) {
-	            console.error("사진 상세 정보 로드 중 오류 발생:", error);
+	            console.error("게시글 상세 정보 로드 중 오류 발생:", error);
 	        }
 	    });
 	}
@@ -223,7 +280,7 @@ $(function() {
 	    });
 	}
 	
-	// 댓글 목록 렌더링 함수
+	// 댓글 렌더링 함수
 	function renderReplies(replies) {
 	    var replyList = $('#replyList');   // 댓글 목록이 표시될 영역
 	    replyList.empty();   // 기존 댓글 초기화
@@ -233,9 +290,9 @@ $(function() {
 	            <div class="reply-item">
 	                <p><strong>${reply.userId}</strong> (${reply.createdAt}):</p>
 	                <p>${reply.content}</p>
+	                <button class="editReply" data-id="${reply.replyId}">수정</button>
 	                <button class="saveEditReply" data-id="${reply.replyId}" style="display:none;">저장</button>
-                    <button class="editReply">수정</button>
-                    <button class="deleteReply" data-id="${reply.replyId}">삭제</button>
+	                <button class="deleteReply" data-id="${reply.replyId}">삭제</button>
 	            </div>
 	        `;
 	        replyList.append(replyItem);
@@ -246,8 +303,6 @@ $(function() {
     $('#submitReplyButton').on('click', function() {
         var content = $('#replyInput').val();
         var postId = $('#photoDetailModal').data('post-id');  // 모달에서 postId 가져오기
-        
-    	console.log('Post ID from photoDetailModal:', postId);
 
         if (!content) {
             alert("댓글 내용을 입력하세요.");
@@ -284,13 +339,6 @@ $(function() {
 	    contentElement.replaceWith(textarea); // <p>를 <textarea>로 대체
 	    replyDiv.find('.saveEditReply').show(); // 저장 버튼 표시
 	    $(this).hide(); // 수정 버튼 숨김
-        /*const replyDiv = $(this).closest('.reply-item');
-        const contentElement = replyDiv.find('.reply-content');
-
-        // textarea를 수정 가능하게 하고, 저장 버튼 보이기
-        contentElement.prop('disabled', false).focus();  // 수정 가능하게 활성화
-        replyDiv.find('.saveEditReply').show();
-        $(this).hide(); // 수정 버튼 숨김*/
     });
 
     // 댓글 수정 저장 버튼 클릭 이벤트
@@ -313,9 +361,6 @@ $(function() {
 	                
 	                replyDiv.find('.saveEditReply').hide(); // 저장 버튼 숨김
 	                replyDiv.find('.editReply').show(); // 수정 버튼 다시 표시
-                    /*replyDiv.find('.reply-content').prop('disabled', true); // 수정 불가 상태로 변경
-                    replyDiv.find('.saveEditReply').hide();
-                    replyDiv.find('.editReply').show(); // 수정 버튼 다시 보이기*/
                 },
                 error: function (error) {
                     alert("댓글 수정 중 오류 발생");
@@ -343,10 +388,6 @@ $(function() {
             });
         }
     });
-    
-    
-    // 페이지 로드 시 앨범 사진을 불러옴
-    loadPhotos(groupId);
     
     // 상세 모달의 내용을 초기화
     function resetPhotoDetailModal() {
