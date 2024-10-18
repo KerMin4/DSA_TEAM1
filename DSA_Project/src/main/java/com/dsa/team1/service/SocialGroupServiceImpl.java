@@ -476,24 +476,29 @@ public class SocialGroupServiceImpl implements SocialGroupService {
 		 
 		 @Override
 		 public void deleteGroupById(Integer groupId, String userId) {
-		     
+		     // 1. 그룹 조회
 		     SocialGroupEntity group = socialGroupRepository.findById(groupId)
 		             .orElseThrow(() -> new NoSuchElementException("그룹을 찾을 수 없습니다."));
 
-		     
+		     // 2. 그룹 리더가 아닌 경우 예외 처리
 		     if (!group.getGroupLeader().getUserId().equals(userId)) {
 		         throw new SecurityException("그룹 리더만 삭제할 수 있습니다.");
 		     }
 
-		 
+		     // 3. 관련된 데이터를 먼저 삭제
+		     // 3-1. 그룹에 속한 멤버 삭제
 		     userGroupRepository.deleteByGroup(group);
-
 		     
+		     // 3-2. 북마크 삭제
+		     bookmarkRepository.deleteByGroup(group);
+
+		     // 3-3. 그룹에 연결된 해시태그 삭제
 		     groupHashtagRepository.deleteByGroup(group);
 
-		     
+		     // 4. 그룹 삭제
 		     socialGroupRepository.delete(group);
 		 }
+
 
 		 
 		 

@@ -59,11 +59,14 @@
                         <div class="dropdown-card">
                             <button class="dropdown-btn">⋮</button>
                             <div class="dropdown-content">
-                                <form th:action="@{/dashboard/deleteGroup}" method="post">
-                                    <input type="hidden" name="groupId" th:value="${group.groupId}">
-                                    <button type="submit" class="delete-btn">삭제</button>
-                                </form>
-                            </div>
+    <!-- 방장일 경우에만 삭제 버튼을 표시 -->
+    <div th:if="${#authentication.principal.username == group.groupLeader.userId}">
+        <form th:action="@{/dashboard/deleteGroup}" method="post">
+            <input type="hidden" name="groupId" th:value="${group.groupId}">
+            <button type="submit" class="delete-btn">삭제</button>
+        </form>
+    </div>
+</div>
                         </div>
                     </div>
                 </div>

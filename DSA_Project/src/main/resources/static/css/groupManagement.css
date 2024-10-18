@@ -10,7 +10,7 @@
     justify-content: space-between;
     width: 120%; 
     margin-top: 250px;
-    margin-left: -60px; /* 좌측으로부터의 여백 */
+    margin-left: -60px; 
    
 }
 
@@ -40,6 +40,7 @@
     object-fit: cover;
     margin-right: 20px; 
     align-self: center;
+    
 }
 
 .group-text {
@@ -71,13 +72,15 @@ h2, p {
 }
 
 .dropdown-content {
-    display: none;
+    display: none; 
     position: absolute;
     right: 0;
     background-color: #f9f9f9;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
     z-index: 1;
     border-radius: 4px;
+    width: 100px; 
+    text-align: center;
+    padding: 5px;
 }
 
 .dropdown-content form {
@@ -90,16 +93,18 @@ h2, p {
     border: none;
     color: #333;
     cursor: pointer;
-    padding: 5px 10px;
-    width: 100%;
-    text-align: left;
+    padding: 10px;
+    width: 80px; 
+    height: 8px; 
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    text-align: center;
     word-break: normal;
     white-space: nowrap;
     font-family: 'S-CoreDream-3Light', sans-serif;
     font-size: 16px;
 }
-
-
 .joined-group-section {
     margin-left: auto; 
  
@@ -108,4 +113,34 @@ h2, p {
 
 .joined-group-card {
     margin-left: 100px; 
+}
+
+.group-list-container .delete-btn, 
+.group-list-container .leave-btn {
+    background-color: transparent;
+    border: none;
+    color: #333;
+    cursor: pointer;
+    padding: 10px;
+    width: 80%; 
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    text-align: center;
+    white-space: nowrap;
+    font-family: 'S-CoreDream-3Light', sans-serif;
+    font-size: 15px;
+    margin: 0; 
+}
+.dropdown-content {
+    display: none; 
+    position: absolute;
+    right: 0;
+    background-color: #f9f9f9;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+    border-radius: 4px;
+    width: 60px; 
+    text-align: center;
+    padding: 5px;
 }

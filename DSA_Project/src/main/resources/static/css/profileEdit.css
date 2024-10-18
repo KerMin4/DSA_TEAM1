@@ -1,7 +1,7 @@
 .modal {
     display: none; 
     position: fixed;
-    z-index: 1;
+    z-index: 9999;
     left: 0;
     top: 0;
     width: 100%;
@@ -56,11 +56,11 @@
 .form-group input[type="text"]:focus,
 .form-group input[type="password"]:focus {
     outline: none; 
-    border-bottom: 2px solid #4CAF50; 
+    border-bottom: 2px solid #ccc; 
 }
 
 .save-button {
-    background-color: #4CAF50; 
+    background-color: #E48F85; 
     color: white; 
     border: none; 
     padding: 8px 15px; 
@@ -70,12 +70,12 @@
     cursor: pointer; 
     border-radius: 4px; 
     margin-top: 10px; 
-    width: 100%; 
+    width: 20%; 
+    display: block; 
+    margin: 0 auto;
+    margin-left: 153px;
 }
 
-.save-button:hover {
-    background-color: #45a049; 
-}
 
 #profilePreview {
     max-width: 100%; 
@@ -88,13 +88,15 @@
 }
 
 .edit-profile-icon {
-    width: 20px; 
-    height: 20px; 
-    position: absolute; 
-    top: 186px; 
-    right: 40px; 
+    width: 23px; 
+    height: 23px; 
+    position: relative;
+    z-index: 1000; 
+    top: 15px; 
+    right: -63px; 
     cursor: pointer; 
     transition: transform 0.2s; 
+    pointer-events: auto; 
 }
 
 .edit-profile-icon:hover {
@@ -102,15 +104,135 @@
 }
 
 .camera-icon {
-    width: 25px; 
-    height: 25px; 
-    position: absolute; 
-    top: 135px; 
-    right: 23px; 
+    width: 23px; 
+    height: 23px; 
+    position: relative;
+    z-index: 1000; 
+    top: -25px; 
+    right: -30px; 
     cursor: pointer; 
     transition: transform 0.2s; 
+    pointer-events: auto; 
 }
 
 .camera-icon:hover {
     transform: scale(1.5); 
 }
+
+
+.error-message {
+    font-size: 12px;
+    color: red;
+    margin-top: 5px;
+    display: block;
+}
+
+
+.save-button {
+    font-family: 'S-CoreDream-3Light', sans-serif; 
+}
+
+
+.location-edit-section {
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    height: 100vh; 
+    text-align: center; 
+    padding: 20px; 
+    box-sizing: border-box;
+    transform: translateY(-220px); 
+}
+
+.location-edit-section h2 {
+    font-family: 'S-CoreDream-3Light', sans-serif; 
+    color: #333; 
+    margin-bottom: 20px;
+}
+
+#locationForm {
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    width: 100%; 
+    text-align: center; 
+    max-width: 400px; 
+}
+
+#location {
+    border: 2px solid #ccc; 
+    border-radius: 5px; 
+    padding: 10px 15px; 
+    width: 100%; 
+    max-width: 120px;
+    font-family: 'S-CoreDream-3Light', sans-serif; 
+    text-align: center; 
+    margin-bottom: 15px; 
+}
+
+#location:focus {
+    outline: none;
+    border-color: #E48F85; 
+}
+
+
+#findPlace {
+    color: 333; 
+    border: none; 
+    padding: 10px 20px;   
+    font-size: 14px; 
+    cursor: pointer; 
+    border-radius: 20px;  
+    font-family: 'S-CoreDream-3Light', sans-serif; 
+    transition: background-color 0.3s ease;
+    margin-bottom: 15px; 
+    width: 70%;          
+    max-width: 100px;    
+}
+
+
+/* 저장 버튼 스타일 */
+#saveLocation {
+    background-color: #E48F85; 
+    color: white; 
+    border: none; 
+    padding: 10px 15px; 
+    font-size: 14px; 
+    cursor: pointer; 
+    border-radius: 20px; 
+    width: 20%; 
+    margin: 0 auto; 
+    font-family: 'S-CoreDream-3Light', sans-serif; 
+    transition: background-color 0.3s ease;
+    margin-top: -10px; 
+}
+
+#saveLocation:hover {
+    background-color: #D4776A; 
+}
+
+.location-box {
+    border: 2px solid #ccc; 
+    border-radius: 10px;   
+    padding: 15px;          
+    background-color: #f9f9f9;  
+    display: inline-block;   
+    margin-bottom: 20px;      
+    width: 120%;              
+    max-width: 600px;  
+    margin-top: -30px;   
+}
+
+/* 제목 스타일 */
+.location-box h2 {
+    font-family: 'S-CoreDream-3Light', sans-serif; 
+    margin-bottom: 20px;     
+    font-size: 15px; 
+}
+
+#locationForm input[type="text"], #findPlace {
+    width: 100%;            
+    margin-bottom: 10px;     
+}
+

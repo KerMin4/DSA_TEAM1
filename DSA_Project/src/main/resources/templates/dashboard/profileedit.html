@@ -12,7 +12,6 @@
 </head>
 <body>
 
-    <!-- 기존 유지 -->
     <div th:replace="~{fragments/header :: header}"></div>
 
     <div class="mypage-container">
@@ -25,7 +24,6 @@
             </ul>
 
             <th:block sec:authorize="isAuthenticated()">
-                <!-- 기존 프로필 사진과 닉네임 유지 -->
                 <div class="profile-section">
                     <img th:src="${#authentication.principal.profileImage != null ? '/kkirikkiri/upload/' + #authentication.principal.profileImage : '/kkirikkiri/upload/default.png'}"
                          alt="프로필 이미지" class="mypage-profile-img" id="profileImg" />
@@ -45,56 +43,67 @@
             <span class="close">&times;</span>
             <h2>수정이 필요한 정보를 변경해보세요!</h2>
 
-            <!-- 닉네임 변경 -->
+            <!-- 닉네임 수정 -->
             <form id="nicknameChangeForm" th:action="@{/dashboard/editNickname}" method="post">
                 <div class="form-group">
                     <label for="nickname"></label>
                     <input type="text" id="nickname" name="nickname" placeholder="새 닉네임 입력">
+                    <span class="error-message" id="nicknameError"></span> 
                     <button type="submit" class="save-button">변경</button>
                 </div>
             </form>
 
-            <!-- 비밀번호 변경 -->
+            <!-- 비밀번호 수정 -->
             <form id="passwordChangeForm" th:action="@{/dashboard/editPassword}" method="post">
                 <div class="form-group">
                     <label for="password"></label>
                     <input type="password" id="password" name="password" placeholder="새 비밀번호 입력">
-                </div>
-                <div class="form-group">
-                    <label for="password2"></label>
                     <input type="password" id="password2" name="password2" placeholder="새 비밀번호 재확인">
+                    <span class="error-message" id="passwordError"></span> 
                     <button type="submit" class="save-button">변경</button>
                 </div>
             </form>
 
-            <!-- 전화번호 변경 -->
+            <!-- 전화번호 수정 -->
             <form id="phoneChangeForm" th:action="@{/dashboard/editPhone}" method="post">
                 <div class="form-group">
                     <label for="phone"></label>
                     <input type="text" id="phone" name="phone" placeholder="새 전화번호 입력">
+                    <span class="error-message" id="phoneError"></span>
                     <button type="submit" class="save-button">변경</button>
                 </div>
             </form>
         </div>
     </div>
 
-   <!-- 프로필 이미지 변경 모달 -->
-<div id="profileImageModal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-      
-
-        <form id="profileImageForm" th:action="@{/dashboard/editProfileImage}" method="post" enctype="multipart/form-data">
-            <div class="form-group">
-                <label for="profileImageInput" class="file-label"></label>
-                <input type="file" id="profileImageInput" name="profileImage" accept="image/*" style="display: none;">
-                <button type="button" class="file-label" id="fileSelectButton">이미지 변경</button>
-            </div>
-            <img id="profilePreview" class="preview-img" style="display: none;"/> <!-- 미리보기 이미지 -->
-            <button type="submit" class="save-button">변경</button>
-        </form>
+    <!-- 프로필 이미지 수정 모달 -->
+    <div id="profileImageModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <form id="profileImageForm" th:action="@{/dashboard/editProfileImage}" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="profileImageInput"></label>
+                    <input type="file" id="profileImageInput" name="profileImage" accept="image/*" style="display: none;">
+                    <button type="button" id="fileSelectButton">파일 선택</button>
+                    <span class="error-message" id="profileImageError"></span>
+                </div>
+                <img id="profilePreview" style="display:none;" />
+                <button type="submit" class="save-button">변경</button>
+            </form>
+        </div>
     </div>
+    
+  
+<div class="location-edit-section">
+    <form id="locationForm" th:action="@{/dashboard/editLocation}" method="post">
+        <div class="location-box">
+            <h2>새로운 곳에서 활동하고 싶으면, 위치를 변경해보세요!</h2>
+            <input type="button" id="findPlace" value="지역 찾기"><br>
+            <input type="text" id="location" name="location" placeholder="관심 지역"><br>
+        </div>
+        <button type="submit" id="saveLocation" class="save-button">저장</button>
+    </form>
 </div>
-
+  
 </body>
 </html>

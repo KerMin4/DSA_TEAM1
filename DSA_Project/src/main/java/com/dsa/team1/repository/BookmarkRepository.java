@@ -19,6 +19,8 @@ public interface BookmarkRepository extends JpaRepository<BookmarkEntity, Intege
     boolean existsByUserAndGroup(UserEntity user, SocialGroupEntity group);
     
     List<BookmarkEntity> findByUser(UserEntity user);
+
+	void deleteByGroup(SocialGroupEntity group);
   
 }
 
