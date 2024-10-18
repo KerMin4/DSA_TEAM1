@@ -243,7 +243,7 @@ public class DashboardController {
         return "redirect:/dashboard/mypage";
     }
 
-    // 위치 수정
+    /* 위치 수정
     @PostMapping("editLocation")
     public String editLocation(@AuthenticationPrincipal AuthenticatedUser authenticatedUser,
                                @RequestParam("location") String location,
@@ -252,5 +252,37 @@ public class DashboardController {
         userService.updateLocation(userId, location);
         redirectAttributes.addFlashAttribute("message", "위치가 변경되었습니다.");
         return "redirect:/dashboard/mypage";
+    }
+    */
+    
+ /* 관심사 수정
+    @PostMapping("editInterests")
+    public String editInterests(@AuthenticationPrincipal AuthenticatedUser authenticatedUser,
+                                @RequestParam("interests") List<String> interests, // 선택된 관심사를 리스트로 받음
+                                RedirectAttributes redirectAttributes) {
+        String userId = authenticatedUser.getUsername();
+        try {
+            userService.updateInterests(userId, interests); // 서비스에서 관심사 업데이트 처리
+            redirectAttributes.addFlashAttribute("message", "관심사가 변경되었습니다.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "관심사 변경에 실패했습니다: " + e.getMessage());
+        }
+        return "redirect:/dashboard/mypage";
+    }
+    
+    */
+    
+    // 위치 수정
+    @PostMapping("editLocation")
+    public String editLocation(@AuthenticationPrincipal AuthenticatedUser authenticatedUser,
+                               @RequestParam("location") String location,
+                               RedirectAttributes redirectAttributes) {
+        String userId = authenticatedUser.getUsername();
+        log.debug("사용자의 ID: {}", userId);
+        log.debug("새 위치: {}", location); // 새 위치 로그 추가
+
+        userService.updateLocation(userId, location);
+        redirectAttributes.addFlashAttribute("message", "위치가 변경되었습니다.");
+        return "redirect:/dashboard/mypage"; 
     }
 }
