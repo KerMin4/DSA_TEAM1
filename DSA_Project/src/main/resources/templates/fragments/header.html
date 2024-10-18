@@ -13,7 +13,7 @@
     		alert('알림 :' + event.data);
     	};
     	
-    	eventSourcce.onerror = function(){
+    	eventSource.onerror = function(){
     		console.error('알림 연결이 끊어졌습니다.');
     	};
     </script>
@@ -40,17 +40,28 @@
 
                     <th:block sec:authorize="isAuthenticated()">
                     
-                        <!-- 여기부터 로그인 후 -->
-                        
+                        <!-- 로그인 후 프로필 이미지 표시 -->
                         <li class="dropdown">
-                            <img th:src="${#authentication.principal.profileImage != null ? '/kkirikkiri/upload/' + #authentication.principal.profileImage : '/kkirikkiri/upload/default.png'}"
-                                 alt="프로필 이미지" class="profile-img" id="profileImg" />
+                            <!-- 프로필 이미지가 있을 때 -->
+                            
+                            <th:block th:if="${#authentication.principal.profileImage != null}">
+                             <img th:src="${#authentication.principal.profileImage != null ? '/kkirikkiri/upload/' + #authentication.principal.profileImage : '/kkirikkiri/upload/default.png'}"
+                              alt="프로필 이미지" class="profile-img" id="profileImg" />
+                            </th:block>
+
+
+                            <!-- 프로필 이미지가 없을 때 기본 이미지 표시 -->
+                            <th:block th:if="${#authentication.principal.profileImage == null}">
+                                <img th:src="@{/images/default.png}" 
+                                     alt="기본 프로필 이미지" class="profile-img" id="profileImg" />
+                            </th:block>
 
                             <ul class="dropdown-menu" id="profileDropdown">
                                 <li><a th:href="@{/dashboard/mypage}">홈</a></li>
                                 <li><a th:href="@{/dashboard/profileedit}">프로필 수정</a></li>
                                 <li><a th:href="@{/dashboard/groupManagement}">그룹 관리</a></li>
                                 <li><a th:href="@{/dashboard/paymentManagement}">결제 관리</a></li>
+                                <li><a th:href="@{/dashboard/bookingHistory}">예약 내역</a></li>
                                 <li><a th:href="@{/member/logout}">Logout</a></li>
                             </ul>
                         </li>
