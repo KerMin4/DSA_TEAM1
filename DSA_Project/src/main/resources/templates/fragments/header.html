@@ -6,6 +6,17 @@
     <title>Header</title>
     <link th:href="@{/css/header.css}" rel="stylesheet">
     <script th:src="@{/js/dropdown.js}"></script>
+    <script>
+    	const eventSource = new EventSource('/notify');
+    	
+    	eventSource.onmessage = function(event){
+    		alert('알림 :' + event.data);
+    	};
+    	
+    	eventSourcce.onerror = function(){
+    		console.error('알림 연결이 끊어졌습니다.');
+    	};
+    </script>
 </head>
 <body>
     <header>
