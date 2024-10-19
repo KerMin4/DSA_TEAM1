@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>결제관리</title>
+    <title>예약 관리</title>
     <link th:href="@{/css/header.css}" rel="stylesheet">
     <link th:href="@{/css/main.css}" rel="stylesheet"> 
     <link th:href="@{/css/mypage.css}" rel="stylesheet">
@@ -22,15 +22,16 @@
                 <li><a th:classappend="${activePage == 'booking-history'} ? 'active'" th:href="@{/dashboard/bookingHistory}" id="booking-history">예약 내역</a></li>
             </ul>
 
-        <th:block sec:authorize="isAuthenticated()">
+       
+            <th:block sec:authorize="isAuthenticated()">
                 <div class="profile-section">
                     <!-- 프로필 이미지가 있을 때 -->
-                           <th:block th:if="${#authentication.principal.profileImage != null}">
+                    <th:block th:if="${#authentication.principal.profileImage != null}">
                       <img th:src="${#authentication.principal.profileImage != null ? '/kkirikkiri/upload/' + #authentication.principal.profileImage : '/kkirikkiri/upload/default.png'}"
                          alt="프로필 이미지" class="mypage-profile-img" id="profileImg" />
                     </th:block>
 
-                    <!-- 프로필 이미지가 없을 때 기본 이미지 표시 -->
+                      <!-- 프로필 이미지가 없을 때 기본 이미지 표시 -->
                     <th:block th:if="${#authentication.principal.profileImage == null}">
                         <img th:src="@{/images/default.png}" 
                              alt="기본 프로필 이미지" class="mypage-profile-img" id="profileImg" />
@@ -38,7 +39,6 @@
                 </div>
                 <p th:text="${#authentication.principal.name}" class="profile-nickname"></p>
             </th:block>
-
 
             <div class="horizontal-line"></div>
         </nav>

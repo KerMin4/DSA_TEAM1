@@ -99,8 +99,8 @@
     height: 23px; 
     position: relative;
     z-index: 1000; 
-    top: 15px; 
-    right: -75px; 
+    top: 22px; 
+    right: -65px; 
     cursor: pointer; 
     transition: transform 0.2s; 
     pointer-events: auto; 

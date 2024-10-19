@@ -72,7 +72,7 @@ main {
 
 .create-button {
     display: inline-block;
-    width: 90px;
+    width: 115px;
     height: 35px;
     background-color: rgba(129, 187, 246, 0.5); /* 배경색 #81BBF6에 50% 투명도 적용 */
     border: 1px solid rgba(0, 0, 0, 0.5); /* 테두리 #000000에 50% 투명도 적용 */
@@ -80,12 +80,12 @@ main {
     color: #000000; 
     font-family: 'S-CoreDream-5Medium', sans-serif;
     font-size: 14px;
-    text-align: center;
     line-height: 35px;
     text-decoration: none;
     position: relative;
-    left: 130px; 
-    
+    left: 145px; 
+    top: -15px;
+    text-indent: 33px; 
 }
 
 .create-button:hover {
@@ -97,7 +97,7 @@ main {
     width: 500px;
     height: auto;
     position: relative;
-    top: -80px; 
+    top: -70px; 
     z-index: 1; 
 }
 
@@ -106,4 +106,12 @@ main {
     position: relative; 
 }
 
-
+.group-image {
+    width: 30px;
+    height: 30px;
+    position: relative;
+    top: -5px; 
+    left: 36px; 
+    z-index: 100;
+  
+}
