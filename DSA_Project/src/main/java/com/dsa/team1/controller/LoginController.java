@@ -72,6 +72,8 @@ public class LoginController{
 	        @RequestParam("phone") String phone,
 	        @RequestParam("name") String name,
 	        @RequestParam("username") String username,
+	        @RequestParam("birth")Integer birth,
+	        @RequestParam("gender")Integer gender,
 	        @RequestParam("profileImage") MultipartFile profileImage // 프로필 사진 추가함 -나연-
 	) {
 	    log.debug("흥미: {}", interests);
@@ -79,7 +81,7 @@ public class LoginController{
 
 	
 	    try {
-			us.join(userid, password, phone, email, location, name, username, profileImage);
+			us.join(userid, password, phone, email, location, name, username, birth, gender, profileImage, interests);
 		} catch (IOException e) {
 	
 			e.printStackTrace();

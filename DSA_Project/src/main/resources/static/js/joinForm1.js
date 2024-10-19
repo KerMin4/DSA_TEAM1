@@ -56,6 +56,20 @@ $(document).ready(function(){
             return;
         }
 
+		const year = $('#birth-year').val();
+		const month = $('#birth-month').val();
+		const day = $('#birth-day').val();
+		
+		var birth = 1000*yeara + 100*month + day;
+		
+		if(!year || !month || !day){
+			alert("생년월일을 입력해주세요");
+			return false;
+		}
+
+		const gender = $('input[name="gender"]:checked').val();
+		
+		
         formData.append('userid', userid);
         formData.append('password', password);
         formData.append('phone', phone);
@@ -63,17 +77,15 @@ $(document).ready(function(){
         formData.append('name', name);
         formData.append('username', username);
         formData.append('profileImage', profileImage); // 프로필 추가
-
-        alert(formData);
+        formData.append('birth', birth);
+		formData.append('gender', gender);
         console.log(formData);
 
       
         $.post("/kkirikkiri/member/join1", formData, function(response) {
-            console.log("여기까진 옴?"); 
             window.location.href = "/kkirikkiri"; 
         }).fail(function(error) {
             console.log(formData); 
-            console.log("실패다 이자식아"); 
         });
     });
 
@@ -170,5 +182,44 @@ $(document).ready(function(){
             });
         }
     });    
-});
+    
+     let isYearOptionExisted = false;
+    let isMonthOptionExisted = false;
+    let isDayOptionExisted = false;
 
+    $('#birth-year').on('focus', function() {
+        if (!isYearOptionExisted) {
+            isYearOptionExisted = true;
+            for (let i = 2024; i >= 1924; i--) {
+                $(this).append($('<option>', {
+                    value: i,
+                    text: i
+                }));
+            }
+        }
+    });
+
+    $('#birth-month').on('focus', function() {
+        if (!isMonthOptionExisted) {
+            isMonthOptionExisted = true;
+            for (let i = 1; i <= 12; i++) {
+                $(this).append($('<option>', {
+                    value: i,
+                    text: i
+                }));
+            }
+        }
+    });
+
+    $('#birth-day').on('focus', function() {
+        if (!isDayOptionExisted) {
+            isDayOptionExisted = true;
+            for (let i = 1; i <= 31; i++) {
+                $(this).append($('<option>', {
+                    value: i,
+                    text: i
+                }));
+            }
+        }
+    });
+});
