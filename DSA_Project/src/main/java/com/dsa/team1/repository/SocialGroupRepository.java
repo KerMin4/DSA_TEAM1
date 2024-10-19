@@ -46,41 +46,6 @@ public interface SocialGroupRepository extends JpaRepository<SocialGroupEntity, 
     // 북마크순 쿼리
     @Query("SELECT g FROM SocialGroupEntity g ORDER BY g.bookmarkCount DESC")
     List<SocialGroupEntity> findAllOrderByBookmarkCountDesc();
-	
-//    // 그룹 이름 또는 설명에 검색어가 포함된 그룹 찾기
-//    List<SocialGroupEntity> findByGroupNameContainingOrDescriptionContaining(String groupName, String description);
-//
-//    // 새로운 방식의 그룹 검색 쿼리
-//    @Query("SELECT g FROM SocialGroupEntity g " +
-//           "WHERE LOWER(g.groupName) LIKE LOWER(CONCAT('%', :query, '%')) " +
-//           "OR LOWER(g.description) LIKE LOWER(CONCAT('%', :query, '%'))")
-//    List<SocialGroupEntity> searchByGroupNameOrDescription(@Param("query") String query);
-//
-//    // 검색어, 카테고리, 지역 필터링을 처리하는 쿼리
-//    @Query("SELECT g FROM SocialGroupEntity g " +
-//    	       "WHERE (:query IS NULL OR LOWER(g.groupName) LIKE LOWER(CONCAT('%', :query, '%')) " +
-//    	       "OR LOWER(g.description) LIKE LOWER(CONCAT('%', :query, '%'))) " +
-//    	       "AND (:joinMethod IS NULL OR g.groupJoinMethod = :joinMethod) " +
-//    	       "AND (:location IS NULL OR g.location = :location) " +
-//    	       "AND (:category IS NULL OR g.interest = :category)")
-//	List<SocialGroupEntity> filterGroups(@Param("query") String query, 
-//	                                     @Param("joinMethod") String joinMethod, 
-//	                                     @Param("location") String location,
-//	                                     @Param("category") Interest category);
-//
-//
-//    // 그룹 ID로 그룹 헤더 이미지를 찾는 메소드
-//    @Query("SELECT g.profileImage FROM SocialGroupEntity g WHERE g.groupId = :groupId")
-//    String findGroupHeaderImageByGroupId(@Param("groupId") Integer groupId);
-//
-//    // 조회수순 정렬 쿼리
-//    @Query("SELECT g FROM SocialGroupEntity g ORDER BY g.viewCount DESC")
-//    List<SocialGroupEntity> findAllOrderByViewCountDesc();
-//
-//    // 북마크순 쿼리
-//    @Query("SELECT g FROM SocialGroupEntity g ORDER BY g.bookmarkCount DESC")
-//    List<SocialGroupEntity> findAllOrderByBookmarkCountDesc();
-
 
     // 유저가 생성한 그룹을 가져오는 메서드 - 나연 -
     List<SocialGroupEntity> findByGroupLeaderUserId(String userId);

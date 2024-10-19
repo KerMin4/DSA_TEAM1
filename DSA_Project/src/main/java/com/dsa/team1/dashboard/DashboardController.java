@@ -285,4 +285,12 @@ public class DashboardController {
         redirectAttributes.addFlashAttribute("message", "위치가 변경되었습니다.");
         return "redirect:/dashboard/mypage"; 
     }
+    
+    // 10.18
+ // 예약 기록 페이지 이동
+    @GetMapping("/bookingHistory")
+    public String bookingHistory(Model model) {
+        model.addAttribute("activePage", "booking-history");
+        return "dashboard/bookingHistory";
+    }
 }

@@ -27,6 +27,5 @@ public class PostDTO {
 	private LocalDateTime createdAt;
 	private PostType postType;
 	
-	private String imageName;
 	private List<PhotoDTO> photos;
 }

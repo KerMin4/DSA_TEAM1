@@ -6,6 +6,7 @@ import org.springframework.data.annotation.CreatedDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -35,12 +36,12 @@ public class PhotoEntity {
 	@Column(name = "photo_id")
 	private Integer photoId;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "post_id")
 	private PostEntity post;
 	
 	@Column(name = "image_name")
-	private String imageName;
+	private String imageName;	
 	
 	@CreatedDate
 	@Column(name = "created_at", columnDefinition = "timestamp default current_timestamp")
