@@ -49,7 +49,10 @@ public class UserEntity {
     @Column(name = "name", length = 50)
     private String name;
     
+    @Column(name = "birth")
     private Integer birth;
+    
+    @Column(name = "gender")
     private Integer gender;
     
     @Column(name = "phone_number", length = 20)

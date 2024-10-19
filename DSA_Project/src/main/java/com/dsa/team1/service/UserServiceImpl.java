@@ -1,12 +1,15 @@
 package com.dsa.team1.service;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.dsa.team1.entity.InterestEntity;
 import com.dsa.team1.entity.UserEntity;
+import com.dsa.team1.repository.InterestRepository;
 import com.dsa.team1.repository.UserRepository;
 import com.dsa.team1.util.FileManager;
 
@@ -21,17 +24,20 @@ import lombok.extern.slf4j.Slf4j;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository ur;
+    private final InterestRepository ir;
     private final BCryptPasswordEncoder passwordEncoder;
     private final FileManager fileManager;
 
     @Override
-    public void join(String userid, String password, String phone, String email, String location, String name, String username, MultipartFile profileImage) throws IOException {
+    public void join(String userid, String password, String phone, String email, String location, String name, String username, Integer birth, Integer gender, MultipartFile profileImage, List<String> interests) throws IOException {
         String profileImagePath = null;
 
         if (!profileImage.isEmpty()) {
             profileImagePath = fileManager.saveFile("C:/upload", profileImage);
         }
 
+        // gender 남자 1 여자 2
+        
         UserEntity userEntity = UserEntity.builder()
                 .userId(userid)
                 .password(passwordEncoder.encode(password))
@@ -41,9 +47,14 @@ public class UserServiceImpl implements UserService {
                 .preferredLocation(location)
                 .userName(username)
                 .name(name)
+                .birth(birth)
+                .gender(gender)
                 .build();
 
         ur.save(userEntity);
+        
+        //InterestEntity interestEntity = InterestEntity.builder()
+        		
     }
 
     @Override

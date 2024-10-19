@@ -6,6 +6,7 @@
     <title>회원가입</title>
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
     <script th:src="@{/js/joinForm1.js}"></script>
+    <!-- <script th:src="@{/js/joinForm_birth.js}"></script> -->
     <link rel = "stylesheet" type = "text/css" href="/kkirikkiri/css/joinForm.css">
     <link rel = "stylesheet" type = "text/css" href="/kkirikkiri/css/main.css">
     <link rel="stylesheet" type="text/css" href="/kkirikkiri/css/header.css"> 
@@ -18,7 +19,7 @@
         <div class="stepper">
             <div class="step-circle active" id="step-circle-1">1</div>
             <div class="line active" id="line-1"></div>
-            <div class="step-circle active" id="step-circle-2">2</div>
+            <div class="step-circle" id="step-circle-2">2</div>
             <div class="line" id="line-2"></div>
             <div class="step-circle" id="step-circle-3">3</div>
         </div>
@@ -122,9 +123,24 @@
                 <input type="password" id="password" name="password" placeholder="비밀번호"><br>
                 <input type="password" id="password2" name="password2" placeholder="비밀번호 재확인"><br>
                 <input type="text" id="name" name="name" placeholder="닉네임"><br>
-                <input type="text" id="username" name="username" placeholder="진짜이름"><br>
+                <input type="text" id="username" name="username" placeholder="이름"><br>
                 <input type="text" id="email" name="email" placeholder="이메일"><br>
                 <input type="text" id="phone" name="phone" placeholder="휴대전화"><br>
+                   <div class = "info" id = "info_birth">
+                	<select class = "box" id = "birth-year">
+                		<option disabled selected>출생년도</option>
+                	</select>
+                	<select class = "box" id = "birth-month">
+                		<option disabled selected>월</option>
+                	</select>
+                	<select class = "box" id = "birth-day">
+                		<option disabled selected>일</option>
+                	</select>	
+                </div>
+           		<div class = "info" id = "gender">
+           			<input type = "radio" name = "gender" value = "1" checked>남
+           			<input type = "radio" name = "gender" value = "2">여
+           		</div>
                 <div class="button-container">
                     <button type="button" id="prevStep3"> < 이전</button>
                     <button type="submit" id="submitForm">가입 > </button>
