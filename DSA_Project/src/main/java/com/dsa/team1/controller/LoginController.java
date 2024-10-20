@@ -2,6 +2,7 @@ package com.dsa.team1.controller;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.dsa.team1.entity.enums.Interest;
 import com.dsa.team1.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -72,16 +74,14 @@ public class LoginController{
 	        @RequestParam("phone") String phone,
 	        @RequestParam("name") String name,
 	        @RequestParam("username") String username,
-	        @RequestParam("birth")Integer birth,
 	        @RequestParam("gender")Integer gender,
-	        @RequestParam("profileImage") MultipartFile profileImage // 프로필 사진 추가함 -나연-
+	        @RequestParam("profileImage") MultipartFile profileImage// 프로필 사진 추가함 -나연-
 	) {
 	    log.debug("흥미: {}", interests);
 	    log.debug(location);
-
-	
+	   
 	    try {
-			us.join(userid, password, phone, email, location, name, username, birth, gender, profileImage, interests);
+			us.join(userid, password, phone, email, location, name, username, gender, profileImage, interests);
 		} catch (IOException e) {
 	
 			e.printStackTrace();

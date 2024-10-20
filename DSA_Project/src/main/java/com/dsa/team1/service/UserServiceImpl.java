@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.dsa.team1.entity.InterestEntity;
 import com.dsa.team1.entity.UserEntity;
+import com.dsa.team1.entity.enums.Interest;
 import com.dsa.team1.repository.InterestRepository;
 import com.dsa.team1.repository.UserRepository;
 import com.dsa.team1.util.FileManager;
@@ -29,7 +30,7 @@ public class UserServiceImpl implements UserService {
     private final FileManager fileManager;
 
     @Override
-    public void join(String userid, String password, String phone, String email, String location, String name, String username, Integer birth, Integer gender, MultipartFile profileImage, List<String> interests) throws IOException {
+    public void join(String userid, String password, String phone, String email, String location, String name, String username, Integer gender, MultipartFile profileImage, List<String> interests) throws IOException {
         String profileImagePath = null;
 
         if (!profileImage.isEmpty()) {
@@ -47,14 +48,18 @@ public class UserServiceImpl implements UserService {
                 .preferredLocation(location)
                 .userName(username)
                 .name(name)
-                .birth(birth)
                 .gender(gender)
                 .build();
 
         ur.save(userEntity);
         
-        //InterestEntity interestEntity = InterestEntity.builder()
-        		
+        for(String interest : interests) {
+        	InterestEntity interestEntity = InterestEntity.builder()
+        											.user(userEntity)
+        											.interest(interest)
+        											.build();
+        	ir.save(interestEntity);
+        }
     }
 
     @Override
