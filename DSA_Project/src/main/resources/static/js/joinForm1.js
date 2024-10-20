@@ -55,20 +55,18 @@ $(document).ready(function(){
             alert("비밀번호가 일치하지 않습니다.");
             return;
         }
+		var year = $('#birth-year').val();
+		var month = $('#birth-month').val();
+		var day = $('#birth-day').val();
+		
+		//var birth = 10000*year + 100*month + 1*day;
 
-		const year = $('#birth-year').val();
-		const month = $('#birth-month').val();
-		const day = $('#birth-day').val();
-		
-		var birth = 1000*yeara + 100*month + day;
-		
 		if(!year || !month || !day){
 			alert("생년월일을 입력해주세요");
 			return false;
 		}
 
-		const gender = $('input[name="gender"]:checked').val();
-		
+		var gender = $('input[name="gender"]:checked').val();
 		
         formData.append('userid', userid);
         formData.append('password', password);
@@ -77,16 +75,50 @@ $(document).ready(function(){
         formData.append('name', name);
         formData.append('username', username);
         formData.append('profileImage', profileImage); // 프로필 추가
-        formData.append('birth', birth);
+     //   formData.append('birth', birth);
+     	formData.append('year', year);
+     	formData.append('month', month);
+     	formData.append('day', day);
 		formData.append('gender', gender);
         console.log(formData);
-
-      
+        /*
+        var dataToSend = {
+			userid : formData.get('userid'),
+			password : formData.get('password'),
+			phone : formData.get('phone'),
+			email : formData.get('email'),
+			name : formData.get('name'),
+			username : formData.get('username'),
+			profileImage : formData.get('profileImage'),
+			year : formData.get('year'),
+			month : formData.get('month'),
+			day : formData.get('day'),
+			gender : formData.get('gender'),
+			interests : formData.get('interests'),
+			location : formData.get('location'),
+		};*/
         $.post("/kkirikkiri/member/join1", formData, function(response) {
             window.location.href = "/kkirikkiri"; 
         }).fail(function(error) {
             console.log(formData); 
         });
+        /*
+	   $.ajax({
+			url: "/kkirikkiri/member/join1",
+			type : "POST",
+			data: formData,
+			contentType : false,
+			processData: false,
+			success: function(response){
+				alert("회원가입이 완료되었습니다.");
+				window.location.href = "/kkirikkiri";
+			}, error: function(error){
+				console.error("오류발생", error);
+				alert("회원가입에 실패했습니다.");
+			}
+	   });
+	   
+	   */
     });
 
     function showStep(step){
