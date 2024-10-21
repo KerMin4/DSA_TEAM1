@@ -4,9 +4,16 @@ $(function() {
         event.preventDefault(); // 기본 링크 동작 방지
         window.location.href = '/kkirikkiri/socialgroup/socialing';
     });
+    
+    // 정렬 버튼 클릭 시 동작
+	$('.sort-btn').on('change', function() {
+	    var selectedSort = $(this).val(); // 선택된 정렬 기준
+	    console.log("Selected sort option: ", selectedSort);
+	    filterGroups(null, selectedSort); // 필터링 함수 호출 시 정렬 기준 전달
+	});
 
     // 그룹 필터링을 위한 함수
-    function filterGroups(query) {
+    function filterGroups(query, sort) {
 	    var searchQuery = query || ($('#searchInput').length ? $('#searchInput').val().trim() : ''); // searchInput 존재 여부 확인
 	    var selectedInterest = $('input[name="interest"]:checked').val(); 							// 선택된 카테고리
 	    var selectedLocation = $('.sub-location-btn.selected').data('sublocation');					// 선택된 지역
@@ -46,9 +53,10 @@ $(function() {
             url: '/kkirikkiri/socialgroup/filter',
             type: 'GET',
             data: {
-                query: searchQuery,          // 검색어 또는 해시태그
-                category: selectedInterest,  // 선택된 카테고리
-                location: selectedLocation   // 지역 필터
+                query: searchQuery,          	// 검색어 또는 해시태그
+                category: selectedInterest,  	// 선택된 카테고리
+                location: selectedLocation,   	// 지역 필터
+                sort: sort						// 정렬 기준
             },
            success: function(data) {
 	            var newContent = $(data).find('#group-container').html();
