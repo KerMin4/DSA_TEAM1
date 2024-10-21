@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
     private final FileManager fileManager;
 
     @Override
-    public void join(String userid, String password, String phone, String email, String location, String name, String username, Integer gender, MultipartFile profileImage, List<String> interests) throws IOException {
+    public void join(String userid, String password, String phone, String email, String location, String name, String username, Integer gender, MultipartFile profileImage, List<String> interests, int birth) throws IOException {
         String profileImagePath = null;
 
         if (!profileImage.isEmpty()) {
@@ -49,6 +49,7 @@ public class UserServiceImpl implements UserService {
                 .userName(username)
                 .name(name)
                 .gender(gender)
+                .birth(birth)
                 .build();
 
         ur.save(userEntity);

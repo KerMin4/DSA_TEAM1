@@ -13,7 +13,7 @@ public interface UserService {
 	// 프로필 사진땜에 추가함 -나연-
     boolean idCheck(String id);
     void join(String userid, String password, String phone, String email, String location, String name, String username,  Integer gender,
-              MultipartFile profileImage, List<String> interests) throws IOException;
+              MultipartFile profileImage, List<String> interests, int birth) throws IOException;
     UserEntity findUserByUserId(String userId);
     
     // 프로필 수정 -나연-
