@@ -3,16 +3,15 @@ package com.dsa.team1.service;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.dsa.team1.dto.PhotoDTO;
 import com.dsa.team1.dto.PostDTO;
 import com.dsa.team1.dto.ReplyDTO;
 import com.dsa.team1.entity.GroupHashtagEntity;
@@ -53,61 +52,50 @@ public class GroupBoardServiceImpl implements GroupBoardService {
     private final PostRepository postRepository;
     private final ReplyRepository replyRepository;
     private final FileManager fileManager;
-    
+
     /**
-     * 그룹 업데이트 시 DB에 해당 그룹의 정보를 저장
+     * 그룹 멤버인지 확인 
      */
     @Override
-	public void updateGroup(Integer groupId, String groupName, String description, String location, String eventDate,
-	        String interest, String joinMethod, Integer memberLimit, String hashtags, String removedHashtags,  MultipartFile profileImage) throws IOException {
+    public boolean isUserMemberOfGroup(String userId, Integer groupId) {
+        boolean isMember = userGroupRepository.existsByUserAndGroupId(userId, groupId);
+        SocialGroupEntity group = socialGroupRepository.findById(groupId)
+            .orElseThrow(() -> new IllegalArgumentException("그룹을 찾을 수 없습니다."));
+        
+        // 그룹 리더도 멤버로 간주
+        if (!isMember && group.getGroupLeader().getUserId().equals(userId)) {
+            isMember = true;
+        }
+        return isMember;
+    }
+    
+    /**
+     * 멤버프로필 이미지 가져오기 
+     */
+    @Override
+    public List<Map<String, String>> getMemberProfiles(Integer groupId) {
+        SocialGroupEntity group = socialGroupRepository.findById(groupId)
+            .orElseThrow(() -> new IllegalArgumentException("잘못된 그룹 ID입니다."));
 
-	    SocialGroupEntity group = socialGroupRepository.findById(groupId)
-	            .orElseThrow(() -> new IllegalArgumentException("잘못된 그룹 ID입니다."));
+        String groupLeaderId = group.getGroupLeader().getUserId();
+        UserEntity groupLeader = userRepository.findByUserId(groupLeaderId)
+            .orElseThrow(() -> new IllegalArgumentException("그룹 리더를 찾을 수 없습니다."));
 
-	    group.setGroupName(groupName);
-	    group.setDescription(description);
-	    group.setLocation(location);
+        List<UserEntity> members = userGroupRepository.findActiveMembersByGroupId(groupId);
+        if (members.stream().noneMatch(member -> member.getUserId().equals(groupLeaderId))) {
+            members.add(groupLeader);
+        }
 
-	    // LocalDate를 LocalDateTime으로 변환
-	    LocalDateTime eventDateTime = LocalDate.parse(eventDate).atStartOfDay();
-	    group.setEventDate(eventDateTime);  // 변환한 LocalDateTime을 설정
-
-	    group.setInterest(Interest.valueOf(interest));
-	    group.setGroupJoinMethod(GroupJoinMethod.valueOf(joinMethod.toUpperCase()));
-	    group.setMemberLimit(memberLimit);
-	    
-	    // 프로필 이미지 처리
-	    if (profileImage != null && !profileImage.isEmpty()) {
-	        String fileName = fileManager.saveFile("C:/upload", profileImage);  // 파일 저장
-	        group.setProfileImage(fileName);  // 저장된 파일 이름을 그룹 프로필 이미지로 설정
-	    }
-	    
-	    // 삭제된 해시태그 처리 (removedHashtags)
-	    if (removedHashtags != null && !removedHashtags.trim().isEmpty()) {
-	        String[] removedHashtagArray = removedHashtags.split(",");
-	        for (String removedHashtag : removedHashtagArray) {
-	            String cleanRemovedHashtag = removedHashtag.trim().replace("#", ""); // # 제거 후 정리
-	            if (!cleanRemovedHashtag.isEmpty()) {
-	                groupHashtagRepository.deleteByGroupAndName(group, cleanRemovedHashtag);
-	            }
-	        }
-	    }
-
-	    // 새로운 해시태그 추가
-	    if (hashtags != null && !hashtags.trim().isEmpty()) {
-	        String[] hashtagArray = hashtags.split(",");
-	        for (String hashtag : hashtagArray) {
-	            GroupHashtagEntity hashtagEntity = GroupHashtagEntity.builder()
-	                .group(group)
-	                .name(hashtag.trim())
-	                .build();
-	            groupHashtagRepository.save(hashtagEntity);  // 해시태그 저장
-	        }
-	    }
-
-	    socialGroupRepository.save(group);
-	}
-
+        return members.stream()
+            .map(member -> {
+                Map<String, String> profile = new HashMap<>();
+                profile.put("userId", member.getName());
+                profile.put("profileImage", member.getProfileImage() != null ? member.getProfileImage() : "defaultProfile.png");
+                return profile;
+            })
+            .collect(Collectors.toList());
+    }
+    
     /**
      * 공지사항 업로드
      */
@@ -249,4 +237,64 @@ public class GroupBoardServiceImpl implements GroupBoardService {
         replyRepository.deleteById(replyId);
     }
 
+    /**
+     * 그룹 업데이트 시 DB에 해당 그룹의 정보를 저장
+     */
+    @Override
+	public void updateGroup(Integer groupId, String groupName, String description, String interest, String joinMethod,
+			Integer memberLimit, String removedMembers, String hashtags, String removedHashtags,  MultipartFile profileImage) throws IOException {
+
+	    SocialGroupEntity group = socialGroupRepository.findById(groupId)
+	            .orElseThrow(() -> new IllegalArgumentException("잘못된 그룹 ID입니다."));
+
+	    group.setGroupName(groupName);
+	    group.setDescription(description);
+	    group.setInterest(Interest.valueOf(interest));
+	    group.setGroupJoinMethod(GroupJoinMethod.valueOf(joinMethod.toUpperCase()));
+	    group.setMemberLimit(memberLimit);
+	    
+	    // 프로필 이미지 처리
+	    if (profileImage != null && !profileImage.isEmpty()) {
+	        String fileName = fileManager.saveFile("C:/upload", profileImage);  // 파일 저장
+	        group.setProfileImage(fileName);  // 저장된 파일 이름을 그룹 프로필 이미지로 설정
+	    }
+	    
+	    // 삭제된 멤버 처리
+	    if (removedMembers != null && !removedMembers.trim().isEmpty()) {
+	        String[] memberIds = removedMembers.split(",");
+	        for (String memberId : memberIds) {
+	            userGroupRepository.deleteByGroup_GroupIdAndUser_UserId(groupId, memberId.trim());
+	        }
+	    }
+	    
+	    // 새로운 해시태그 추가
+	    if (hashtags != null && !hashtags.trim().isEmpty()) {
+	        String[] hashtagArray = hashtags.split(",");
+	        for (String hashtag : hashtagArray) {
+	        	// 모든 # 기호를 제거한 후 앞에 한 번만 추가
+	        	String cleanHashtag = hashtag.trim().replaceAll("^#+", ""); // 모든 # 기호를 제거하고 저장
+
+	            // 중복이 없는 경우에만 저장
+	            if (!cleanHashtag.isEmpty() && !groupHashtagRepository.existsByGroupAndName(group, cleanHashtag)) {
+	                GroupHashtagEntity hashtagEntity = GroupHashtagEntity.builder()
+	                    .group(group)
+	                    .name(cleanHashtag)
+	                    .build();
+	                groupHashtagRepository.save(hashtagEntity);  // 해시태그 저장
+	            }
+	        }
+	    }
+	    
+	    // 삭제된 해시태그 처리 (removedHashtags)
+	    if (removedHashtags != null && !removedHashtags.trim().isEmpty()) {
+	        String[] removedHashtagArray = removedHashtags.split(",");
+	        for (String removedHashtag : removedHashtagArray) {
+	            String cleanRemovedHashtag = removedHashtag.trim().replaceAll("^#+", ""); // # 제거한 후 처리
+	            if (!cleanRemovedHashtag.isEmpty()) {
+	                groupHashtagRepository.deleteByGroupAndName(group, cleanRemovedHashtag);
+	            }
+	        }
+	    }
+	}
+    
 }

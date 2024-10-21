@@ -19,8 +19,6 @@
             <h2>그룹 게시판</h2>
             
             <br>
-            
-            <h2 th:text="${groupName}"></h2>
 
             <div>가입 멤버</div>
             <ul class="members-list">
@@ -33,6 +31,7 @@
 
         <!-- Main Content Section -->
         <div class="main-content">
+        
 		    <div th:if="${isMember}">
 		        <!-- 그룹 게시판 컨텐츠 -->
 		        <nav class="tabs">
@@ -45,6 +44,9 @@
 					<a th:href="@{/groupboard/album(groupId=${group.groupId})}" class="tab">앨범</a>
 					<a th:href="@{/groupboard/settings(groupId=${group.groupId})}" class="tab">설정</a> -->
                 </nav>
+                
+                <h2 th:text="${groupName}"></h2>
+                
                 <div id="content-box" class="content-box">
                     <!-- 이제는 각 탭에 맞는 페이지로 직접 이동합니다. -->
                 </div>

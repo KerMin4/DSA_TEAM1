@@ -20,8 +20,6 @@
             
             <br>
             
-            <h2 th:text="${groupName}"></h2>
-
             <div>가입 멤버</div>
             <ul class="members-list">
 			    <li th:each="member : ${members}">
@@ -40,13 +38,44 @@
 			    <a th:href="@{/groupboard/album(groupId=${group.groupId}, type='album')}" class="tab">앨범</a>
 			    <a th:href="@{/groupboard/settings(groupId=${group.groupId}, type='settings')}" class="tab">설정</a>
 			</nav>
-        
-        	<table>
-        		<tr>
+			
+			<div class="schedule-details">
+				<input type="hidden" id="groupId" th:value="${groupId}">
+			    
+			    <table>
+                    <tr>
+                        <td>날짜시간:</td>
+                        <td>
+                            <p id="eventDateDisplay" th:text="${eventDateFormatted}"></p>
+                            <input type="datetime-local" id="eventDateInput" th:value="${eventDateFormatted}" style="display: none;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>장소:</td>
+                        <td>
+                            <p id="locationDisplay" th:text="${group.location}"></p>
+                            <textarea id="locationInput" style="display: none;"></textarea>
+                        </td>
+                    </tr>
+                </table>
+			    
+			    <button id="editButton">수정</button>
+			    <button id="saveButton" style="display: none;">저장하기</button>
+			</div>
+        	<!-- <table>
+                <tr>
                     <td><label for="eventDate">이벤트 날짜:</label></td>
-                    <td><input type="text" id="eventDate" name="eventDate" th:value="${eventDateFormatted}"></td>
+                    <td>
+			            <input type="datetime-local" id="eventDate" name="eventDate"
+			                   th:value="${eventDateFormatted}" />
+			        </td>
                 </tr>
-        	</table>
+
+                <tr>
+                    <td><label for="location">위치:</label></td>
+                    <td><input type="text" id="location" name="location" th:value="${group.location}"></td>
+                </tr>
+        	</table> -->
         </div>
     </div>
 

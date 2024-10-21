@@ -102,10 +102,10 @@ public class SocialGroupController {
                 .map(Interest::name)  // Enum의 이름(String)으로 변환
                 .collect(Collectors.toList());
     	
-    	// 이벤트 날짜 변환
-    	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    	LocalDateTime eventDateTime = LocalDate.parse(eventDate, formatter).atStartOfDay();
-        
+        // 이벤트 날짜 변환
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+        LocalDateTime eventDateTime = LocalDateTime.parse(eventDate, formatter);
+
     	// 가입 방법 Enum 변환
     	GroupJoinMethod groupJoinMethod = GroupJoinMethod.valueOf(joinMethod.toUpperCase());
         
@@ -116,7 +116,7 @@ public class SocialGroupController {
 
         // 그룹 생성
         try {
-            socialGroupService.create(interestAsString, groupName, eventDate, description, location, joinMethod, memberLimit, hashtagList, profileImage, user);
+            socialGroupService.create(interestAsString, groupName, eventDateTime, description, location, joinMethod, memberLimit, hashtagList, profileImage, user);
         } catch (IOException e) {
         	e.printStackTrace();
         }
@@ -351,7 +351,6 @@ public class SocialGroupController {
      */
     @PostMapping("/joinGroup")
     public ResponseEntity<Map<String, String>> joinGroup(
-//    public String joinGroup(
             @RequestParam("groupId") Integer groupId,
             @AuthenticationPrincipal AuthenticatedUser user) {
     	
@@ -360,17 +359,11 @@ public class SocialGroupController {
         SocialGroupEntity group = socialGroupRepository.findById(groupId)
                 .orElseThrow(() -> new IllegalArgumentException("잘못된 그룹 ID입니다."));
         
-        boolean isMember = userGroupRepository.existsByUser_UserIdAndGroup_GroupId(user.getId(), groupId);
+        boolean isMember = socialGroupService.isUserMemberOfGroup(String.valueOf(user.getId()), groupId);
         if (isMember) {
             response.put("errorMessage", "이미 그룹의 멤버입니다.");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
-//        // 이미 그룹에 가입된 멤버인지 확인
-//        boolean isMember = userGroupRepository.existsByUser_UserIdAndGroup_GroupId(user.getId(), groupId);
-//        if (isMember) {
-//            redirectAttributes.addFlashAttribute("error", "이미 그룹의 멤버입니다.");
-//            return "redirect:/socialgroup/socialing";
-//        }
         
         if (group.getGroupJoinMethod() == GroupJoinMethod.AUTO) {
             socialGroupService.addMemberToGroup(user.getId(), groupId);

@@ -20,8 +20,6 @@
             
             <br>
             
-            <h2 th:text="${groupName}"></h2>
-
             <div>가입 멤버</div>
             <ul class="members-list">
 			    <li th:each="member : ${members}">
@@ -82,16 +80,6 @@
 	                </tr>
 	
 	                <tr>
-	                    <td><label for="eventDate">이벤트 날짜:</label></td>
-	                    <td><input type="text" id="eventDate" name="eventDate" th:value="${eventDateFormatted}"></td>
-	                </tr>
-	
-	                <tr>
-	                    <td><label for="location">위치:</label></td>
-	                    <td><input type="text" id="location" name="location" th:value="${group.location}"></td>
-	                </tr>
-	
-	                <tr>
 	                    <td><label for="memberLimit">인원 제한:</label></td>
 	                    <td>
 	                        <div class="person-counter">
@@ -105,7 +93,16 @@
 	                
 	                <tr>
 	                	<td>멤버 관리:</td>
-	                	<td></td>
+	                	<td>
+					        <div class="member-management">
+					            <div class="member-list" style="max-height: 200px; overflow-y: auto;">
+					                <div th:each="member : ${members}">
+					                    <span th:text="${member.userId}"></span>
+					                    <button type="button" class="remove-member" th:data-user-id="${member.userId}">삭제</button>
+					                </div>
+					            </div>
+					        </div>
+					    </td>
 	                </tr>
 	                
 	                <tr>

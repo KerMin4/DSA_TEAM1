@@ -76,9 +76,8 @@ public class GroupBoardController {
         // 해당 그룹을 조회
         SocialGroupEntity group = socialGroupRepository.findById(groupId)
                 .orElseThrow(() -> new IllegalArgumentException("잘못된 그룹 ID입니다."));
-        
         // 그룹 이름 추가
-        model.addAttribute("groupName", group.getGroupName()); // 그룹 이름 추가
+        model.addAttribute("groupName", group.getGroupName());
         
         // 조회수 증가
         if (group.getViewCount() == null) {
@@ -87,45 +86,20 @@ public class GroupBoardController {
         group.setViewCount(group.getViewCount() + 1);
         socialGroupRepository.save(group);
         
-        // SocialGroupEntity에서 groupLeaderId를 가져옴
-        String groupLeaderId = group.getGroupLeader().getUserId();  // groupLeader에서 userId를 가져옴
-        
-        // 그룹 리더 정보 조회
-        UserEntity groupLeader = userRepository.findByUserId(groupLeaderId)
-                .orElseThrow(() -> new IllegalArgumentException("그룹 리더를 찾을 수 없습니다."));
-        // 그룹 멤버 조회
-        List<UserEntity> members = userGroupRepository.findActiveMembersByGroupId(groupId);
-        // 그룹 리더가 이미 멤버 목록에 포함되어 있는지 확인 후, 포함되지 않았다면 추가
-        boolean leaderInMembers = members.stream().anyMatch(member -> member.getUserId().equals(groupLeaderId));
-        if (!leaderInMembers) {
-            members.add(groupLeader);
-        }
-        // 멤버 목록 및 프로필 이미지 추가
-        List<Map<String, String>> memberProfiles = members.stream()
-                .map(member -> {
-                    Map<String, String> profile = new HashMap<>();
-                    profile.put("userId", member.getName());
-                    profile.put("profileImage", member.getProfileImage() != null ? member.getProfileImage() : "defaultProfile.png");
-                    return profile;
-                })
-                .collect(Collectors.toList());
-        
+        // 멤버 목록 및 리더 정보 가져오기
+        List<Map<String, String>> memberProfiles = groupBoardService.getMemberProfiles(groupId);
+        model.addAttribute("members", memberProfiles);
+
         // 현재 로그인한 유저가 그룹의 멤버인지 확인
-        boolean isMember = userGroupRepository.existsByUserAndGroupId(user.getId(), groupId);
-        // 그룹 리더도 멤버로 간주
-        if (!isMember && group.getGroupLeader().getUserId().equals(user.getId())) {
-            isMember = true;
-        }
+        boolean isMember = groupBoardService.isUserMemberOfGroup(user.getId(), groupId);
         model.addAttribute("isMember", isMember);
         
-        // 그룹 멤버일 때
+        // 그룹 멤버일 때와 비회원일 때 페이지 반환
         if (isMember) {
             model.addAttribute("group", group);
-            model.addAttribute("members", memberProfiles);
-            model.addAttribute("groupLeaderId", groupLeader.getUserId());
+            model.addAttribute("groupLeaderId", group.getGroupLeader().getUserId());
             return "groupboard/main";
         } else {
-            // 비회원일 경우
             model.addAttribute("group", group);
             return "socialgroup/joinGroupInvitation";
         }
@@ -138,15 +112,19 @@ public class GroupBoardController {
     @GetMapping("/announcement")
     public String announcementPage(
         @RequestParam("groupId") Integer groupId,
+        @AuthenticationPrincipal AuthenticatedUser user,
         Model model) {
     	
     	// 그룹 객체 조회
         SocialGroupEntity group = socialGroupRepository.findById(groupId)
             .orElseThrow(() -> new IllegalArgumentException("해당 그룹을 찾을 수 없습니다."));
 
-    	// groupId와 함께 group 객체를 모델에 추가하여 Thymeleaf 템플릿에서 사용 가능하도록 설정
         model.addAttribute("group", group);
 	    model.addAttribute("groupId", groupId);
+	    
+	    // 멤버 목록 및 리더 정보 가져오기
+	    List<Map<String, String>> memberProfiles = groupBoardService.getMemberProfiles(groupId);
+	    model.addAttribute("members", memberProfiles);
 	    
 	    return "groupboard/announcement";
     }
@@ -248,16 +226,46 @@ public class GroupBoardController {
     @GetMapping("/schedule")
     public String scheduleTab(
     		@RequestParam("groupId") Integer groupId,
+    		@AuthenticationPrincipal AuthenticatedUser user,
     		Model model) {
     	
     	// 그룹 객체 조회
         SocialGroupEntity group = socialGroupRepository.findById(groupId)
             .orElseThrow(() -> new IllegalArgumentException("해당 그룹을 찾을 수 없습니다."));
-    	
         model.addAttribute("group", group);
 	    model.addAttribute("groupId", groupId);
-        
+	    
+	    // 멤버 목록 및 리더 정보 가져오기
+	    List<Map<String, String>> memberProfiles = groupBoardService.getMemberProfiles(groupId);
+	    model.addAttribute("members", memberProfiles);
+
+	    // 날짜 포맷 설정
+	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+	    String formattedDateTime = group.getEventDate().format(formatter);
+	    model.addAttribute("eventDateFormatted", formattedDateTime);
+	    
         return "groupboard/schedule";
+    }
+    
+    /**
+     * 일정 업데이트 
+     */
+    @PostMapping("/schedule/update")
+    public ResponseEntity<?> updateSchedule(
+            @RequestParam("groupId") Integer groupId,
+            @RequestParam("eventDate") String eventDate,
+            @RequestParam("location") String location) {
+
+        SocialGroupEntity group = socialGroupRepository.findById(groupId)
+                .orElseThrow(() -> new IllegalArgumentException("잘못된 그룹 ID입니다."));
+
+        // 날짜 포맷 변경
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+        group.setEventDate(LocalDateTime.parse(eventDate, formatter));
+        group.setLocation(location);
+        socialGroupRepository.save(group);
+
+        return ResponseEntity.ok("일정이 성공적으로 업데이트되었습니다.");
     }
 
     /**
@@ -266,6 +274,7 @@ public class GroupBoardController {
     @GetMapping("/album")
     public String albumTab(
     		@RequestParam("groupId") Integer groupId,
+    		@AuthenticationPrincipal AuthenticatedUser user,
     		Model model
     		) {
     	
@@ -288,6 +297,10 @@ public class GroupBoardController {
 
         model.addAttribute("photos", photos);
         model.addAttribute("group", group);
+        
+        // 멤버 목록 및 리더 정보 가져오기
+	    List<Map<String, String>> memberProfiles = groupBoardService.getMemberProfiles(groupId);
+	    model.addAttribute("members", memberProfiles);
     	
         return "groupboard/album";
     }
@@ -362,15 +375,6 @@ public class GroupBoardController {
                     .imageName("/kkirikkiri/upload/" + photo.getImageName())
                     .build())
                 .collect(Collectors.toList());
-//            // 게시글에 연결된 사진 조회
-//            PhotoEntity photo = photoRepository.findByPost_PostId(postId).stream().findFirst()
-//                .orElseThrow(() -> new IllegalArgumentException("해당 게시글에 연결된 사진이 없습니다."));
-//
-//            PhotoDTO photoDTO = PhotoDTO.builder()
-//                .photoId(photo.getPhotoId())
-//                .imageName("/kkirikkiri/upload/" + photo.getImageName())
-//                .postId(photo.getPost() != null ? photo.getPost().getPostId() : null)
-//                .build();
 
             // user를 명시적으로 초기화
             String userId = post.getUser().getUserId();
@@ -384,13 +388,6 @@ public class GroupBoardController {
                     .createdAt(post.getCreatedAt())
                     .photos(photoDTOs)
                     .build();
-//            PostDTO postDTO = PostDTO.builder()
-//                .postId(post.getPostId())
-//                .userId(post.getUser().getUserId())
-//                .content(post.getContent())
-//                .createdAt(post.getCreatedAt())
-//                .photos(List.of(photoDTO))  // 단일 사진을 포함한 목록으로 설정
-//                .build();
 
             return ResponseEntity.ok(postDTO);
         } catch (Exception e) {
@@ -492,22 +489,18 @@ public class GroupBoardController {
         return ResponseEntity.ok(replies);  // 댓글 목록만 반환
     }
     
-    
     /**
-     * 그룹 설정 불러오기 (헤더 이미지 포함)
+     * 그룹 설정 불러오기
      */
     @GetMapping("/settings")
     public String getGroupSettings(
     		@RequestParam("groupId") Integer groupId,
+    		@AuthenticationPrincipal AuthenticatedUser user,
     		Model model) {
     	
     	// 그룹 객체 조회
         SocialGroupEntity group = socialGroupRepository.findById(groupId)
                 .orElseThrow(() -> new IllegalArgumentException("Group not found"));
-
-        // 날짜 포맷 설정
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String formattedDate = group.getEventDate().format(formatter);
 
         // 그룹 헤더 이미지 설정 (기본값이 없으면 default 이미지로)
         String groupProfileImage = (group.getProfileImage() != null) ? group.getProfileImage() : "noImage_icon.png";
@@ -518,9 +511,12 @@ public class GroupBoardController {
         // 모델에 그룹, 이벤트 날짜, 헤더 이미지 및 해시태그 추가
         model.addAttribute("group", group);
 	    model.addAttribute("groupId", groupId);
-        model.addAttribute("eventDateFormatted", formattedDate);
         model.addAttribute("groupProfileImage", groupProfileImage);
         model.addAttribute("hashtags", hashtags);
+        
+        // 멤버 목록 및 리더 정보 가져오기
+	    List<Map<String, String>> memberProfiles = groupBoardService.getMemberProfiles(groupId);
+	    model.addAttribute("members", memberProfiles);
 
         return "groupboard/settings";
     }
@@ -555,18 +551,17 @@ public class GroupBoardController {
             @RequestParam("groupId") Integer groupId,
             @RequestParam("groupName") String groupName,
             @RequestParam("description") String description,
-            @RequestParam("location") String location,
-            @RequestParam("eventDate") String eventDate,
             @RequestParam("interest") String interest,
             @RequestParam("joinMethod") String joinMethod,
             @RequestParam("memberLimit") Integer memberLimit,
+            @RequestParam("removedMembers") String removedMembers, // 추가된 삭제된 멤버 리스트
             @RequestParam("hashtags") String hashtags,  // 추가된 해시태그
             @RequestParam(value = "removedHashtags", required = false) String removedHashtags,  // 삭제된 해시태그
             @RequestParam(value = "profileImage", required = false) MultipartFile profileImage) {
 
     	try {
             // 그룹 정보 업데이트
-            groupBoardService.updateGroup(groupId, groupName, description, location, eventDate, interest, joinMethod, memberLimit, hashtags, removedHashtags, profileImage);
+            groupBoardService.updateGroup(groupId, groupName, description, interest, joinMethod, memberLimit, removedMembers, hashtags, removedHashtags, profileImage);
 
             SocialGroupEntity group = socialGroupRepository.findById(groupId)
                     .orElseThrow(() -> new IllegalArgumentException("해당 그룹을 찾을 수 없습니다."));
@@ -586,16 +581,15 @@ public class GroupBoardController {
             if (hashtags != null && !hashtags.trim().isEmpty()) {
                 String[] hashtagArray = hashtags.split(",");
                 for (String hashtag : hashtagArray) {
-                    // 해시태그 앞의 # 기호를 제거하고 공백을 트림
-                    String cleanHashtag = hashtag.trim().replace("#", "");
-                    if (!cleanHashtag.isEmpty() && !groupHashtagRepository.existsByGroupAndName(group, cleanHashtag)) {
-                        // 중복이 없는 경우에만 저장
-                        GroupHashtagEntity hashtagEntity = GroupHashtagEntity.builder()
-                            .group(group)
-                            .name(cleanHashtag)
-                            .build();
-                        groupHashtagRepository.save(hashtagEntity);  // 해시태그 저장
-                    }
+                	// DB에 저장할 때는 # 기호를 제거한 상태로 저장
+                	String cleanHashtag = hashtag.trim().replaceAll("^#+", "");
+                	if (!cleanHashtag.isEmpty() && !groupHashtagRepository.existsByGroupAndName(group, cleanHashtag)) {
+                	    GroupHashtagEntity hashtagEntity = GroupHashtagEntity.builder()
+                	        .group(group)
+                	        .name(cleanHashtag)
+                	        .build();
+                	    groupHashtagRepository.save(hashtagEntity);  // 해시태그 저장
+                	}
                 }
             }
 
