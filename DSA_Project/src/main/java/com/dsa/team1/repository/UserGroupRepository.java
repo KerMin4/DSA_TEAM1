@@ -40,6 +40,7 @@ public interface UserGroupRepository extends JpaRepository<UserGroupEntity, Inte
 
 	boolean existsByUser_UserIdAndGroup_GroupId(String userId, Integer groupId);
 	
+	void deleteByGroup_GroupIdAndUser_UserId(Integer groupId, String userId);
 
 
 	// 여기부터 내가 씀 -나연-
@@ -47,7 +48,5 @@ public interface UserGroupRepository extends JpaRepository<UserGroupEntity, Inte
 	Optional<UserGroupEntity> findByUser_UserIdAndGroup_GroupId(String userId, Integer groupId);
 	boolean existsByUser_UserIdAndGroup_GroupIdAndStatus(String userId, Integer groupId, UserGroupStatus status);
 
-    
-	
 
 }

@@ -20,17 +20,18 @@ $(function() {
         $('#memberLimit').val(memberLimit);  // input 필드의 값을 변경
     });
 
-    // 해시태그 추가 버튼 클릭 이벤트 수정
+    // 해시태그 추가 버튼 클릭 이벤트
 	$('#addHashtag').on('click', function() {
-	    var hashtagText = $('#hashtag').val().trim();
+	    var hashtagText = $('#hashtag').val().trim().replace(/^#/, ''); // 입력된 해시태그 앞의 # 기호 제거
 	    
-	    if (hashtagText !== '' && !hashtags.includes(hashtagText)) { // 빈 값 및 중복 체크
-	        hashtags.push(hashtagText);  // 해시태그 배열에 추가
-	        
+	    if (hashtagText !== '' && !hashtags.includes('#' + hashtagText)) { // 빈 값 및 중복 체크
+	        var formattedHashtag = '#' + hashtagText; // UI에서는 # 기호를 포함하여 보여줌
+			hashtags.push(hashtagText); // DB에 저장할 때는 # 기호를 제거한 값을 사용
+	
 	        // UI에 추가
 	        $('#hashtagContainer').append(
 	            '<span class="hashtag-item">' +
-	            '#' + hashtagText +
+	            formattedHashtag +
 	            ' <button type="button" class="remove-hashtag">삭제</button>' +
 	            '</span>'
 	        );
@@ -41,22 +42,19 @@ $(function() {
 	    }
 	});
 
-
     // 동적으로 생성된 해시태그 삭제 버튼에 대한 이벤트 바인딩
 	$(document).on('click', '.remove-hashtag', function() {
 	    var hashtagText = $(this).parent().text().replace(' 삭제', '').trim();
-	    
+
 	    if (hashtagText !== '') {
 	        hashtags = hashtags.filter(function(tag) {
 	            return tag !== hashtagText;
 	        });
 	
-	        removedHashtags.push(hashtagText);  // 삭제할 해시태그 추가
-	
-	        $(this).parent().remove();
+	        removedHashtags.push(hashtagText); // 삭제된 해시태그 배열에 추가
+        	$(this).parent().remove(); // UI에서 해시태그 삭제
 	    }
 	});
-
 
     // 헤더 이미지 관리 버튼 클릭 시 모달 열기
     $('#openHeaderImageModal').on('click', function() {
@@ -125,8 +123,16 @@ $(function() {
         uploadedImageFile = null; // 선택한 이미지 초기화
         $(this).hide(); // 삭제 버튼 숨기기
     });
+    
+    var removedMembers = []; // 삭제된 멤버 ID를 저장할 배열
+	// 멤버 삭제 버튼 클릭 이벤트
+	$(document).on('click', '.remove-member', function() {
+	    var userId = $(this).data('user-id');
+	    removedMembers.push(userId); // 삭제된 멤버 ID를 배열에 추가
+	    $(this).parent().remove(); // UI에서 해당 멤버 제거
+	});
 
-    // 그룹 업데이트 버튼 클릭 이벤트 (해시태그와 이미지를 함께 전송)
+    // 그룹 업데이트 버튼 클릭 이벤트
     $('#updateGroupBtn').on('click', function(e) {
         e.preventDefault();  // 폼의 기본 제출 방식 막기
 
@@ -137,7 +143,7 @@ $(function() {
 	    var validHashtags = hashtags.filter(function(tag) {
 	        return tag.trim() !== '';  // 빈 해시태그 필터링
 	    });
-		
+	    
         // 추가된 해시태그와 삭제된 해시태그 데이터를 추가
         formData.append('hashtags', hashtags.join(',')); // 추가된 해시태그
         formData.append('removedHashtags', removedHashtags.join(',')); // 삭제된 해시태그
@@ -146,6 +152,8 @@ $(function() {
         if (uploadedImageFile) {
             formData.append('profileImage', uploadedImageFile);
         }
+        
+        formData.append('removedMembers', removedMembers.join(',')); // 삭제된 멤버 ID 추가
 
         // AJAX로 폼 데이터 전송
         $.ajax({

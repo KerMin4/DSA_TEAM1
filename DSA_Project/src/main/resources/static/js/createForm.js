@@ -131,9 +131,9 @@ $(function() {
         }
 
         // 날짜와 시간을 조합하여 LocalDateTime 형식으로 변환
-        var eventDate = $('#eventDate').val(); // 날짜 값 가져오기 (yyyy-MM-dd 형식)
-        if (!eventDate) return alert('활동 날짜를 선택해주세요.');	// 필수 필드 검증
-		formData.set('eventDate', eventDate);  // FormData에 저장
+		var eventDate = $('#eventDate').val(); // 'yyyy-MM-ddTHH:mm' 형식으로 가져옴
+		if (!eventDate) return alert('활동 날짜와 시간을 선택해주세요.');
+		formData.set('eventDate', eventDate);
 
         // 필수 필드 검증
         if (!formData.get('interest')) return alert('관심사를 선택해주세요.');
