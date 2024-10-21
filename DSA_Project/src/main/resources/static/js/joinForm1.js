@@ -35,7 +35,7 @@ $(document).ready(function(){
         showStep(3);
     });
 
-    $('#submitForm').click(function() {
+    $('#submitForm').click(function(e) {
         var formData = new FormData(); // 이거 추가함. 프로필 사진 업로드하려면 있어야됨 -나연-
         var userid = $('#userid').val();
         var password = $('#password').val();

@@ -75,13 +75,17 @@ public class LoginController{
 	        @RequestParam("name") String name,
 	        @RequestParam("username") String username,
 	        @RequestParam("gender")Integer gender,
+	        @RequestParam("year")String year,
+	        @RequestParam("month")String month,
+	        @RequestParam("day")String day,
 	        @RequestParam("profileImage") MultipartFile profileImage// 프로필 사진 추가함 -나연-
 	) {
 	    log.debug("흥미: {}", interests);
 	    log.debug(location);
-	   
+	    log.debug("{} {} {}", year, month, day);
+	    int birth =  10000*Integer.parseInt(year) + 100 * Integer.parseInt(month) + Integer.parseInt(day);
 	    try {
-			us.join(userid, password, phone, email, location, name, username, gender, profileImage, interests);
+			us.join(userid, password, phone, email, location, name, username, gender, profileImage, interests, birth);
 		} catch (IOException e) {
 	
 			e.printStackTrace();
