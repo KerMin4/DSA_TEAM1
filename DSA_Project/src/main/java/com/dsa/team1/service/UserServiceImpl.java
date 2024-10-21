@@ -121,4 +121,23 @@ public class UserServiceImpl implements UserService {
             ur.save(user);
         }
     }
+    // 관심사 수정
+    @Override
+    public void updateInterests(String userId, List<String> interests) {
+    	
+        // 해당 사용자의 기존 관심사 삭제
+        List<InterestEntity> existingInterests = ir.findByUser_UserId(userId);
+        ir.deleteAll(existingInterests);
+
+        // 새로운 관심사 저장
+        UserEntity user = ur.findByUserId(userId).orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+        
+        for (String interest : interests) {
+            InterestEntity interestEntity = InterestEntity.builder()
+                    .user(user)
+                    .interest(interest)
+                    .build();
+            ir.save(interestEntity);
+        }
+    }
 }

@@ -83,7 +83,6 @@
     margin-left: 153px;
 }
 
-
 #profilePreview {
     max-width: 100%; 
     max-height: 150px; 
@@ -126,7 +125,6 @@
     transform: scale(1.5); 
 }
 
-
 .error-message {
     font-size: 12px;
     color: red;
@@ -134,11 +132,9 @@
     display: block;
 }
 
-
 .save-button {
     font-family: 'S-CoreDream-3Light', sans-serif; 
 }
-
 
 .location-edit-section {
     display: flex; 
@@ -159,6 +155,7 @@
     font-family: 'S-CoreDream-3Light', sans-serif; 
     color: #333; 
     margin-bottom: 20px;
+    font-size: 15px; 
 }
 
 #locationForm {
@@ -179,6 +176,9 @@
     font-family: 'S-CoreDream-3Light', sans-serif; 
     text-align: center; 
     margin-bottom: 15px; 
+    position: relative; 
+    top: -47px; 
+    left: 55px;
 }
 
 #location:focus {
@@ -186,9 +186,8 @@
     border-color: #E48F85; 
 }
 
-
 #findPlace {
-    color: 333; 
+    color: #333; 
     border: none; 
     padding: 10px 20px;   
     font-size: 14px; 
@@ -199,10 +198,12 @@
     margin-bottom: 15px; 
     width: 70%;          
     max-width: 100px;    
+    position: relative; 
+    left: -90px; 
+    top: 3px;
 }
 
 
-/* 저장 버튼 스타일 */
 #saveLocation {
     background-color: #E48F85; 
     color: white; 
@@ -215,7 +216,7 @@
     margin: 0 auto; 
     font-family: 'S-CoreDream-3Light', sans-serif; 
     transition: background-color 0.3s ease;
-    margin-top: -10px; 
+    margin-top: -70px; 
 }
 
 #saveLocation:hover {
@@ -229,12 +230,12 @@
     background-color: #f9f9f9;  
     display: inline-block;   
     margin-bottom: 20px;      
-    width: 120%;              
-    max-width: 600px;  
-    margin-top: -30px;   
+    width: 520px;  
+    height: 150px;             
+    margin-left: 10px; 
+    margin-top: -280px;
 }
 
-/* 제목 스타일 */
 .location-box h2 {
     font-family: 'S-CoreDream-3Light', sans-serif; 
     margin-bottom: 20px;     
@@ -246,5 +247,111 @@
     margin-bottom: 10px;     
 }
 
+.interest-box {
+    border: 2px solid #ccc; 
+    border-radius: 10px;   
+    padding: 15px;          
+    background-color: #f9f9f9;  
+    display: inline-block;   
+    margin-bottom: 20px;      
+    width: 550px;  
+    height: 260px; 
+    margin-top: -30px;   
+    box-sizing: border-box; 
+    margin-left: 10px; 
+}
 
 
+.interest-box h2 {
+    font-family: 'S-CoreDream-3Light', sans-serif; 
+    color: #333; 
+    margin-bottom: 20px;  
+    font-size: 15px; 
+    text-align: center; 
+}
+
+/* 관심사 체크박스 숨기기 */
+.interest-option input[type="checkbox"] {
+    display: none;
+}
+
+.interest-option label {
+    display: inline-block;
+    background-color: #f0f0f0;
+    color: 333;
+    border-radius: 20px; 
+    padding: 5px 10px; 
+    font-size: 14px; 
+    cursor: pointer;
+    font-family: 'S-CoreDream-3Light', sans-serif;
+    text-align: center;
+    transition: background-color 0.3s ease;
+    width: 55px; 
+    height: 27px; 
+    line-height: 27px; 
+    
+}
+
+.interest-option input[type="checkbox"]:checked + label {
+    background-color: #cccccc; 
+}
+
+.interest-option label:hover {
+    background-color: #cccccc; 
+}
+
+.interests-container {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 600px;
+    margin: 0 auto;
+    gap: -5px; 
+    justify-content: center; 
+    align-items: center; 
+    
+}
+
+.interests-row {
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+.interest-option {
+    margin: 10px;
+    margin-right: 20px; 
+}
+
+.interest-edit-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; 
+    margin-top: -190px; 
+
+}
+
+
+#saveInterests {
+    background-color: #E48F85; 
+    color: white; 
+    border: none; 
+    text-align: center; 
+    text-decoration: none; 
+    font-size: 14px; 
+    cursor: pointer; 
+    border-radius: 20px; 
+    width: 80px; 
+    height: 40px; 
+    position: absolute;
+    top: 590px;
+    left: 580px;
+    z-index: 10;
+}
+
+#saveLocation {
+    left: 17px;
+    position: relative; 
+}

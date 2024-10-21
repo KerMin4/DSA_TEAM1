@@ -24,7 +24,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-  
     const deleteButtons = document.querySelectorAll('.delete-btn');
     deleteButtons.forEach(function(button) {
         button.addEventListener('click', function(event) {
@@ -35,7 +34,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
- 
     const leaveButtons = document.querySelectorAll('.leave-btn');
     leaveButtons.forEach(function(button) {
         button.addEventListener('click', function(event) {
@@ -43,6 +41,15 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!confirmed) { 
                 event.preventDefault();
             }
+        });
+    });
+
+    // 그룹 카드를 클릭했을 때 해당 URL로 이동
+    const groupCards = document.querySelectorAll('.group-card');
+    groupCards.forEach(function(card) {
+        card.addEventListener('click', function() {
+            const groupUrl = card.getAttribute('data-group-url');
+            window.location.href = groupUrl;
         });
     });
 });

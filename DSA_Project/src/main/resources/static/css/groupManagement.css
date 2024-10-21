@@ -38,10 +38,11 @@
     width: 140px; 
     height: 149px; 
     object-fit: cover;
+    border-radius: 5%;
     margin-right: 20px; 
     align-self: center;    
     top: -1px; 
-    left: -1px; 
+    left: -5px; 
 }
 
 .group-text {
@@ -133,6 +134,7 @@ h2, p {
     font-size: 15px;
     margin: 0; 
 }
+
 .dropdown-content {
     display: none; 
     position: absolute;
@@ -165,4 +167,33 @@ h2, p {
 
 .group-text h2 a:hover::after {
     width: 100%; 
+}
+
+
+.group-title {
+    font-family: 'S-CoreDream-3Light', sans-serif;
+    font-size: 18px;
+    color: #333; 
+    margin-bottom: 20px;
+}
+
+
+.joined-group-title {
+    margin-left: 95px;
+    color: #333; 
+    font-family: 'S-CoreDream-3Light', sans-serif;
+    font-size: 18px;
+}
+
+.no-joined-group-message {
+    margin-left: 95px; 
+}
+
+.edit-btn {
+    color: #333;
+    border: none; 
+    text-align: center; 
+    text-decoration: none;
+    cursor: pointer; 
+    margin-left: -5px;
 }

@@ -22,7 +22,6 @@
                 <li><a th:classappend="${activePage == 'group-management'} ? 'active'" th:href="@{/dashboard/groupManagement}" id="group-management">그룹 관리</a></li>
                 <li><a th:classappend="${activePage == 'payment-management'} ? 'active'" th:href="@{/dashboard/paymentManagement}" id="payment-management">결제 관리</a></li>
                 <li><a th:classappend="${activePage == 'booking-history'} ? 'active'" th:href="@{/dashboard/bookingHistory}" id="booking-history">예약 내역</a></li>
-                
             </ul>
 
             <th:block sec:authorize="isAuthenticated()">
@@ -87,6 +86,65 @@
             </form>
         </div>
     </div>
+    
+ <div class="interest-edit-section">
+    <form id="interestsForm" th:action="@{/dashboard/editInterests}" method="post">
+      <div class="interest-box">
+        <h2>취향이 달라졌다면, 다시 선택해보세요!</h2>
+        <div class="interests-container">
+          
+            <div class="interests-row">
+                <div class="interest-option">
+                    <input type="checkbox" id="hobby" name="interests" value="HOBBY">
+                    <label for="hobby">취미</label>
+                </div>
+                <div class="interest-option">
+                    <input type="checkbox" id="development" name="interests" value="DEVELOPMENT">
+                    <label for="development">자기계발</label>
+                </div>
+                <div class="interest-option">
+                    <input type="checkbox" id="food" name="interests" value="FOOD">
+                    <label for="food">푸드</label>
+                </div>
+                <div class="interest-option">
+                    <input type="checkbox" id="activity" name="interests" value="ACTIVITY">
+                    <label for="activity">액티비티</label>
+                </div>
+                <div class="interest-option">
+                    <input type="checkbox" id="pets" name="interests" value="PETS">
+                    <label for="pets">반려동물</label>
+                </div>
+            </div>
+
+            <!-- 두 번째 줄: 하단 5개 -->
+            <div class="interests-row">
+                <div class="interest-option">
+                    <input type="checkbox" id="culture" name="interests" value="CULTURE">
+                    <label for="culture">문화</label>
+                </div>
+                <div class="interest-option">
+                    <input type="checkbox" id="money" name="interests" value="MONEY">
+                    <label for="money">재테크</label>
+                </div>
+                <div class="interest-option">
+                    <input type="checkbox" id="love" name="interests" value="LOVE">
+                    <label for="love">연애</label>
+                </div>
+                <div class="interest-option">
+                    <input type="checkbox" id="game" name="interests" value="GAME">
+                    <label for="game">게임</label>
+                </div>
+                <div class="interest-option">
+                    <input type="checkbox" id="travel" name="interests" value="TRAVEL">
+                    <label for="travel">여행</label>
+                </div>
+            </div>
+        </div>
+      </div>
+      <button type="submit" id="saveInterests" class="save-button">저장</button>
+    </form>
+</div>
+
 
     <!-- 프로필 이미지 수정 모달 -->
     <div id="profileImageModal" class="modal">

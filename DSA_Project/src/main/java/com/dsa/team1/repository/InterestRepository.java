@@ -11,4 +11,6 @@ import com.dsa.team1.entity.InterestEntity;
 public interface InterestRepository extends JpaRepository<InterestEntity, Long> {
 	@Query("SELECT i FROM InterestEntity i WHERE i.user.userId = :userId")
 	List<String> findByUserId(String userId);
+
+	List<InterestEntity> findByUser_UserId(String userId);
 }
