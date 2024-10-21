@@ -23,7 +23,7 @@ public interface SocialGroupService {
 	
 	List<SocialGroupEntity> findAllGroups();
 
-	List<SocialGroupEntity> searchGroups(String query, String category, String location);
+	List<SocialGroupEntity> searchGroups(String query, String category, String location, String sort);
 
 	void toggleBookmark(UserEntity userEntity, SocialGroupEntity group);
 

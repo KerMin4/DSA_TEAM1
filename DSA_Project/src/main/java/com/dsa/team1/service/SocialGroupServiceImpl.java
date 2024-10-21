@@ -3,6 +3,7 @@ package com.dsa.team1.service;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -147,7 +148,7 @@ public class SocialGroupServiceImpl implements SocialGroupService {
      * @return 필터링된 그룹 리스트
      */
 	@Override
-	public List<SocialGroupEntity> searchGroups(String query, String category, String location) {
+	public List<SocialGroupEntity> searchGroups(String query, String category, String location, String sort) {
 
 	    // 1. 해시태그나 그룹 이름/설명으로 검색
 	    List<SocialGroupEntity> groups = new ArrayList<>();
@@ -175,14 +176,14 @@ public class SocialGroupServiceImpl implements SocialGroupService {
 	            log.error("유효하지 않은 카테고리 값: {}", category);
 	        }
 	    }
-
 	    // 필터링된 결과 반환 (query가 없을 경우, 필터링만 실행)
 	    if (location != null || interestCategory != null) {
-	        groups = socialGroupRepository.filterGroups(query, null, location, interestCategory);
+	        groups = socialGroupRepository.filterGroups(query, null, location, interestCategory, sort);
 	    }
-
-	    // 중복 제거
-	    return groups.stream().distinct().collect(Collectors.toList());
+	    
+	    return groups;
+//	    // 중복 제거
+//	    return groups.stream().distinct().collect(Collectors.toList());
 	}
 	
 	/**
