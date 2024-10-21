@@ -1,6 +1,23 @@
 $(document).ready(function () {
-    
-    // 닉네임 유효성 검사
+
+   
+  
+    $('input[name="interests"]').change(function() {
+        const checkedInterests = $('input[name="interests"]:checked').length;
+
+     
+        if (!$(this).is(':checked')) {
+            console.log('관심사 선택 해제됨:', $(this).val());
+        }
+
+      
+        if (checkedInterests > 5) {
+            alert('취향은 다섯 개까지 선택 가능해요.');
+            $(this).prop('checked', false); 
+        }
+    });
+
+  
     function validateNicknameForm() {
         let isValid = true;
         const nickname = $('#nickname').val();
@@ -18,7 +35,7 @@ $(document).ready(function () {
         return isValid;
     }
 
-    // 비밀번호 유효성 검사
+   
     function validatePasswordForm() {
         let isValid = true;
         const password = $('#password').val();
@@ -44,7 +61,7 @@ $(document).ready(function () {
         return isValid;
     }
 
-    // 전화번호 유효성 검사
+    
     function validatePhoneForm() {
         let isValid = true;
         const phone = $('#phone').val();
@@ -62,7 +79,7 @@ $(document).ready(function () {
         return isValid;
     }
 
-    // 프로필 이미지 유효성 검사
+   
     function validateProfileImageForm() {
         let isValid = true;
         const file = $('#profileImageInput').prop('files')[0];
@@ -79,7 +96,19 @@ $(document).ready(function () {
         return isValid;
     }
 
-    // 입력 폼 초기화
+  
+    function validateInterestsForm() {
+        const checkedInterests = $('input[name="interests"]:checked').length;
+        
+        if (checkedInterests === 0) {
+            alert('관심사를 하나 이상 선택해주세요.');
+            return false;
+        }
+
+        return true;
+    }
+
+    
     function resetForms() {
         $('#nickname').val('');
         $('#password').val('');
@@ -97,26 +126,26 @@ $(document).ready(function () {
         console.log('폼 초기화됨');
     }
 
-    // 모달 열기
+  
     function openModal(modalId) {
         console.log(modalId + ' 열림');
-        $(modalId).addClass('show'); // 모달을 열 때 클래스 추가
+        $(modalId).addClass('show'); 
     }
 
-    // 모달 닫기
+   
     function closeModal(modalId) {
         console.log(modalId + ' 닫힘');
-        $(modalId).removeClass('show'); // 모달을 닫을 때 클래스 제거
-        resetForms(); // 폼 초기화
+        $(modalId).removeClass('show'); 
+        resetForms(); 
     }
 
-    // 닫기 버튼 클릭 시 모달 닫기
+   
     $('.close').click(function () {
         closeModal($(this).closest('.modal'));
         console.log('모달 닫기 버튼 클릭됨');
     });
 
-    // 모달 외부 클릭 시 닫기
+   
     $(window).click(function (event) {
         if ($(event.target).hasClass('modal')) {
             closeModal($(event.target));
@@ -124,20 +153,20 @@ $(document).ready(function () {
         }
     });
 
-    // 펜 아이콘 클릭 시 수정 모달 열기
+  
     $('#editProfileIcon').click(function () {
         console.log('펜 아이콘이 정상적으로 렌더링됨');
         openModal('#editProfileModal');
     });
 
-    // 카메라 아이콘 클릭 시 프로필 이미지 수정 모달 열기
+   
     $('#cameraIcon').click(function () {
         resetForms();
         openModal('#profileImageModal');
         console.log('카메라 아이콘 클릭됨, 프로필 이미지 모달 열림');
     });
 
-    // 닉네임 변경 버튼 클릭 시
+  
     $('#nicknameChangeForm .save-button').click(function (event) {
         event.preventDefault();
         if (validateNicknameForm()) {
@@ -146,7 +175,7 @@ $(document).ready(function () {
         }
     });
 
-    // 비밀번호 변경 버튼 클릭 시
+  
     $('#passwordChangeForm .save-button').click(function (event) {
         event.preventDefault();
         if (validatePasswordForm()) {
@@ -155,7 +184,7 @@ $(document).ready(function () {
         }
     });
 
-    // 전화번호 변경 버튼 클릭 시
+   
     $('#phoneChangeForm .save-button').click(function (event) {
         event.preventDefault();
         if (validatePhoneForm()) {
@@ -164,13 +193,13 @@ $(document).ready(function () {
         }
     });
 
-    // 프로필 이미지 변경 버튼 클릭 시
+   
     $('#fileSelectButton').click(function () {
         console.log('파일 선택 버튼 클릭됨');
         $('#profileImageInput').click();
     });
 
-    // 파일 선택 후 프로필 이미지 미리보기
+   
     $('#profileImageInput').change(function () {
         const file = $(this).prop('files')[0];
         if (file) {
@@ -183,7 +212,7 @@ $(document).ready(function () {
         }
     });
 
-    // 프로필 이미지 변경 버튼 클릭 시
+   
     $('#profileImageForm .save-button').click(function (event) {
         event.preventDefault();
         if (validateProfileImageForm()) {
@@ -192,13 +221,13 @@ $(document).ready(function () {
         }
     });
 
-    // 지역 찾기 버튼 클릭 시 새 창 열기
+   
     $('#findPlace').click(function () {
         console.log('지역 찾기 버튼 클릭됨');
         window.open('/kkirikkiri/member/mapTest', '지역찾기', 'fullscreen');
     });
 
-    // 저장 버튼 클릭 시
+
     $('#saveLocation').click(function () {
         const location = $('#location').val();
         console.log('입력된 위치 값:', location);
@@ -207,6 +236,15 @@ $(document).ready(function () {
             $('#locationForm').submit();
         } else {
             alert("위치를 입력해주세요.");
+        }
+    });
+
+    
+    $('#interestsForm .save-button').click(function (event) {
+        event.preventDefault();
+        if (validateInterestsForm()) {
+            console.log('관심사 저장 폼 제출됨');
+            $('#interestsForm').submit();
         }
     });
 });

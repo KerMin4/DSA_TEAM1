@@ -22,6 +22,7 @@ public interface UserService {
     void updatePhone(String userId, String phone);
     void updatePassword(String userId, String password); 
     void updateLocation(String userId, String location);
+	void updateInterests(String userId, List<String> interests);
 }
 
 
