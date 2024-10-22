@@ -33,4 +33,49 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    overflow: hidden; /* 스크롤바 제거 */
+}
+
+/* ======================= 포인트 색상 적용 ======================= */
+.schedule-details button {
+    background-color: #E48F85;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 8px; /* 버튼 패딩 축소 */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px; /* 버튼과 다른 요소 간격 축소 */
+}
+
+.schedule-details button:hover {
+    background-color: #d0786e;
+}
+
+#saveButton {
+    background-color: #E48F85;
+}
+
+table {
+    width: 30%;
+    margin-top: 10px; /* 테이블 위 간격 축소 */
+}
+
+table td {
+    padding: 5px; /* 테이블 셀 패딩 축소 */
+    vertical-align: middle;
+}
+
+#eventDateDisplay, #locationDisplay {
+    margin: 2px 0; /* 표시 텍스트 위아래 간격 축소 */
+    font-size: 14px;
+    color: #333;
+}
+
+#locationInput {
+    width: 100%;
+    padding: 4px; /* 텍스트에리어 안쪽 여백 설정 */
+    border-radius: 5px; /* 둥근 모서리 */
+    border: 1px solid #ccc; /* 경계선 추가 */
+    resize: none; /* 크기 조절 비활성화 */
 }

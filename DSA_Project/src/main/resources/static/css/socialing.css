@@ -48,7 +48,7 @@
     right: 60px;
     width: 90px;
     height: 90px;
-    background-color: rgba(74, 144, 226, 0.8);
+    background-color: #E48F85;
     color: white;
     border: none;
     border-radius: 50%;
@@ -63,7 +63,9 @@
 }
 
 .create-btn:hover {
-    background-color: #0056b3;
+    background-color: #d34838;
+    transform: translateY(-1px); /* **호버 시 살짝 위로 올라가는 효과** */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* **호버 시 그림자 진하게** */
 }
 
 /* ======================= 버튼 및 토글 스타일 ======================= */
@@ -79,7 +81,7 @@
 
 /* 검색어 강조 스타일 */
 .highlight-query {
-    color: #FF4081;
+    color: #E48F85;
     font-weight: bold;
 }
 
@@ -100,34 +102,139 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    overflow: hidden; /* 스크롤바 제거 */
 }
 
-/* ============================================== */
-
-.group-image {
-    width: 200px;
-    height: 200px;
-    object-fit: cover;
+/* ======================= 메인 콘텐츠 스타일 ======================= */
+.main-content {
+    flex: 1; /* 남은 공간을 채우도록 설정 */
+    padding: 20px;
+    max-width: 1200px; /* 메인 콘텐츠의 최대 너비 제한 */
+    margin: 0 auto; /* 가운데 정렬 */
+    box-sizing: border-box; /* 패딩과 너비를 포함하여 크기 계산 */
 }
 
-/* ============================================== */
+/* ===================== 해시태그 스타일 ===================== */
 .hashtags {
     white-space: normal; /* 줄바꿈 허용 */
+    border-radius: 10px;
 }
 
 .hashtags div {
     display: flex; /* 해시태그가 가로로 나열되도록 강제 */
     flex-wrap: wrap; /* 공간이 부족할 경우 다음 줄로 넘어가도록 */
-    gap: 10px; /* 해시태그 간의 간격을 지정 */
+    gap: 6px; /* 해시태그 간의 간격을 지정 */
 }
 
 .hashtags div span {
-    display: inline-block; /* 해시태그를 가로로 정렬 */
-    margin-right: 10px; /* 해시태그 간 여백 */
-    padding: 5px; /* 여백을 주어 해시태그 간 간격을 일정하게 */
-    background-color: #f1f1f1; /* 해시태그 배경색 */
-    border-radius: 5px; /* 해시태그 모서리 둥글게 */
-    white-space: nowrap; /* 해시태그 텍스트 줄바꿈 방지 */
+    display: inline-block;
+    padding: 7px 8px;
+    background-color: #ffffff; /* 내부 배경색을 화이트로 설정 */
+    color: #E48F85; /* 텍스트 색상을 핑크색으로 설정 */
+    border: 2px solid #E48F85; /* 테두리를 핑크색으로 설정 */
+    border-radius: 20px; /* 둥근 모서리 */
+    font-size: 14px;
+    transition: background-color 0.1s, color 0.1s, transform 0.1s; /* 배경색 및 이동 애니메이션 */
+    cursor: pointer;
+}
+
+.hashtags div span:hover {
+    background-color: #E48F85; /* 호버 시 배경색을 핑크로 변경 */
+    color: #ffffff; /* 호버 시 텍스트 색상을 화이트로 변경 */
+}
+
+/* 선택된 해시태그 스타일 */
+.hashtags div span.selected {
+    background-color: #E48F85; /* 선택된 동안 배경색을 핑크로 유지 */
+    color: #ffffff; /* 선택된 동안 텍스트 색상을 화이트로 유지 */
+}
+
+/* ===================== 그룹 카드 ======================= */
+
+/* 그룹 리스트를 감싸는 컨테이너에 그리드 레이아웃 적용 */
+.group-listing {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 두 개의 열로 나누기 */
+    gap: 20px 40px; /* 카드들 사이의 간격 */
+    padding: 10px; /* 그룹 리스트의 전체 패딩 */
+    max-width: 1200px; /* 최대 너비 설정 */
+    margin: 0 auto; /* 가운데 정렬 */
+}
+
+/* 그룹 카드 스타일 */
+.group-card {
+    background-color: #ffffff; /* 그룹 카드의 배경색 */
+    border: 1px solid #ddd; /* 카드 테두리 */
+    border-radius: 10px; /* 카드 모서리를 둥글게 */
+    padding: 15px; /* 카드 내부 여백 */
+    position: relative;
+    cursor: pointer; /* 포인터 적용 */
+    box-sizing: border-box;
+    display: flex; /* 카드 내의 내용 정렬을 위한 플렉스 설정 */
+    align-items: center;
+    gap: 15px; /* 이미지와 텍스트 사이 간격 */
+    margin-bottom: 20px;
+}
+
+.group-image {
+    width: 140px; /* 이미지 너비 */
+    height: 150px; /* 이미지 높이 */
+    object-fit: cover; /* 이미지 비율 유지 */
+    border-radius: 10px; /* 이미지 모서리를 둥글게 */
+}
+
+.group-info {
+    display: flex; /* 그룹 정보를 가로로 정렬 */
+    flex-direction: column; /* 수직 정렬 */
+    justify-content: center; /* 중앙 정렬 */
+}
+
+.group-info h3 {
+    margin: 0;
+    font-size: 18px; /* 제목 크기 설정 */
+    color: #333; /* 제목 색상 */
+}
+
+.group-info p {
+    margin: 5px 0; /* **텍스트 간격 줄이기** */
+    color: #666; /* 텍스트 색상 */
+    font-size: 14px; /* 텍스트 크기 */
+}
+
+.join-btn {
+    background-color: #E48F85; /* 버튼 배경색 */
+    color: #fff; /* 텍스트 색상 */
+    border: none; /* 테두리 제거 */
+    border-radius: 5px; /* 둥근 모서리 */
+    padding: 8px 12px;
+    cursor: pointer; /* 포인터 적용 */
+    transition: background-color 0.2s;
+}
+
+.join-btn:hover {
+    background-color: #d34838; /* 호버 시 색상 */
+}
+
+.bookmark-btn {
+    position: absolute;
+    top: 10px; /* 원하는 위치로 조정 */
+    right: 10px; /* 오른쪽 상단에 배치 */
+    z-index: 10; /* 카드보다 높은 레이어에 표시 */
+    background: rgba(255, 255, 255, 0.8); /* 배경을 반투명하게 설정해 버튼이 잘 보이도록 */
+    border: none;
+    cursor: pointer;
+    pointer-events: auto; /* 버튼 클릭이 그룹 카드 클릭보다 우선되도록 설정 */
+}
+
+.bookmark-icon {
+    width: 35px; /* 아이콘 크기 조정 */
+    height: 30px;
+    opacity: 0.6;
+    transition: transform 0.2s; /* 클릭 시 애니메이션 */
+}
+
+.bookmark-btn:hover .bookmark-icon {
+    transform: scale(1.1); /* 호버 시 확대 효과 */
 }
 
 /* ================== 관심사 카테고리 ============================ */
@@ -191,6 +298,47 @@ body {
     color: white;
 }
 
+/* ======================= 링크 스타일 ======================= */
+a {
+    text-decoration: none; /* 링크의 밑줄 제거 */
+    color: inherit; /* 텍스트 색상을 상속받아 자연스럽게 유지 */
+}
 
+a:hover {
+    text-decoration: none; /* 호버 시에도 밑줄이 나타나지 않도록 설정 */
+}
 
+/* ======================= 검색어 입력 필드와 버튼 스타일 ======================= */
 
+.search {
+    display: flex; /* 가로 정렬 */
+    align-items: center; /* 중앙 정렬 */
+    gap: 5px; /* 입력창과 버튼 사이 간격 */
+    background-color: #ffffff;
+    padding: 5px;
+    border-radius: 25px;
+    margin-bottom: 20px;
+    flex-wrap: wrap; /* 사이드바 크기에 따라 줄바꿈 */
+}
+
+.search input[type="text"] {
+    flex: 1; /* 입력창이 가능한 공간을 최대한 사용 */
+    padding: 10px; /* 내부 패딩 */
+    border: 1px solid #c0c0c0; /* 테두리 색상 */
+    border-radius: 5px; /* 둥근 모서리 */
+    font-size: 14px; /* 텍스트 크기 */
+}
+
+.search input[type="submit"] {
+    padding: 8px 10px; /* 버튼 패딩 */
+    background-color: #E48F85; /* 버튼 배경색 */
+    color: #fff; /* 버튼 텍스트 색상 */
+    border: none; /* 테두리 제거 */
+    border-radius: 5px; /* 둥근 모서리 */
+    font-size: 14px; /* 버튼 텍스트 크기 */
+    cursor: pointer; /* 클릭 가능한 포인터 표시 */
+}
+
+.search input[type="submit"]:active {
+    transform: translateY(1px); /* 클릭 시 약간 눌리는 효과 */
+}

@@ -33,4 +33,76 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    overflow: hidden; /* 스크롤바 제거 */
+}
+
+/* ======================= 공지사항 스타일 ======================= */
+
+#announcementList {
+    max-width: 800px; /* 공지사항 리스트 최대 넓이 설정 */
+    border-radius: 10px; /* 모서리를 둥글게 */
+    padding: 15px;
+}
+
+.announcement {
+    background-color: #FFFFFF; /* 공지사항 카드 배경색 */
+    border-radius: 5px; /* 모서리를 둥글게 */
+    margin-bottom: 10px; /* 카드 사이 간격 */
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.announcement-content {
+    flex: 1;
+    margin: 0 10px;
+    font-size: 16px;
+    color: #333;
+}
+
+#postAnnouncement {
+    background-color: #E48F85; /* 버튼 배경색 */
+    color: #FFFFFF;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#postAnnouncement:hover {
+    background-color: #d76e6e; /* 호버 시 약간 어두운 색상 */
+}
+
+.saveEdit, .editAnnouncement, .deleteAnnouncement {
+    background-color: #ccc;
+    color: #FFFFFF;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 5px;
+    margin-left: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.saveEdit:hover, .editAnnouncement:hover, .deleteAnnouncement:hover {
+    background-color: #6ab8de; /* 호버 시 약간 어두운 색상 */
+}
+
+textarea#announcementText {
+    width: 800px;
+    border: 1px solid #666;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 14px;
+    resize: none;
+    margin-bottom: 10px;
+}
+
+/* 공지사항이 없을 때 텍스트 스타일 */
+#announcementList p {
+    text-align: center;
+    color: #555;
+    font-size: 14px;
 }

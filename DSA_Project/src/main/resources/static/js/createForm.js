@@ -99,8 +99,18 @@ $(function() {
         }
         formData.hashtags = formData.hashtags || [];
         formData.hashtags.push(hashtagValue);
-        var newHashtag = $('<span></span>').addClass('hashtag')
-            .html('#' + hashtagValue + ' <button class="remove-hashtag">삭제</button>');
+        
+        // 동적으로 생성되는 해시태그 요소
+	    var newHashtag = $(`
+	        <div class="hashtag-wrapper">
+	            <span class="hashtag">#${hashtagValue}</span>
+	            <button class="remove-hashtag">
+	                <img src="../images/delete.png" alt="삭제" class="delete-icon">
+	            </button>
+	        </div>
+	    `);
+        /*var newHashtag = $('<span></span>').addClass('hashtag')
+            .html('#' + hashtagValue + '</span><button class="remove-hashtag"></button>');*/
         $('#hashtagContainer').append(newHashtag);
         hashtagInput.val('');
 
@@ -109,7 +119,8 @@ $(function() {
 
     // Hashtag removal
     $(document).on('click', '.remove-hashtag', function() {
-        var hashtagText = $(this).parent().text().replace(' 삭제', '');
+		var hashtagText = $(this).siblings('.hashtag').text().replace('#', '').trim();
+        /*var hashtagText = $(this).parent().text().replace(' 삭제', '');*/
         formData.hashtags = formData.hashtags.filter(function(tag) {
             return tag !== hashtagText;
         });
