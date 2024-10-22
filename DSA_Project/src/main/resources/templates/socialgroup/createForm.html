@@ -35,19 +35,19 @@
 	        <div class="form-section">
 	            <form id="createForm" th:action="@{/socialgroup/create}" method="post" enctype="multipart/form-data">
 	                <div class="category-container">
-					    <label><input type="radio" class="radio" name="interest" value="HOBBY"> 취미</label>
-					    <label><input type="radio" class="radio" name="interest" value="DEVELOPMENT"> 자기계발</label>
-					    <label><input type="radio" class="radio" name="interest" value="FOOD"> 푸드</label>
-					    <label><input type="radio" class="radio" name="interest" value="ACTIVITY"> 액티비티</label>
-					    <label><input type="radio" class="radio" name="interest" value="PETS"> 반려동물</label>
-					    <label><input type="radio" class="radio" name="interest" value="CULTURE"> 문화</label>
-					    <label><input type="radio" class="radio" name="interest" value="MONEY"> 재테크</label>
-					    <label><input type="radio" class="radio" name="interest" value="LOVE"> 연애</label>
-					    <label><input type="radio" class="radio" name="interest" value="GAME"> 게임</label>
-					    <label><input type="radio" class="radio" name="interest" value="TRAVEL"> 여행</label>
+					    <input type="radio" id="hobby" class="radio" name="interest" value="HOBBY"><label for="hobby">취미</label>
+					    <input type="radio" id="development" class="radio" name="interest" value="DEVELOPMENT"><label for="development">자기계발</label>
+					    <input type="radio" id="food" class="radio" name="interest" value="FOOD"><label for="food">푸드</label>
+					    <input type="radio" id="activity" class="radio" name="interest" value="ACTIVITY"><label for="activity">액티비티</label>
+					    <input type="radio" id="pets" class="radio" name="interest" value="PETS"><label for="pets">반려동물</label>
+					    <input type="radio" id="culture" class="radio" name="interest" value="CULTURE"><label for="culture">문화</label>
+					    <input type="radio" id="money" class="radio" name="interest" value="MONEY"><label for="money">재테크</label>
+					    <input type="radio" id="love" class="radio" name="interest" value="LOVE"><label for="love">연애</label>
+					    <input type="radio" id="game" class="radio" name="interest" value="GAME"><label for="game">게임</label>
+					    <input type="radio" id="travel" class="radio" name="interest" value="TRAVEL"><label for="travel">여행</label>
 					</div>
 	
-	                <table>
+	                <table class="form-table">
 		                <tr>
 		                    <td>
                                 <img id="imagePreview" style="display: block;">
@@ -55,7 +55,7 @@
                         	</td>
 		                </tr>
 		                <tr>
-		                    <td>
+		                    <td colspan="2">
 		                        <input type="text" name="groupName" id="groupName" placeholder="그룹이름을 입력하세요.">
 		                    </td>
 		                    <td>
@@ -70,10 +70,10 @@
 		                    </td>
 		                </tr>
 		                <tr>
-		                    <td>
+		                    <td colspan="5">
 		                        <textarea name="description" id="description" placeholder="그룹에 대해 소개해보세요! ex. 취미계발 모임입니다."></textarea>
 		                    </td>
-		                    <td>
+		                    <td colspan="3">
 		                        <!-- 모달을 열기 위한 버튼 -->
                                 <button type="button" id="openHeaderImageModal">헤더 이미지 업로드</button>
 		                    </td>
@@ -81,7 +81,8 @@
 		                <tr>
 		                    <td>위치 설정</td>
 		                    <td>
-		                        <input type="text" name="location" id="location" placeholder="구 단위만 선택 가능해요">
+		                    	<input type="button" id="findPlace" value="지역 찾기"><br>
+            					<input type="text" id="location" name="location" placeholder="구 단위만 선택 가능해요"><br>
 		                    </td>
 						    <td>가입 권한</td>
 						    <td>
@@ -90,16 +91,22 @@
 						    </td>
 						</tr>
 		                <tr>
-		                    <td>
-		                        <input type="text" name="hashtag" id="hashtag" placeholder="해쉬태그 입력">
-		                        <input type="button" id="addHashtag" value="등록">
+		                    <td colspan="2">
+		                        <div class="hashtag-input-wrapper">
+						            <input type="text" name="hashtag" id="hashtag" placeholder="해시태그 입력">
+						            <input type="button" id="addHashtag" value="등록">
+						        </div>
+						    </td>
+		                </tr>
+		                <tr>
+		                	<td>
 		                        <div id="hashtagContainer">
 		                            <!-- 해시태그가 여기에 추가됨 -->
 		                        </div>
 		                    </td>
 		                </tr>
 		                <tr>
-		                    <td>
+		                    <td colspan="5" style="text-align: center;">
 		                        <input type="submit" id="submitForm" value="그룹 생성">
 		                    </td>
 		                </tr>
