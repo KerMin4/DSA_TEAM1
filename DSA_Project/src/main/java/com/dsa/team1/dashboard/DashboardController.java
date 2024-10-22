@@ -243,22 +243,10 @@ public class DashboardController {
         return "redirect:/dashboard/mypage";
     }
 
-    /* 위치 수정
-    @PostMapping("editLocation")
-    public String editLocation(@AuthenticationPrincipal AuthenticatedUser authenticatedUser,
-                               @RequestParam("location") String location,
-                               RedirectAttributes redirectAttributes) {
-        String userId = authenticatedUser.getUsername();
-        userService.updateLocation(userId, location);
-        redirectAttributes.addFlashAttribute("message", "위치가 변경되었습니다.");
-        return "redirect:/dashboard/mypage";
-    }
-    */
-    
- /* 관심사 수정
+    // 관심사 수정
     @PostMapping("editInterests")
     public String editInterests(@AuthenticationPrincipal AuthenticatedUser authenticatedUser,
-                                @RequestParam("interests") List<String> interests, // 선택된 관심사를 리스트로 받음
+                                @RequestParam("interests") List<String> interests, // 사용자가 선택한 관심사 리스트
                                 RedirectAttributes redirectAttributes) {
         String userId = authenticatedUser.getUsername();
         try {
@@ -269,8 +257,6 @@ public class DashboardController {
         }
         return "redirect:/dashboard/mypage";
     }
-    
-    */
     
     // 위치 수정
     @PostMapping("editLocation")

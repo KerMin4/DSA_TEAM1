@@ -315,7 +315,7 @@ button {
 #form-step3 input[type="email"],
 #userid {
     width: 100%; 
-    max-width: 300px;
+    max-width: 200px;
     padding: 10px 5px;
     margin: 10px 0;
     border: none;
@@ -379,7 +379,8 @@ button {
 
 select.box {
   width: 100%;
-  height: 50px;
+  height: 40px;
+   max-height: 50px; 
   box-sizing: border-box;
   margin-left: 5px;
   padding: 5px 0 5px 10px;
@@ -387,11 +388,16 @@ select.box {
   border: 1px solid #d9d6d6;
   color: #383838;
   background-color: #ffffff;
-  font-family: 'Montserrat', 'Pretendard', sans-serif;
+  font-family: 'S-CoreDream-3Light', sans-serif; 
+   overflow: hidden; 
 }
 
 option {
   font-size: 16px;
+}
+
+select.box option {
+    height: 30px; /* 드롭다운 리스트 내 항목 높이 설정 */
 }
 
 .info#info_birth {
@@ -408,10 +414,12 @@ option {
 
 .info#gender{
 	display: flex;
+}
 
 .region-heading {
     font-size: 20px; 
     text-align: center;
+    margin-top: -10px; 
 }
 
 
@@ -424,9 +432,9 @@ option {
 }
 
 #form-step2 input[type="button"] {
-    width: 100%; 
-    max-width: 100px;
-    padding: 10px 20px; 
+    width: 120%; 
+    max-width: 90px; 
+    padding: 10px 25px; 
     border-bottom: 1px solid #ccc;
     border: none; 
     border-radius: 15px; 
@@ -436,12 +444,14 @@ option {
     cursor: pointer; 
     transition: background-color 0.3s ease; 
     margin-bottom: 10px;
+    margin-left: -160px;
+    text-align: center;
+    text-indent: -10px; 
 }
 
-
 #form-step2 input[type="text"] {
-    width: 100%; 
-    max-width: 250px; 
+    width: 60%; 
+    max-width: 130px; 
     padding: 10px 15px; 
     font-family: 'S-CoreDream-3Light', sans-serif; 
     font-size: 14px;
@@ -449,6 +459,10 @@ option {
     border: 2px solid #ccc; 
     border-radius: 10px; 
     margin-bottom: 10px; 
-    
+    margin-top: -75px; 
+    margin-right: -120px; 
+}
 
+#birth-year {
+  width: 150px; /* 출생년도 박스의 너비를 원하는 값으로 설정 */
 }

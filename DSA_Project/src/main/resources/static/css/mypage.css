@@ -244,7 +244,7 @@
     border-radius: 5px;
     position: fixed;  
     bottom: auto;    
-    top: 350px;      
+    top: 355px;      
     right:1370px;      
     z-index: 1000;    
     border: none; 
@@ -263,7 +263,7 @@
             color: white;
             border: none;
             cursor: pointer;
-            margin-left: 10px;
+            margin-left: 105px;
            font-family: 'S-CoreDream-3Light', sans-serif;
         }
         
