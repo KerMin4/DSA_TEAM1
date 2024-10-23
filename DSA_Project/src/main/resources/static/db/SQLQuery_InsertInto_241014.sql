@@ -50,9 +50,9 @@ INSERT INTO Notification (user_id, message) VALUES
 
 -- Place Table 데이터 삽입
 INSERT INTO Place (title, description, profile_image, category, location, event_date, required_members, member_limit, price, vendor_id) VALUES
-('Art Exhibition', 'Modern art exhibition', 'art_exhibit.jpg', 'exhibition', 'Seoul Art Museum', '2024-11-20 10:00:00', 10, 50, 15.00, 'vendor1'),
-('Cooking Workshop', 'Learn to cook Italian dishes', 'cook_workshop.jpg', 'hobby', 'Busan Kitchen', '2024-12-05 14:00:00', 5, 20, 50.00, 'vendor1'),
-('Jazz Concert', 'Live jazz music', 'jazz_concert.jpg', 'show', 'Incheon Jazz Hall', '2024-12-10 19:00:00', 20, 100, 75.00, 'vendor1');
+('Art Exhibition', 'Modern art exhibition', 'art_exhibit.jpg', 'EXHIBITION', 'Seoul Art Museum', '2024-11-20 10:00:00', 10, 50, 15.00, 'vendor1'),
+('Cooking Workshop', 'Learn to cook Italian dishes', 'cook_workshop.jpg', 'HOBBY', 'Busan Kitchen', '2024-12-05 14:00:00', 5, 20, 50.00, 'vendor1'),
+('Jazz Concert', 'Live jazz music', 'jazz_concert.jpg', 'SHOW', 'Incheon Jazz Hall', '2024-12-10 19:00:00', 20, 100, 75.00, 'vendor1');
 
 -- UserPlace Table 데이터 삽입
 INSERT INTO UserPlace (user_id, place_id, status) VALUES

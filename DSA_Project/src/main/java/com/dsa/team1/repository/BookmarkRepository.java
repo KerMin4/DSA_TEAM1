@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.dsa.team1.entity.BookmarkEntity;
+import com.dsa.team1.entity.PlaceEntity;
 import com.dsa.team1.entity.SocialGroupEntity;
 import com.dsa.team1.entity.UserEntity;
 
@@ -21,6 +22,10 @@ public interface BookmarkRepository extends JpaRepository<BookmarkEntity, Intege
     List<BookmarkEntity> findByUser(UserEntity user);
 
 	void deleteByGroup(SocialGroupEntity group);
+
+	Boolean existsByUser_UserIdAndPlace_PlaceId(String id, Integer placeId);
+
+	Optional<BookmarkEntity> findByUserAndPlace(UserEntity userEntity, PlaceEntity placeEntity);
   
 }
 

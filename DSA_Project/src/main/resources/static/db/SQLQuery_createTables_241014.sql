@@ -1,9 +1,8 @@
 /*
- * 2024-10-14
+ * 2024-10-15
  * CreateTables_11
  * MySQL, DBeaver
- * Update table Post - add column PostType
- * Update table Photo - add column CreatedAt
+ * Update table Place - column category varchar to enum
  * Tables: User, SocialGroup, UserGroup, Interests, Bookmark, Notification, Place, UserPlace, Posts, Photos, Reply MemberHashtag, GroupHashtag, Transaction, Reservation
  */
 
@@ -82,7 +81,7 @@ CREATE TABLE Place (
     title VARCHAR(255) not NULL,
     description TEXT,
     profile_image VARCHAR(255),
-    category VARCHAR(255) not null,
+    category ENUM('HOBBY', 'EXHIBITION', 'SHOW', 'EVENT', 'SPACE') not null,
     location VARCHAR(255),
     event_date DATETIME not NULL,
     required_members INT not NULL,
