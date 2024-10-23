@@ -72,10 +72,16 @@ table td {
     color: #333;
 }
 
-#locationInput {
+#location {
     width: 100%;
     padding: 4px; /* 텍스트에리어 안쪽 여백 설정 */
     border-radius: 5px; /* 둥근 모서리 */
     border: 1px solid #ccc; /* 경계선 추가 */
     resize: none; /* 크기 조절 비활성화 */
+}
+
+.location-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Adjust the gap between the button and the input field */
 }

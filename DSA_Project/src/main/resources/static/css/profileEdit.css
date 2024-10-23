@@ -105,10 +105,6 @@
     pointer-events: auto; 
 }
 
-.edit-profile-icon:hover {
-    transform: scale(1.5); 
-}
-
 .camera-icon {
     width: 23px; 
     height: 23px; 
@@ -119,10 +115,6 @@
     cursor: pointer; 
     transition: transform 0.2s; 
     pointer-events: auto; 
-}
-
-.camera-icon:hover {
-    transform: scale(1.5); 
 }
 
 .error-message {
@@ -317,6 +309,7 @@
     align-items: center;
     width: 100%;
     margin-bottom: 5px;
+    margin-left: 12px;
 }
 
 .interest-option {

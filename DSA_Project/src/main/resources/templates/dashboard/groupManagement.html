@@ -9,7 +9,7 @@
     <link th:href="@{/css/groupManagement.css}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="/kkirikkiri/js/jquery-3.7.1.min.js"></script>
-    <script th:src="@{/js/groupManagement.js}"></script>
+    <script th:src="@{/js/groupManagement.js}"></script> 
 </head>
 <body class="group-management-page">
    
@@ -44,45 +44,45 @@
 
         <div class="group-list-container">
         
-            <!-- 생성한 그룹 섹션 -->
-            <div class="group-list-section">
-                <h1 class="group-title">내가 만든 그룹</h1>
-             
-                <div th:if="${createdGroups.empty}">
-                    <p>생성한 그룹이 없습니다. 그룹을 생성해보세요!</p>
-                </div>
+         <!-- 생성한 그룹 섹션 -->
+<div class="group-list-section">
+    <h1 class="group-title">내가 만든 그룹</h1>
 
-                <!-- 생성한 그룹 목록 -->
-                <div th:each="group : ${createdGroups}">
-                    <div class="group-card" th:data-group-url="@{/groupboard/main(groupId=${group.groupId})}">
-                        <img th:src="@{/upload/{imagePath}(imagePath=${group.profileImage})}" alt="그룹 이미지" class="group-image">
-                        <div class="group-text">
-                            <h2 th:text="${group.groupName}"></h2>
-                            <p th:text="${group.description}"></p>
-                            <p>위치: <span th:text="${group.location}"></span></p>
-                            <p>
-                                <i class="fas fa-user-friends"></i> 
-                                <span th:text="${memberCountMap[group.groupId]}"></span>
-                                /
-                                <span th:text="${group.memberLimit}"></span>
-                            </p>
-                        </div>
-                        <div class="dropdown-card">
-                            <button class="dropdown-btn">⋮</button>
-                            <div class="dropdown-content">
-                                <div th:if="${#authentication.principal.username == group.groupLeader.userId}">
-                                    <form th:action="@{/dashboard/deleteGroup}" method="post">
-                                        <input type="hidden" name="groupId" th:value="${group.groupId}">
-                                        <button type="submit" class="delete-btn">삭제</button>
-                                    </form>
-                                    <!-- 수정 버튼 추가 -->
-                                    <a th:href="@{/groupboard/settings(groupId=${group.groupId}, type='settings')}" class="edit-btn">수정</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+    <div th:if="${createdGroups.empty}">
+        <p>생성한 그룹이 없습니다. 그룹을 생성해보세요!</p>
+    </div>
+
+    <!-- 생성한 그룹 목록 -->
+    <div th:each="group : ${createdGroups}">
+        <div class="group-card" 
+             th:data-group-url="@{/groupboard/main(groupId=${group.groupId})}"
+             th:data-current-user="${#authentication.principal.username}"
+             th:data-group-leader="${group.groupLeader.userId}">
+            <img th:src="@{/upload/{imagePath}(imagePath=${group.profileImage})}" alt="그룹 이미지" class="group-image">
+            <div class="group-text">
+                <h2 th:text="${group.groupName}"></h2>
+                <p th:text="${group.description}"></p>
+                <p class="group-location">위치: <span th:text="${group.location}"></span></p>
+                <p>
+                    <i class="fas fa-user-friends"></i>
+                    <span th:text="${memberCountMap[group.groupId]}"></span>
+                    /
+                    <span th:text="${group.memberLimit}"></span>
+                </p>
+            </div>
+            <div class="dropdown-card">
+                <button class="dropdown-btn">⋮</button>
+                <div class="dropdown-content">
+                    <form th:action="@{/dashboard/deleteGroup}" method="post">
+                        <input type="hidden" name="groupId" th:value="${group.groupId}">
+                        <button type="submit" class="delete-btn">삭제</button>
+                    </form>
+                    <a th:href="@{/groupboard/settings(groupId=${group.groupId}, type='settings')}" class="edit-btn">수정</a>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
 
             <!-- 가입한 그룹 섹션 -->
             <div class="group-list-section joined-group-section">
@@ -93,12 +93,14 @@
 
                 <!-- 가입한 그룹 목록 -->
                 <div th:each="group : ${joinedGroups}">
-                    <div class="group-card joined-group-card" th:data-group-url="@{/groupboard/main(groupId=${group.groupId})}">
+                    <div class="group-card joined-group-card" th:data-group-url="@{/groupboard/main(groupId=${group.groupId})}"
+                         th:data-current-user="${#authentication.principal.username}"
+                         th:data-group-leader="${group.groupLeader.userId}">
                         <img th:src="@{/upload/{imagePath}(imagePath=${group.profileImage})}" alt="그룹 이미지" class="group-image">
                         <div class="group-text">
                             <h2 th:text="${group.groupName}"></h2>
                             <p th:text="${group.description}"></p>
-                            <p>위치: <span th:text="${group.location}"></span></p>
+                            <p class="group-location">위치: <span th:text="${group.location}"></span></p>
                             <p>
                                 <i class="fas fa-user-friends"></i> 
                                 <span th:text="${memberCountMap[group.groupId]}"></span>

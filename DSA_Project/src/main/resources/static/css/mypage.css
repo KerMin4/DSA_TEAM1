@@ -257,21 +257,26 @@
     
 }
 
- .delete-btn {
-            display: none; 
-            background-color: #6ba3e5; 
-            color: white;
-            border: none;
-            cursor: pointer;
-            margin-left: 105px;
-           font-family: 'S-CoreDream-3Light', sans-serif;
-        }
-        
+.delete-btn {
+    visibility: hidden;
+    background-color: #6ba3e5; 
+    color: white; 
+    border: none;
+    cursor: pointer; 
+    padding: 5px 10px; 
+    margin-left: 10px; 
+    white-space: nowrap; 
+}
+
+.bookmark-item:hover .delete-btn {
+    visibility: visible; 
+}
+  
 .bookmark-item:hover .delete-btn {
             display: inline; 
         }
         
-        .bookmark-button-container {
+.bookmark-button-container {
     display: flex;
     align-items: center;
 }
@@ -292,6 +297,18 @@
     background-color: #fefefe; 
     color: white;
     border-radius: 0; 
-    border-bottom: 1px solid #ccc; /* 구분선 추가 */
+    border-bottom: 1px solid #ccc; 
 }
-        
+       
+       
+.bookmark-item {
+    display: flex; 
+    align-items: center; 
+}
+
+.bookmark-item a {
+    white-space: nowrap; 
+    display: block; 
+    flex-grow: 1;
+    margin-right: 10px;
+}

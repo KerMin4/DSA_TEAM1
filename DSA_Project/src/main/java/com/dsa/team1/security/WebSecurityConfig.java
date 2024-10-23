@@ -39,7 +39,7 @@ public class WebSecurityConfig {
 		  	"/upload/**",
 			"/member/mapTest",
 			"/place/**", 
-			"/trend/**"
+			"/trend/trend"
 	};
 	
 	@Bean
