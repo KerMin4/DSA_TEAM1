@@ -127,6 +127,11 @@ public class DashboardController {
         for (SocialGroupEntity group : createdGroups) {
             int memberCount = socialGroupService.getMemberCountByGroup(group);
             memberCountMap.put(group.getGroupId(), memberCount);
+
+            // 방장(userId)와 그룹 리더(group.groupLeader.userId)의 값을 출력
+            System.out.println("로그인한 사용자: " + userId);
+            System.out.println("그룹 리더: " + group.getGroupLeader().getUserId());
+            System.out.println("생성된 그룹 리더 ID: " + group.getGroupLeader().getUserId());
         }
       
         for (SocialGroupEntity group : joinedGroups) {
@@ -273,7 +278,7 @@ public class DashboardController {
     }
     
     // 10.18
- // 예약 기록 페이지 이동
+    // 예약 기록 페이지 이동
     @GetMapping("/bookingHistory")
     public String bookingHistory(Model model) {
         model.addAttribute("activePage", "booking-history");
