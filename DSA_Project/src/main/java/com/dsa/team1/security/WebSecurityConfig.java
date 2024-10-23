@@ -39,7 +39,8 @@ public class WebSecurityConfig {
 		  	"/upload/**",
 			"/member/mapTest",
 			"/place/placeMain", 
-			"/trend/trend"
+			"/trend/trend",
+			"/oauth2/**"
 	};
 	
 	@Bean

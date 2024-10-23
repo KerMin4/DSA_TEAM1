@@ -165,7 +165,9 @@ function getListItem(index, places) {
 }
 
 function sendDataToServer(places){
-	$(opener.document).find('#location').val(places.place_name);
+	var place= places.place_name + " " + places.address_name; 
+	
+	$(opener.document).find('#location').val(place);
 	window.close();
 }
 function addMarker(position, idx, title) {

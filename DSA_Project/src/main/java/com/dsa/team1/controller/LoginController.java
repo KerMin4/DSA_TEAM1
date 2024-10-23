@@ -106,4 +106,6 @@ public class LoginController{
 		model.addAttribute("kakaoAppkey", kakaoAppkey);
 		return "member/mapTest";
 	}
+	
+
 }
