@@ -80,6 +80,27 @@ $(function() {
         formData.set('profileImage', 'noImage_icon.png'); // 기본 이미지를 FormData에 저장
         $(this).hide(); // 삭제 버튼 숨기기
     });
+    
+    // Remove image button click event
+    $('#removeImage').on('click', function(e) {
+        e.preventDefault(); // 폼 제출 방지
+        $('#imagePreview').attr('src', '../images/noImage_icon.png').show(); // 이미지 기본값으로 초기화
+        $('#modalHeaderImageInput').val(''); // 모달 인풋 초기화
+        $('#modalImagePreview').attr('src', '').hide(); // 모달 미리보기 초기화
+        formData.set('profileImage', 'noImage_icon.png'); // 기본 이미지를 FormData에 저장
+        $(this).hide(); // 삭제 버튼 숨기기
+    });
+    
+    // 지역찾기 버튼
+    $('#findPlace').click(function () {
+        console.log('지역 찾기 버튼 클릭됨');
+        window.open('/kkirikkiri/member/mapTest', '지역찾기', 'fullscreen');
+        
+        const location = $('#location').val();
+        console.log('입력된 위치 값:', location);
+
+        $('#locationForm').submit();
+    });
 
     // Join method radio button change event
     $('input[type="radio"][name="joinMethod"]').on('change', function() {

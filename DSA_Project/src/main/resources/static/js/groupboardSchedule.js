@@ -4,21 +4,33 @@ $(function() {
         var currentEventDate = $('#eventDateDisplay').text();
         
         $('#eventDateInput').val(currentEventDate);
-        $('#locationInput').val(currentLocation);
+        $('#location').val(currentLocation);
 		
         $('#eventDateDisplay').hide();
         $('#locationDisplay').hide();
         $('#eventDateInput').show();
-        $('#locationInput').show();
+        $('#findPlace').show();
+        $('#location').show();
         $(this).hide();
         $('#saveButton').show();
     });
+    
+    // 지역찾기 버튼
+    $('#findPlace').click(function() {
+        console.log('지역 찾기 버튼 클릭됨');
+        window.open('/kkirikkiri/member/mapTest', '지역찾기', 'fullscreen');
+        
+        const location = $('#location').val();
+        console.log('입력된 위치 값:', location);
 
+        $('#locationForm').submit();
+    });
+    
     $('#saveButton').on('click', function() {
 		event.preventDefault();
 		
         var eventDate = $('#eventDateInput').val();
-        var location = $('#locationInput').val();
+        var location = $('#location').val();
         var groupId = $('#groupId').val();
 
         $.ajax({
@@ -34,7 +46,8 @@ $(function() {
                 $('#eventDateDisplay').text(eventDate).show();
                 $('#locationDisplay').text(location).show();
                 $('#eventDateInput').hide();
-                $('#locationInput').hide();
+                $('#findPlace').hide();
+                $('#location').hide();
                 $('#saveButton').hide();
                 $('#editButton').show();
             },

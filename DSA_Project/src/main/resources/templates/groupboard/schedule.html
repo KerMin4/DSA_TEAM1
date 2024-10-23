@@ -53,9 +53,12 @@
                     <tr>
                         <td>장소:</td>
                         <td>
-                            <p id="locationDisplay" th:text="${group.location}"></p>
-                            <textarea id="locationInput" style="display: none;"></textarea>
-                        </td>
+					        <div class="location-wrapper">
+					            <input type="button" id="findPlace" value="지역 찾기" style="display: none;">
+					            <input type="text" id="location" name="location" style="display: none;">
+					            <p id="locationDisplay" th:text="${group.location}"></p>
+					        </div>
+					    </td>
                     </tr>
                 </table>
 			    

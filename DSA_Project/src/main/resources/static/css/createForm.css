@@ -143,15 +143,42 @@ body {
 
 /* ===================== 메인 콘텐츠의 이미지 업로드 버튼 스타일 ===================== */
 #openHeaderImageModal {
-    background-color: #6fa3ef;
-    color: #fff;
     padding: 8px 15px;
     border-radius: 4px;
-    transition: background-color 0.3s ease;
+    transition: transform 0.1s; /* 클릭 시 애니메이션 */
 }
 
 #openHeaderImageModal:hover {
-    background-color: #5a8ad7;
+	transform: scale(1.1);
+}
+
+.image-upload-button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.image-icon {
+    width: 35px; /* 원하는 크기로 조절 */
+    height: 30px;
+}
+
+#removeImage {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: url('../images/delete.png') no-repeat center;
+    background-size: cover;
+    width: 16px;
+    height: 16px;
+    border: none;
+    cursor: pointer;
+    display: none; /* 기본적으로 숨김 */
+}
+
+#removeImage:hover {
+	transform: scale(1.1);
 }
 
 /* ======================= 인원 수 카운터 스타일 ======================= */
@@ -187,6 +214,24 @@ body {
     color: #333; /* 텍스트 색상 */
 }
 
+/* ===================== 위치 설정 스타일 ===================== */
+.location-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* 버튼과 입력창 사이의 간격 */
+}
+
+#findPlace {
+    padding: 5px 5px; /* 버튼 패딩 조절 */
+}
+
+#location {
+    flex-grow: 1; /* 입력 창이 남은 공간을 채우도록 설정 */
+    padding: 8px;
+    border: 1px solid #c0c0c0;
+    border-radius: 4px;
+    font-size: 14px;
+}
 
 /* ===================== 해시태그 스타일 ===================== */
 #hashtagContainer {
