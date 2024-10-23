@@ -50,8 +50,16 @@
 	                <table class="form-table">
 		                <tr>
 		                    <td>
-                                <img id="imagePreview" style="display: block;">
-                                <button type="button" id="removeImage" style="display:none;">이미지 삭제</button>
+		                    	<div style="position: relative; display: inline-block;">
+							        <img id="imagePreview" style="display: block;">
+							        <button id="removeImage"></button>
+							    </div>
+                                <!-- <img id="imagePreview" style="display: block;">
+                                <button type="button" id="removeImage" style="display:none;">이미지 삭제</button> -->
+                                <!-- 모달을 열기 위한 버튼 -->
+		                        <button type="button" id="openHeaderImageModal" class="image-upload-button">
+								    <img src="../images/camera.png" alt="헤더 이미지 업로드" class="image-icon">
+								</button>
                         	</td>
 		                </tr>
 		                <tr>
@@ -73,17 +81,15 @@
 		                    <td colspan="5">
 		                        <textarea name="description" id="description" placeholder="그룹에 대해 소개해보세요! ex. 취미계발 모임입니다."></textarea>
 		                    </td>
-		                    <td colspan="3">
-		                        <!-- 모달을 열기 위한 버튼 -->
-                                <button type="button" id="openHeaderImageModal">헤더 이미지 업로드</button>
-		                    </td>
 		                </tr>
 		                <tr>
 		                    <td>위치 설정</td>
-		                    <td>
-		                    	<input type="button" id="findPlace" value="지역 찾기"><br>
-            					<input type="text" id="location" name="location" placeholder="구 단위만 선택 가능해요"><br>
-		                    </td>
+		                    <td colspan="3">
+						        <div class="location-wrapper">
+						            <input type="button" id="findPlace" value="지역 찾기">
+						            <input type="text" id="location" name="location" placeholder="구 단위만 선택 가능해요">
+						        </div>
+						    </td>
 						    <td>가입 권한</td>
 						    <td>
 						        <label><input type="radio" name="joinMethod" value="AUTO"> 바로 가입</label>
