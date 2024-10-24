@@ -24,6 +24,16 @@
     color: #333; /* 텍스트 색상 */
 }
 
+/* ======================= 탭 스타일 ======================= */
+.tabs a {
+    padding: 10px;
+    display: inline-block;
+    text-decoration: none;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+
 /* ======================= 기본 스타일 ======================= */
 body {
     font-family: 'S-CoreDream-3Light', sans-serif;
@@ -33,7 +43,6 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    overflow: hidden; /* 스크롤바 제거 */
 }
 
 /* ======================= 포인트 색상 적용 ======================= */

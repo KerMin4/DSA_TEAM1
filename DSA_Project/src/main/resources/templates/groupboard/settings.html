@@ -47,19 +47,37 @@
 	            	<tr>
 					    <td><label for="interest">카테고리:</label></td>
 					    <td>
-					        <label><input type="radio" name="interest" value="HOBBY" th:checked="${group.interest.name() == 'HOBBY'}"> 취미</label>
-					        <label><input type="radio" name="interest" value="DEVELOPMENT" th:checked="${group.interest.name() == 'DEVELOPMENT'}"> 자기계발</label>
-					        <label><input type="radio" name="interest" value="FOOD" th:checked="${group.interest.name() == 'FOOD'}"> 푸드</label>
-					        <label><input type="radio" name="interest" value="ACTIVITY" th:checked="${group.interest.name() == 'ACTIVITY'}"> 액티비티</label>
-					        <label><input type="radio" name="interest" value="PETS" th:checked="${group.interest.name() == 'PETS'}"> 반려동물</label>
-					        <label><input type="radio" name="interest" value="CULTURE" th:checked="${group.interest.name() == 'CULTURE'}"> 문화</label>
-					        <label><input type="radio" name="interest" value="MONEY" th:checked="${group.interest.name() == 'MONEY'}"> 재테크</label>
-					        <label><input type="radio" name="interest" value="LOVE" th:checked="${group.interest.name() == 'LOVE'}"> 연애</label>
-					        <label><input type="radio" name="interest" value="GAME" th:checked="${group.interest.name() == 'GAME'}"> 게임</label>
-					        <label><input type="radio" name="interest" value="TRAVEL" th:checked="${group.interest.name() == 'TRAVEL'}"> 여행</label>
+					        <label class="interest-label" th:classappend="${group.interest.name() == 'HOBBY'} ? 'selected'" for="hobby">취미</label>
+					        <input type="radio" id="hobby" name="interest" value="HOBBY" class="radio-hidden" th:checked="${group.interest.name() == 'HOBBY'}">
+					        
+					        <label class="interest-label" th:classappend="${group.interest.name() == 'DEVELOPMENT'} ? 'selected'" for="development">자기계발</label>
+					        <input type="radio" id="development" name="interest" value="DEVELOPMENT" class="radio-hidden" th:checked="${group.interest.name() == 'DEVELOPMENT'}">
+					        
+					        <label class="interest-label" th:classappend="${group.interest.name() == 'FOOD'} ? 'selected'" for="food">푸드</label>
+					        <input type="radio" id="food" name="interest" value="FOOD" class="radio-hidden" th:checked="${group.interest.name() == 'FOOD'}">
+					        
+					        <label class="interest-label" th:classappend="${group.interest.name() == 'ACTIVITY'} ? 'selected'" for="activity">액티비티</label>
+					        <input type="radio" id="activity" name="interest" value="ACTIVITY" class="radio-hidden" th:checked="${group.interest.name() == 'ACTIVITY'}">
+					        
+					        <label class="interest-label" th:classappend="${group.interest.name() == 'PETS'} ? 'selected'" for="pets">반려동물</label>
+					        <input type="radio" id="pets" name="interest" value="PETS" class="radio-hidden" th:checked="${group.interest.name() == 'PETS'}">
+					        
+					        <label class="interest-label" th:classappend="${group.interest.name() == 'CULTURE'} ? 'selected'" for="culture">문화</label>
+					        <input type="radio" id="culture" name="interest" value="CULTURE" class="radio-hidden" th:checked="${group.interest.name() == 'CULTURE'}">
+					        
+					        <label class="interest-label" th:classappend="${group.interest.name() == 'MONEY'} ? 'selected'" for="money">재테크</label>
+					        <input type="radio" id="money" name="interest" value="MONEY" class="radio-hidden" th:checked="${group.interest.name() == 'MONEY'}">
+					        
+					        <label class="interest-label" th:classappend="${group.interest.name() == 'LOVE'} ? 'selected'" for="love">연애</label>
+					        <input type="radio" id="love" name="interest" value="LOVE" class="radio-hidden" th:checked="${group.interest.name() == 'LOVE'}">
+					        
+					        <label class="interest-label" th:classappend="${group.interest.name() == 'GAME'} ? 'selected'" for="game">게임</label>
+					        <input type="radio" id="game" name="interest" value="GAME" class="radio-hidden" th:checked="${group.interest.name() == 'GAME'}">
+					        
+					        <label class="interest-label" th:classappend="${group.interest.name() == 'TRAVEL'} ? 'selected'" for="travel">여행</label>
+					        <input type="radio" id="travel" name="interest" value="TRAVEL" class="radio-hidden" th:checked="${group.interest.name() == 'TRAVEL'}">
 					    </td>
 					</tr>
-	                
 	                <tr>
 					    <td><label for="profileImage">헤더 이미지:</label></td>
 					    <td>
