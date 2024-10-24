@@ -69,14 +69,18 @@ body {
     color: #333;
 }
 
+
 #postAnnouncement {
-    background-color: #E48F85; /* 버튼 배경색 */
+    background-color: #E48F85;
     color: #FFFFFF;
     border: none;
     padding: 8px 16px;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    position: relative; 
+    top: -22px; 
+    
 }
 
 #postAnnouncement:hover {
@@ -92,6 +96,12 @@ body {
     margin-left: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    
+}
+
+.announcement-buttons {
+    display: flex;
+    justify-content: flex-end; /* 버튼들을 오른쪽으로 정렬 */
 }
 
 .saveEdit:hover, .editAnnouncement:hover, .deleteAnnouncement:hover {
