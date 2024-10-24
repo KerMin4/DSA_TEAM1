@@ -8,6 +8,7 @@
     <script th:src="@{/js/dropdown.js}"></script>
     <script th:src="@{/js/notification.js}"></script>
     <script>
+
     	document.getElementById('notification-btn').addEventListener('click', () => {
         const userId = document.getElementById('notification-btn').getAttribute('data-user-id');
         console.log('알림 버튼 클릭됨:', userId);
@@ -22,6 +23,7 @@
             })
             .catch(error => console.error('에러 발생:', error));
     });
+
     </script>
 </head>
 <body>
@@ -34,8 +36,8 @@
 
                 <div class="center-menu">
                     <li><a th:href="@{/socialgroup/socialing}">소셜링</a></li>
-                    <li><a href="#">트렌드</a></li>
-                    <li><a href="#">플레이스</a></li>
+                    <li><a th:href="@{/trend/trend}">트렌드</a></li>
+                    <li><a th:href="@{/place/placeMain}">플레이스</a></li>
                 </div>
 
                 <div class="right-menu">
@@ -45,21 +47,38 @@
                     </th:block>
 
                     <th:block sec:authorize="isAuthenticated()">
+
                     	<li>
                     		<a id="notification-btn" th:data-user-id="${#authentication.principal.id}" th:href="@{/notifications}">
    							 🔔 알림 <span id="notification-badge" style="display: inline;">🔴</span>
 							</a>
                         <!-- 여기부터 로그인 후 -->
                         
+
+                    
+                        <!-- 로그인 후 프로필 이미지 표시 -->
+
                         <li class="dropdown">
-                            <img th:src="${#authentication.principal.profileImage != null ? '/kkirikkiri/upload/' + #authentication.principal.profileImage : '/kkirikkiri/upload/default.png'}"
-                                 alt="프로필 이미지" class="profile-img" id="profileImg" />
+                            <!-- 프로필 이미지가 있을 때 -->
+                            
+                            <th:block th:if="${#authentication.principal.profileImage != null}">
+                             <img th:src="${#authentication.principal.profileImage != null ? '/kkirikkiri/upload/' + #authentication.principal.profileImage : '/kkirikkiri/upload/default.png'}"
+                              alt="프로필 이미지" class="profile-img" id="profileImg" />
+                            </th:block>
+
+
+                            <!-- 프로필 이미지가 없을 때 기본 이미지 표시 -->
+                            <th:block th:if="${#authentication.principal.profileImage == null}">
+                                <img th:src="@{/images/default.png}" 
+                                     alt="기본 프로필 이미지" class="profile-img" id="profileImg" />
+                            </th:block>
 
                             <ul class="dropdown-menu" id="profileDropdown">
                                 <li><a th:href="@{/dashboard/mypage}">홈</a></li>
                                 <li><a th:href="@{/dashboard/profileedit}">프로필 수정</a></li>
                                 <li><a th:href="@{/dashboard/groupManagement}">그룹 관리</a></li>
                                 <li><a th:href="@{/dashboard/paymentManagement}">결제 관리</a></li>
+                                <li><a th:href="@{/dashboard/bookingHistory}">예약 내역</a></li>
                                 <li><a th:href="@{/member/logout}">Logout</a></li>
                             </ul>
                         </li>

@@ -7,12 +7,9 @@
     <link th:href="@{/css/main.css}" rel="stylesheet">
     <link th:href="@{/css/mypage.css}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.3.1/fullcalendar.min.css"/>
-
-    <!-- jQuery and jQuery UI -->
     <script src="/kkirikkiri/js/jquery-3.7.1.min.js"></script>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 
@@ -31,12 +28,22 @@
                 <li><a th:classappend="${activePage == 'profile-edit'} ? 'active'" th:href="@{/dashboard/profileedit}" id="profile-edit">프로필 수정</a></li>
                 <li><a th:classappend="${activePage == 'group-management'} ? 'active'" th:href="@{/dashboard/groupManagement}" id="group-management">그룹 관리</a></li>
                 <li><a th:classappend="${activePage == 'payment-management'} ? 'active'" th:href="@{/dashboard/paymentManagement}" id="payment-management">결제 관리</a></li>
+                <li><a th:classappend="${activePage == 'booking-history'} ? 'active'" th:href="@{/dashboard/bookingHistory}" id="booking-history">예약 내역</a></li>
             </ul>
 
             <th:block sec:authorize="isAuthenticated()">
                 <div class="profile-section">
-                    <img th:src="${#authentication.principal.profileImage != null ? '/kkirikkiri/upload/' + #authentication.principal.profileImage : '/kkirikkiri/upload/default.png'}"
+                    <!-- 프로필 이미지가 있을 때 -->
+                    <th:block th:if="${#authentication.principal.profileImage != null}">
+                      <img th:src="${#authentication.principal.profileImage != null ? '/kkirikkiri/upload/' + #authentication.principal.profileImage : '/kkirikkiri/upload/default.png'}"
                          alt="프로필 이미지" class="mypage-profile-img" id="profileImg" />
+                    </th:block>
+
+                    <!-- 프로필 이미지가 없을 때 기본 이미지 표시 -->
+                    <th:block th:if="${#authentication.principal.profileImage == null}">
+                        <img th:src="@{/images/default.png}" 
+                             alt="기본 프로필 이미지" class="mypage-profile-img" id="profileImg" />
+                    </th:block>
                 </div>
                 <p th:text="${#authentication.principal.name}" class="profile-nickname"></p>
             </th:block>
@@ -46,7 +53,7 @@
 
         <div class="bookmark-button-container">
             <button id="bookmarkManageBtn" style="white-space: nowrap;">
-                <img th:src="@{/images/bookmarks.png}" class="bookmark-icon" alt="북마크 아이콘"> <!-- 아이콘 -->
+                <img th:src="@{/images/bookmarks.png}" class="bookmark-icon" alt="북마크 아이콘"><!-- 아이콘 -->
                 모든 북마크
             </button>
         </div>
@@ -65,13 +72,15 @@
         <!-- 북마크 패널 -->
         <div class="bookmark-floating-panel" id="bookmarkPanel">
             <div class="panel-header">
-                <span>모든 북마크 보기</span>
-                <button class="close-btn" onclick="closeBookmarkPanel()"></button>
+                <span>북마크 관리</span>
+                <button class="close-btn" onclick="closeBookmarkPanel()">x</button>
             </div>
             <div class="bookmarked-groups">
                 <ul>
                     <li th:each="bookmark : ${bookmarkedGroups}" class="bookmark-item">
-                        <span th:text="${bookmarkedGroupDetails[bookmark.groupId].name}">그룹 이름</span>
+                        <a th:href="@{/groupboard/main(groupId=${bookmark.groupId})}" 
+                           th:text="${bookmarkedGroupDetails[bookmark.groupId].name}" 
+                           style="text-decoration: none; color: inherit;">그룹 이름</a>
                         <form th:action="@{/dashboard/removeBookmark}" method="post" style="display: inline;">
                             <input type="hidden" th:name="groupId" th:value="${bookmark.groupId}" />
                             <button type="submit" class="delete-btn">삭제</button>

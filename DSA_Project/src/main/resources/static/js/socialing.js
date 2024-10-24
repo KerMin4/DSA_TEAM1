@@ -4,9 +4,16 @@ $(function() {
         event.preventDefault(); // 기본 링크 동작 방지
         window.location.href = '/kkirikkiri/socialgroup/socialing';
     });
+    
+    // 정렬 버튼 클릭 시 동작
+	$('.sort-btn').on('change', function() {
+	    var selectedSort = $(this).val(); // 선택된 정렬 기준
+	    console.log("Selected sort option: ", selectedSort);
+	    filterGroups(null, selectedSort); // 필터링 함수 호출 시 정렬 기준 전달
+	});
 
     // 그룹 필터링을 위한 함수
-    function filterGroups(query) {
+    function filterGroups(query, sort) {
 	    var searchQuery = query || ($('#searchInput').length ? $('#searchInput').val().trim() : ''); // searchInput 존재 여부 확인
 	    var selectedInterest = $('input[name="interest"]:checked').val(); 							// 선택된 카테고리
 	    var selectedLocation = $('.sub-location-btn.selected').data('sublocation');					// 선택된 지역
@@ -46,9 +53,10 @@ $(function() {
             url: '/kkirikkiri/socialgroup/filter',
             type: 'GET',
             data: {
-                query: searchQuery,          // 검색어 또는 해시태그
-                category: selectedInterest,  // 선택된 카테고리
-                location: selectedLocation   // 지역 필터
+                query: searchQuery,          	// 검색어 또는 해시태그
+                category: selectedInterest,  	// 선택된 카테고리
+                location: selectedLocation,   	// 지역 필터
+                sort: sort						// 정렬 기준
             },
            success: function(data) {
 	            var newContent = $(data).find('#group-container').html();
@@ -147,36 +155,55 @@ $(function() {
 	$('#hashtag-container').on('click', 'a', function(event) {
 	    event.preventDefault();
 	    var selectedHashtag = $(this).text().replace('#', '').trim(); // 클릭한 해시태그에서 # 제거
+	    
+	    // 기존에 선택된 해시태그의 selected 클래스 제거
+        $('#hashtag-container span').removeClass('selected');
+
+        // 현재 클릭된 해시태그에 selected 클래스 추가
+        $(this).find('span').addClass('selected');
+
 	    filterGroups(selectedHashtag);  // 해시태그를 검색어로 사용하여 필터링
 	});
 
-    
     // 북마크 버튼 클릭 시 동작
-    $('.group-listing').on('click', '.bookmark-btn', function() {
+    $('.group-listing').on('click', '.bookmark-btn', function(event) {
+		event.preventDefault(); // 기본 클릭 동작 방지
+		event.stopPropagation(); // 부모 요소로 이벤트 전파 방지
+		
         var groupId = $(this).data('group-id'); 
         var bookmarkButton = $(this);
+        var bookmarkIcon = bookmarkButton.find('.bookmark-icon'); // 버튼 내 이미지 요소 선택
 
         $.ajax({
             type: "POST",
             url: "/kkirikkiri/socialgroup/bookmark/toggle",
             data: { groupId: groupId },
+            beforeSend: function(xhr) {
+		        // CSRF 토큰을 헤더에 추가
+		        xhr.setRequestHeader('X-CSRF-TOKEN', $('meta[name="_csrf"]').attr('content'));
+		    },
             success: function(response) {
                 console.log("북마크 상태 변경 성공: " + response);
 
-                // 북마크 수 업데이트를 위한 요소 선택
-                var bookmarkCountElement = bookmarkButton.closest('.group-card').find('.bookmark-count');
-                var updatedCount = parseInt(response); // 서버로부터 받은 새로운 북마크 수
+                // 서버로부터 받은 새로운 북마크 수
+                var updatedCount = parseInt(response); 
 
-                // 북마크 상태에 따라 버튼 텍스트 변경
-                if (bookmarkButton.text() === '북마크 추가') {
-                    bookmarkButton.text('북마크 제거');
+                // 북마크 상태에 따라 아이콘 이미지 및 텍스트 변경
+                if (bookmarkIcon.attr('src').includes('bookmarks.png')) {
+                    bookmarkIcon.attr('src', '/kkirikkiri/images/bookmarked.png');
                 } else {
-                    bookmarkButton.text('북마크 추가');
+                    bookmarkIcon.attr('src', '/kkirikkiri/images/bookmarks.png');
                 }
 
-                // 북마크 수 업데이트
-                bookmarkCountElement.text('북마크: ' + updatedCount);
-            },
+                // UI 업데이트: 강제로 텍스트 변경 시도
+	            var bookmarkCountElement = bookmarkButton.closest('.group-card-wrapper').find('.bookmark-count');
+	            if (bookmarkCountElement.length > 0) {
+	                bookmarkCountElement.text('북마크: ' + updatedCount);
+	                console.log("북마크 수 업데이트됨: " + bookmarkCountElement.text());
+	            } else {
+	                console.error("bookmarkCountElement를 찾을 수 없습니다.");
+	            }
+	        },
             error: function(error) {
                 console.log("에러 발생", error);
             }

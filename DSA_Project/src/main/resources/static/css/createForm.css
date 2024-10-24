@@ -9,8 +9,9 @@
     background-image: url('../images/noImage_icon.png'); /* 배경 이미지로 설정 */
     background-size: cover; /* 배경 이미지 크기를 div에 맞추기 */
     background-position: center; /* 배경 이미지의 위치 설정 */
+    border: 1px solid #808080; /* 외곽선 추가 */
+    border-radius: 8px; /* 모서리를 둥글게 */
 }
-
 
 /* ======================= 버튼 스타일 ======================= */
 
@@ -72,4 +73,214 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    overflow: hidden; /* 스크롤바 제거 */
+}
+
+/* ======================= 메인 콘텐츠 스타일 ======================= */
+.main-content {
+    flex-grow: 1; /* 메인 콘텐츠가 가능한 공간을 차지하도록 */
+}
+
+.form-section {
+    max-width: 100%; /* 폼 섹션의 최대 너비 */
+    margin: 0 auto; /* 중앙 정렬 */
+}
+
+/* 입력 필드 스타일 */
+.form-section input[type="text"],
+.form-section input[type="datetime-local"],
+.form-section textarea {
+    width: calc(100% - 20px); /* 너비 설정 및 내부 여백 보정 */
+    padding: 10px; /* 입력 필드 내부 여백 */
+    margin-bottom: 15px; /* 입력 필드 간격 */
+    border: 1px solid #c0c0c0; /* 테두리 색상: 검정색으로 설정 */
+    border-radius: 4px; /* 모서리 둥글게 */
+    font-size: 14px; /* 폰트 크기 */
+    box-sizing: border-box; /* 전체 너비 포함 */
+}
+
+/* 버튼 스타일 */
+.form-section input[type="submit"] {
+    background-color: #E48F85; /* 버튼 배경색 */
+    color: #fff; /* 텍스트 색상 */
+    border: none; /* 테두리 제거 */
+    border-radius: 4px; /* 모서리 둥글게 */
+    padding: 10px 20px; /* 버튼 패딩 */
+    margin-top: 10px; /* 버튼 위쪽 간격 */
+    transition: background-color 0.3s ease; /* 배경색 전환 효과 */
+}
+
+.form-section input[type="submit"]:hover {
+    background-color: #d4756e; /* 버튼 호버 색상 */
+}
+
+/* ===================== 카테고리 라디오 버튼 스타일 ===================== */
+.category-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px; /* 라디오 버튼 간 간격 */
+    margin-bottom: 20px; /* 아래쪽 여백 */
+}
+
+.category-container input[type="radio"] {
+    display: none; /* 기본 라디오 버튼 숨기기 */
+}
+
+.category-container label {
+    border: 1px solid #000000; /* 기본 테두리 */
+    background-color: #f2f2f2; /* 라벨 배경색 */
+    border-radius: 20px; /* 둥근 모서리 */
+    padding: 5px 10px; /* 라벨 패딩 */
+    cursor: pointer; /* 커서 모양 */
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; /* 배경색 및 테두리 전환 효과 */
+}
+
+.category-container input[type="radio"]:checked + label {
+    background-color: #E48F85; /* 선택된 라디오 버튼 라벨 배경색 */
+    color: #fff; /* 선택된 라벨 텍스트 색상 */
+    border-color: #E48F85; /* 선택된 라벨 테두리 색상 */
+}
+
+/* ===================== 메인 콘텐츠의 이미지 업로드 버튼 스타일 ===================== */
+#openHeaderImageModal {
+    padding: 8px 15px;
+    border-radius: 4px;
+    transition: transform 0.1s; /* 클릭 시 애니메이션 */
+}
+
+#openHeaderImageModal:hover {
+	transform: scale(1.1);
+}
+
+.image-upload-button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.image-icon {
+    width: 35px; /* 원하는 크기로 조절 */
+    height: 30px;
+}
+
+#removeImage {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: url('../images/delete.png') no-repeat center;
+    background-size: cover;
+    width: 16px;
+    height: 16px;
+    border: none;
+    cursor: pointer;
+    display: none; /* 기본적으로 숨김 */
+}
+
+#removeImage:hover {
+	transform: scale(1.1);
+}
+
+/* ======================= 인원 수 카운터 스타일 ======================= */
+
+/* 인원 수 카운터 스타일 */
+.person-counter {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px; /* 버튼 간 간격 */
+}
+
+.person-counter button {
+    background-color: #e0e0e0; /* 버튼의 기본 배경색 */
+    color: #333; /* 텍스트 색상 */
+    border: 1px solid #999; /* 테두리 색상 */
+    border-radius: 50px; /* 모서리 둥글게 */
+    padding: 5px 10px; /* 버튼 패딩 */
+    cursor: pointer; /* 클릭 가능한 포인터 표시 */
+}
+
+.person-counter button:hover {
+    background-color: #e0e0e0; /* 호버 시 색상 변경 */
+    color: #333; /* 호버 시 텍스트 색상 유지 */
+}
+
+.person-counter button:active {
+    transform: translateY(1px); /* 클릭 시 눌리는 효과 */
+}
+
+.person-counter span {
+    margin: 0 5px; /* 숫자와 버튼 사이의 간격 */
+    font-size: 16px; /* 텍스트 크기 */
+    color: #333; /* 텍스트 색상 */
+}
+
+/* ===================== 위치 설정 스타일 ===================== */
+.location-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* 버튼과 입력창 사이의 간격 */
+}
+
+#findPlace {
+    padding: 5px 5px; /* 버튼 패딩 조절 */
+}
+
+#location {
+    flex-grow: 1; /* 입력 창이 남은 공간을 채우도록 설정 */
+    padding: 8px;
+    border: 1px solid #c0c0c0;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* ===================== 해시태그 스타일 ===================== */
+#hashtagContainer {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap; /* 넘칠 경우 줄바꿈 */
+}
+
+.hashtag-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* 해시태그 입력 필드와 버튼 간 간격 */
+}
+
+.hashtag-wrapper {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 5px;
+    font-size: 12px;
+}
+
+.hashtag {
+    display: inline-block;
+    background-color: #ffffff;
+    border-radius: 20px;
+    padding: 6px 8px;
+    border: 2px solid #E48F85;
+    color: #E48F85;
+    font-size: 14px;
+}
+
+.remove-hashtag {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 5px;
+    display: flex;
+    align-items: center;
+    opacity: 0.7; /* 아이콘의 초기 투명도 */
+    transition: opacity 0.2s ease; /* 호버 시 부드러운 효과 */
+}
+
+.remove-hashtag:hover {
+    opacity: 1; /* 호버 시 투명도 제거 */
+}
+
+.delete-icon {
+    width: 10px;
+    height: 10px;
+    opacity: 0.6;
 }

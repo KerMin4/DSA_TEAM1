@@ -2,6 +2,7 @@ package com.dsa.team1.service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,15 +13,12 @@ import com.dsa.team1.security.AuthenticatedUser;
 
 public interface GroupBoardService {
 
-	void updateGroup(Integer groupId, String groupName, String description, String location, String eventDate,
-			String interest, String joinMethod, Integer memberLimit, String hashtags, MultipartFile profileImage) throws IOException;
-
+	boolean isUserMemberOfGroup(String userId, Integer groupId);
+	
+	List<Map<String, String>> getMemberProfiles(Integer groupId);
+	
 	Integer uploadPost(MultipartFile photo, String description, Integer groupId, AuthenticatedUser user) throws IOException;
 	
-	List<PhotoDTO> getPhotosByGroupId(Integer groupId);
-
-	PostDTO getPostDetail(Integer postId);
-
 	void addReply(ReplyDTO replyDTO, AuthenticatedUser user);
 
 	List<ReplyDTO> getRepliesByPostId(Integer postId);
@@ -28,9 +26,9 @@ public interface GroupBoardService {
 	void deleteReply(Integer replyId);
 
 	void editReply(ReplyDTO replyDTO);
-	
-	List<PostDTO> getAnnouncementsByGroupId(Integer groupId);
-	
-	List<PostDTO> getAlbumPostsByGroupId(Integer groupId);
+
+	void updateGroup(Integer groupId, String groupName, String description, String interest, String joinMethod,
+			Integer memberLimit, String removedMembers, String hashtags, String removedHashtags,
+			MultipartFile profileImage) throws IOException;
 
 }

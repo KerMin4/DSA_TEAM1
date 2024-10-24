@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>플레이스</title>
+    <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+    <link th:href="@{/css/sidebar.css}" rel="stylesheet">
+    <link th:href="@{/css/placeMain.css}" rel="stylesheet">
+    <link th:href="@{/css/header.css}" rel="stylesheet">
+    <script th:src="@{/js/placeMain.js}"></script>
+</head>
+<body>
+    <th:block th:replace="~{fragments/header :: header}"></th:block>
+    
+    <div class="container">
+    	<!-- Sidebar Section -->
+        <div class="sidebar">
+            <h2>플레이스 찾기</h2>
+            <div class="search">
+			    <form method="get" th:action="@{/place/placeMain}">
+				    <input type="text" name="query" th:value="${query}" placeholder="검색어를 입력하세요">
+				    <input type="submit" value="검색">
+				</form>
+			</div>
+            
+            <br><br>
+            
+            <a href="#" id="allGroupsButton" class="btn view-all-btn">전체 그룹 보기</a>
+
+            <!-- 카테고리 필터 -->
+			<div class="category-filters">
+			    <h3 id="category-toggle" style="cursor: pointer;">카테고리별</h3>
+			    <div id="category-container" style="display: none;">
+			        <label class="activity-option">
+			            <input type="checkbox" name="activity" value="HOBBY">
+			            <span>취미</span>
+			        </label>
+			        <label class="activity-option">
+			            <input type="checkbox" name="activity" value="EXHIBITION">
+			            <span>전시</span>
+			        </label>
+			        <label class="activity-option">
+			            <input type="checkbox" name="activity" value="SHOW">
+			            <span>공연</span>
+			        </label>
+			        <label class="activity-option">
+			            <input type="checkbox" name="activity" value="EVENT">
+			            <span>행사</span>
+			        </label>
+			        <label class="activity-option">
+			            <input type="checkbox" name="activity" value="SPACE">
+			            <span>공간</span>
+			        </label>
+			    </div>
+			</div>
+            
+            <!-- 지역별 필터 -->
+            <div class="location-filters">
+                <h3 id="location-toggle" style="cursor: pointer;">지역별</h3>
+                <div id="location-container" class="hidden">
+                    <!-- 상위 지역 버튼들이 여기에 동적으로 생성됨 -->
+                    <div id="location-container" class="location-container"></div>
+                </div>
+            </div>
+
+            <div class="sort-filters">
+			    <h3 id="sort-toggle" style="cursor: pointer;">정렬 기준</h3>
+			    <div id="sort-options" class="hidden">
+			        <table>
+			            <tr>
+			                <td><input type="radio" class="sort-btn" name="sort" value="popular"> 인기 순 (북마크 많은 수)</td>
+			            </tr>
+			            <tr>
+			                <td><input type="radio" class="sort-btn" name="sort" value="eventDate"> 이벤트 날짜 순</td>
+			            </tr>
+			            <tr>
+			                <td><input type="radio" class="sort-btn" name="sort" value="latest"> 최신 순</td>
+			            </tr>
+			        </table>
+			    </div>
+			</div>
+        </div>
+
+			<!-- Place Listings -->
+            <div class="place-listing" id="place-container">
+			    <!-- 전체 그룹 목록을 처음에 출력 -->
+			    <!-- 검색 결과가 없을 경우 출력 -->
+				<div th:if="${#lists.isEmpty(places)}">
+			        <p>검색 결과가 없습니다. 다른 검색어를 입력해보세요.</p>
+			    </div>
+			    
+				<!-- 검색 결과가 있을 경우 출력 -->
+				<div th:unless="${#lists.isEmpty(places)}">
+			    <div th:each="place : ${places}">
+			        <div class="place-card" data-group-id="${place.placeId}">
+			            <div class="place-info">
+			                <table>
+			                    <tr>
+			                        <td>
+			                        	<img th:src="@{${place.profileImage != null} ? '/upload/' + ${place.profileImage} : '/images/noImage_icon.png'}" alt="Profile Image" class="place-image">
+			                        </td>
+			                        <td>
+			                            <h3><a th:href="@{/place/placeDetail(placeId=${place.placeId})}" th:text="${place.title}">그룹 이름</a></h3>
+			                            <p th:text="'위치: ' + ${place.location}">위치</p>
+			                            <p th:text="${#temporals.format(place.eventDate, 'yyyy-MM-dd')}">날짜</p>
+			                            <p th:text="'인원: ' + (${currentMembersMap != null && currentMembersMap[place.placeId] != null ? currentMembersMap[place.placeId] : 0}) + '/' + ${place.memberLimit} + '명'">인원</p>
+			                            <p th:text="'조회수: ' + ${place.viewCount}">조회수</p>
+			                            <p th:text="'북마크: ' + ${place.bookmarkCount}" class="bookmark-count">북마크 수</p>
+			                        <td>
+			                            <a th:href="@{/place/joinPlace(placeId=${place.placeId})}" class="join-btn">플레이스 참여</a>
+			                           
+										<button type="button" class="bookmark-btn" th:data-group-id="${place.placeId}">
+										    <span th:text="${bookmarkedMap != null && bookmarkedMap[place.placeId] != null ? (bookmarkedMap[place.placeId] ? '북마크 제거' : '북마크 추가') : '북마크 추가'}"></span>
+										</button>
+			                        </td>
+			                    </tr>
+			                </table>
+			            </div>
+			        </div>
+			    </div>
+			</div>
+                
+	            <!-- 검색 결과가 없을 때 출력할 메시지 -->
+				<div id="no-result-message" style="display: none;">
+	                <p id="no-result-text"></p>
+	            </div>
+	            
+            </div>
+            
+		</div>
+</body>
+</html>

@@ -9,7 +9,7 @@
     <link th:href="@{/css/groupManagement.css}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="/kkirikkiri/js/jquery-3.7.1.min.js"></script>
-    <script th:src="@{/js/groupManagement.js}"></script>
+    <script th:src="@{/js/groupManagement.js}"></script> 
 </head>
 <body class="group-management-page">
    
@@ -22,12 +22,19 @@
                 <li><a th:classappend="${activePage == 'profile-edit'} ? 'active'" th:href="@{/dashboard/profileedit}" id="profile-edit">프로필 수정</a></li>
                 <li><a th:classappend="${activePage == 'group-management'} ? 'active'" th:href="@{/dashboard/groupManagement}" id="group-management">그룹 관리</a></li>
                 <li><a th:classappend="${activePage == 'payment-management'} ? 'active'" th:href="@{/dashboard/paymentManagement}" id="payment-management">결제 관리</a></li>
+                <li><a th:classappend="${activePage == 'booking-history'} ? 'active'" th:href="@{/dashboard/bookingHistory}" id="booking-history">예약 내역</a></li>
             </ul>
 
             <th:block sec:authorize="isAuthenticated()">
                 <div class="profile-section">
-                    <img th:src="${#authentication.principal.profileImage != null ? '/kkirikkiri/upload/' + #authentication.principal.profileImage : '/kkirikkiri/upload/default.png'}"
+                    <th:block th:if="${#authentication.principal.profileImage != null}">
+                      <img th:src="${#authentication.principal.profileImage != null ? '/kkirikkiri/upload/' + #authentication.principal.profileImage : '/kkirikkiri/upload/default.png'}"
                          alt="프로필 이미지" class="mypage-profile-img" id="profileImg" />
+                    </th:block>
+                    <th:block th:if="${#authentication.principal.profileImage == null}">
+                        <img th:src="@{/images/default.png}" 
+                             alt="기본 프로필 이미지" class="mypage-profile-img" id="profileImg" />
+                    </th:block>
                 </div>
                 <p th:text="${#authentication.principal.name}" class="profile-nickname"></p>
             </th:block>
@@ -37,53 +44,63 @@
 
         <div class="group-list-container">
         
-            <!-- 여기부터 생성된 그룹 -->
-            <div class="group-list-section">
-                <h1 class="group-title"></h1>
-                <div th:if="${createdGroups.isEmpty()}"></div>
-                <div th:each="group : ${createdGroups}">
-                    <div class="group-card">
-                        <img th:src="@{/upload/{imagePath}(imagePath=${group.profileImage})}" alt="그룹 이미지" class="group-image">
-                        <div class="group-text">
-                            <h2 th:text="${group.groupName}"></h2>
-                            <p th:text="${group.description}"></p>
-                            <p>위치: <span th:text="${group.location}"></span></p>
-                            <!-- 현재 인원수 / 설정 인원수 추가 -->
-                            <p>
-                                <i class="fas fa-user-friends"></i> 
-                                <span th:text="${memberCountMap[group.groupId]}"></span>
-                                /
-                                <span th:text="${group.memberLimit}"></span>
-                            </p>
-                        </div>
-                        <div class="dropdown-card">
-                            <button class="dropdown-btn">⋮</button>
-                            <div class="dropdown-content">
-    <!-- 방장일 경우에만 삭제 버튼을 표시 -->
-    <div th:if="${#authentication.principal.username == group.groupLeader.userId}">
-        <form th:action="@{/dashboard/deleteGroup}" method="post">
-            <input type="hidden" name="groupId" th:value="${group.groupId}">
-            <button type="submit" class="delete-btn">삭제</button>
-        </form>
+         <!-- 생성한 그룹 섹션 -->
+<div class="group-list-section">
+    <h1 class="group-title">내가 만든 그룹</h1>
+
+    <div th:if="${createdGroups.empty}">
+        <p>생성한 그룹이 없습니다. 그룹을 생성해보세요!</p>
     </div>
-</div>
-                        </div>
-                    </div>
+
+    <!-- 생성한 그룹 목록 -->
+    <div th:each="group : ${createdGroups}">
+        <div class="group-card" 
+             th:data-group-url="@{/groupboard/main(groupId=${group.groupId})}"
+             th:data-current-user="${#authentication.principal.username}"
+             th:data-group-leader="${group.groupLeader.userId}">
+            <img th:src="@{/upload/{imagePath}(imagePath=${group.profileImage})}" alt="그룹 이미지" class="group-image">
+            <div class="group-text">
+                <h2 th:text="${group.groupName}"></h2>
+                <p th:text="${group.description}"></p>
+                <p class="group-location">위치: <span th:text="${group.location}"></span></p>
+                <p>
+                    <i class="fas fa-user-friends"></i>
+                    <span th:text="${memberCountMap[group.groupId]}"></span>
+                    /
+                    <span th:text="${group.memberLimit}"></span>
+                </p>
+            </div>
+            <div class="dropdown-card">
+                <button class="dropdown-btn">⋮</button>
+                <div class="dropdown-content">
+                    <form th:action="@{/dashboard/deleteGroup}" method="post">
+                        <input type="hidden" name="groupId" th:value="${group.groupId}">
+                        <button type="submit" class="delete-btn">삭제</button>
+                    </form>
+                    <a th:href="@{/groupboard/settings(groupId=${group.groupId}, type='settings')}" class="edit-btn">수정</a>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
 
-            <!-- 여기부터 가입한 그룹 -->
+            <!-- 가입한 그룹 섹션 -->
             <div class="group-list-section joined-group-section">
-                <h1 class="group-title"></h1>
-                <div th:if="${joinedGroups.isEmpty()}">
+                <h1 class="group-title joined-group-title">현재 참여 중인 그룹</h1>
+                <div th:if="${joinedGroups.empty}">
+                     <p class="no-joined-group-message">가입한 그룹이 없습니다. 그룹에 가입해보세요!</p>
                 </div>
+
+                <!-- 가입한 그룹 목록 -->
                 <div th:each="group : ${joinedGroups}">
-                    <div class="group-card joined-group-card">
+                    <div class="group-card joined-group-card" th:data-group-url="@{/groupboard/main(groupId=${group.groupId})}"
+                         th:data-current-user="${#authentication.principal.username}"
+                         th:data-group-leader="${group.groupLeader.userId}">
                         <img th:src="@{/upload/{imagePath}(imagePath=${group.profileImage})}" alt="그룹 이미지" class="group-image">
                         <div class="group-text">
                             <h2 th:text="${group.groupName}"></h2>
                             <p th:text="${group.description}"></p>
-                            <p>위치: <span th:text="${group.location}"></span></p>
+                            <p class="group-location">위치: <span th:text="${group.location}"></span></p>
                             <p>
                                 <i class="fas fa-user-friends"></i> 
                                 <span th:text="${memberCountMap[group.groupId]}"></span>

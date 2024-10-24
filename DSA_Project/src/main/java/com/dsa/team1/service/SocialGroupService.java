@@ -1,22 +1,21 @@
 package com.dsa.team1.service;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
 
 import com.dsa.team1.dto.BookmarkDTO;
-import com.dsa.team1.dto.SocialGroupDTO;
 import com.dsa.team1.entity.SocialGroupEntity;
 import com.dsa.team1.entity.UserEntity;
-import com.dsa.team1.entity.enums.GroupJoinMethod;
 import com.dsa.team1.entity.enums.Interest;
 import com.dsa.team1.security.AuthenticatedUser;
 
 public interface SocialGroupService {
 
-	void create(List<String> interest, String groupName, String eventDate, String description, String location,
+	void create(List<String> interest, String groupName, LocalDateTime eventDateTime, String description, String location,
 			String joinMethod, Integer memberLimit, List<String> hashtagList, MultipartFile profileImage,
 			AuthenticatedUser user) throws IOException;
 	
@@ -24,7 +23,7 @@ public interface SocialGroupService {
 	
 	List<SocialGroupEntity> findAllGroups();
 
-	List<SocialGroupEntity> searchGroups(String query, String category, String location);
+	List<SocialGroupEntity> searchGroups(String query, String category, String location, String sort);
 
 	void toggleBookmark(UserEntity userEntity, SocialGroupEntity group);
 
@@ -37,6 +36,8 @@ public interface SocialGroupService {
 	void rejectJoinRequest(Integer userId, Integer groupId);
 
 	void addMemberToGroup(Integer userId, Integer groupId);
+
+	boolean isUserMemberOfGroup(String userId, Integer groupId);
 	
 	
 	// 내꺼 -나연-
@@ -50,6 +51,5 @@ public interface SocialGroupService {
 	void addBookmark(String userId, Integer groupId);
 	boolean isBookmarked(String userId, Integer groupId);
 	// ---------
-
 
 }

@@ -80,6 +80,27 @@ $(function() {
         formData.set('profileImage', 'noImage_icon.png'); // 기본 이미지를 FormData에 저장
         $(this).hide(); // 삭제 버튼 숨기기
     });
+    
+    // Remove image button click event
+    $('#removeImage').on('click', function(e) {
+        e.preventDefault(); // 폼 제출 방지
+        $('#imagePreview').attr('src', '../images/noImage_icon.png').show(); // 이미지 기본값으로 초기화
+        $('#modalHeaderImageInput').val(''); // 모달 인풋 초기화
+        $('#modalImagePreview').attr('src', '').hide(); // 모달 미리보기 초기화
+        formData.set('profileImage', 'noImage_icon.png'); // 기본 이미지를 FormData에 저장
+        $(this).hide(); // 삭제 버튼 숨기기
+    });
+    
+    // 지역찾기 버튼
+    $('#findPlace').click(function () {
+        console.log('지역 찾기 버튼 클릭됨');
+        window.open('/kkirikkiri/member/mapTest', '지역찾기', 'fullscreen');
+        
+        const location = $('#location').val();
+        console.log('입력된 위치 값:', location);
+
+        $('#locationForm').submit();
+    });
 
     // Join method radio button change event
     $('input[type="radio"][name="joinMethod"]').on('change', function() {
@@ -99,8 +120,18 @@ $(function() {
         }
         formData.hashtags = formData.hashtags || [];
         formData.hashtags.push(hashtagValue);
-        var newHashtag = $('<span></span>').addClass('hashtag')
-            .html('#' + hashtagValue + ' <button class="remove-hashtag">삭제</button>');
+        
+        // 동적으로 생성되는 해시태그 요소
+	    var newHashtag = $(`
+	        <div class="hashtag-wrapper">
+	            <span class="hashtag">#${hashtagValue}</span>
+	            <button class="remove-hashtag">
+	                <img src="../images/delete.png" alt="삭제" class="delete-icon">
+	            </button>
+	        </div>
+	    `);
+        /*var newHashtag = $('<span></span>').addClass('hashtag')
+            .html('#' + hashtagValue + '</span><button class="remove-hashtag"></button>');*/
         $('#hashtagContainer').append(newHashtag);
         hashtagInput.val('');
 
@@ -109,7 +140,8 @@ $(function() {
 
     // Hashtag removal
     $(document).on('click', '.remove-hashtag', function() {
-        var hashtagText = $(this).parent().text().replace(' 삭제', '');
+		var hashtagText = $(this).siblings('.hashtag').text().replace('#', '').trim();
+        /*var hashtagText = $(this).parent().text().replace(' 삭제', '');*/
         formData.hashtags = formData.hashtags.filter(function(tag) {
             return tag !== hashtagText;
         });
@@ -131,9 +163,9 @@ $(function() {
         }
 
         // 날짜와 시간을 조합하여 LocalDateTime 형식으로 변환
-        var eventDate = $('#eventDate').val(); // 날짜 값 가져오기 (yyyy-MM-dd 형식)
-        if (!eventDate) return alert('활동 날짜를 선택해주세요.');	// 필수 필드 검증
-		formData.set('eventDate', eventDate);  // FormData에 저장
+		var eventDate = $('#eventDate').val(); // 'yyyy-MM-ddTHH:mm' 형식으로 가져옴
+		if (!eventDate) return alert('활동 날짜와 시간을 선택해주세요.');
+		formData.set('eventDate', eventDate);
 
         // 필수 필드 검증
         if (!formData.get('interest')) return alert('관심사를 선택해주세요.');

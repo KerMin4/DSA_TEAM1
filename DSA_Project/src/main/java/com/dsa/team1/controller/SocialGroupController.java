@@ -102,10 +102,10 @@ public class SocialGroupController {
                 .map(Interest::name)  // Enum의 이름(String)으로 변환
                 .collect(Collectors.toList());
     	
-    	// 이벤트 날짜 변환
-    	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    	LocalDateTime eventDateTime = LocalDate.parse(eventDate, formatter).atStartOfDay();
-        
+        // 이벤트 날짜 변환
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+        LocalDateTime eventDateTime = LocalDateTime.parse(eventDate, formatter);
+
     	// 가입 방법 Enum 변환
     	GroupJoinMethod groupJoinMethod = GroupJoinMethod.valueOf(joinMethod.toUpperCase());
         
@@ -116,7 +116,7 @@ public class SocialGroupController {
 
         // 그룹 생성
         try {
-            socialGroupService.create(interestAsString, groupName, eventDate, description, location, joinMethod, memberLimit, hashtagList, profileImage, user);
+            socialGroupService.create(interestAsString, groupName, eventDateTime, description, location, joinMethod, memberLimit, hashtagList, profileImage, user);
         } catch (IOException e) {
         	e.printStackTrace();
         }
@@ -131,6 +131,7 @@ public class SocialGroupController {
     public String list(
     		Model model,
     		@RequestParam(value = "query", required = false) String query,
+    		@RequestParam(value = "sort", required = false) String sort,
     		@AuthenticationPrincipal AuthenticatedUser user) {
     	
     	// 그룹 목록을 저장할 변수 선언
@@ -138,12 +139,22 @@ public class SocialGroupController {
     	
     	// 검색어가 있을 경우 필터링된 결과 조회, 없을 경우 전체 그룹 조회
         if (query != null && !query.trim().isEmpty()) {
-            log.info("검색어: {}", query);
-            groups = socialGroupService.searchGroups(query, null, null); // 검색된 그룹 목록
-            log.info("검색된 그룹 수: {}", groups.size());
+            groups = socialGroupService.searchGroups(query, null, null, sort); // 검색된 그룹 목록
         } else {
-            groups = socialGroupRepository.findAll(); // 전체 그룹 목록
-            log.info("전체 그룹 수: {}", groups.size());
+            groups = socialGroupRepository.findAll(); // 전체 그룹 목록 조회
+        }
+        
+        // 정렬 옵션에 따라 그룹 목록을 정렬
+        if ("mostViewed".equals(sort)) {
+            groups.sort((g1, g2) -> g2.getViewCount().compareTo(g1.getViewCount()));
+        } else if ("mostBookmarked".equals(sort)) {
+            groups.sort((g1, g2) -> g2.getBookmarkCount().compareTo(g1.getBookmarkCount()));
+        } else if ("upcomingEvents".equals(sort)) {
+            groups.sort((g1, g2) -> {
+                if (g1.getEventDate() == null) return 1;
+                if (g2.getEventDate() == null) return -1;
+                return g1.getEventDate().compareTo(g2.getEventDate());
+            });
         }
         
         // 사용자 정보 추가
@@ -217,6 +228,7 @@ public class SocialGroupController {
             @RequestParam(value = "query", required = false) String query,
             @RequestParam(value = "category", required = false) String category,
             @RequestParam(value = "location", required = false) String location,
+            @RequestParam(value = "sort", required = false) String sort,
             Model model) {
 
         List<SocialGroupEntity> groups = new ArrayList<>();
@@ -286,7 +298,7 @@ public class SocialGroupController {
         location = (location != null && !location.trim().isEmpty()) ? location : null;
 
         // 필터링된 그룹 목록 가져오기
-        groups = socialGroupRepository.filterGroups(query, null, location, interestCategory);
+        groups = socialGroupRepository.filterGroups(query, null, location, interestCategory, sort);
 
         // 각 그룹의 인원 수 계산하여 모델에 추가
         Map<Integer, Integer> memberCountMap = new HashMap<>();
@@ -344,14 +356,12 @@ public class SocialGroupController {
         return "socialgroup/joinGroupInvitation";  // 템플릿 반환
     }
 
-    
     /**
      * 가입 권유 페이지 로직
      * 바로 가입(AUTO) / 승인 후 가입(APPROVAL)
      */
     @PostMapping("/joinGroup")
     public ResponseEntity<Map<String, String>> joinGroup(
-//    public String joinGroup(
             @RequestParam("groupId") Integer groupId,
             @AuthenticationPrincipal AuthenticatedUser user) {
     	
@@ -360,11 +370,12 @@ public class SocialGroupController {
         SocialGroupEntity group = socialGroupRepository.findById(groupId)
                 .orElseThrow(() -> new IllegalArgumentException("잘못된 그룹 ID입니다."));
         
-        boolean isMember = userGroupRepository.existsByUser_UserIdAndGroup_GroupId(user.getId(), groupId);
+        boolean isMember = socialGroupService.isUserMemberOfGroup(String.valueOf(user.getId()), groupId);
         if (isMember) {
             response.put("errorMessage", "이미 그룹의 멤버입니다.");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
+      
 //        // 이미 그룹에 가입된 멤버인지 확인
 //        boolean isMember = userGroupRepository.existsByUser_UserIdAndGroup_GroupId(user.getId(), groupId);
 //        if (isMember) {
@@ -374,6 +385,7 @@ public class SocialGroupController {
 
         UserEntity groupLeader = group.getGroupLeader();
         String message = user.getUsername() + "님이 그룹에 가입하였습니다.";
+
         
         if (group.getGroupJoinMethod() == GroupJoinMethod.AUTO) {
             socialGroupService.addMemberToGroup(user.getId(), groupId);

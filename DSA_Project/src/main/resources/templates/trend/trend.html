@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>트렌드 페이지</title>
+    <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+    <link th:href="@{/css/trend.css}" rel="stylesheet">
+    <link th:href="@{/css/main.css}" rel="stylesheet">
+    <link th:href="@{/css/header.css}" rel="stylesheet">
+</head>
+<body>
+    <th:block th:replace="~{fragments/header :: header}"></th:block>
+
+    <div class="container">
+        <section class="group-section">
+            <h2>같은 나이와 성별의 그룹</h2>
+            <div class="group-list">
+                <!-- 그룹 목록 아이템 -->
+                <div class="group-item" th:each="group : ${groups}">
+                    <img th:src="${group.profileImage}" alt="Group Image">
+                    <h3 th:text="${group.groupName}"></h3>
+                    <p th:text="${group.description}"></p>
+                </div>
+            </div>
+        </section>
+
+        <section class="group-section">
+            <h2>같은 지역의 그룹</h2>
+            <div class="group-list">
+                <!-- 그룹 목록 아이템 -->
+                <div class="group-item" th:each="group : ${locationGroups}">
+                    <img th:src="${group.profileImage}" alt="Group Image">
+                    <h3 th:text="${group.groupName}"></h3>
+                    <p th:text="${group.description}"></p>
+                </div>
+            </div>
+        </section>
+
+        <section class="place-section">
+            <h2>가장 빠른 이벤트 날짜의 플레이스</h2>
+            <div class="place-list">
+                <!-- 플레이스 목록 아이템 -->
+                <div class="place-item" th:each="place : ${places}">
+                    <img th:src="${place.profileImage}" alt="Place Image">
+                    <h3 th:text="${place.title}"></h3>
+                    <p th:text="${place.description}"></p>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

@@ -10,18 +10,19 @@ import com.dsa.team1.entity.enums.Interest;
 
 public interface UserService {
 	
-	// 프로필 사진땜에 추가함 -나연-
+
     boolean idCheck(String id);
     void join(String userid, String password, String phone, String email, String location, String name, String username,  Integer gender,
               MultipartFile profileImage, List<String> interests, int birth) throws IOException;
     UserEntity findUserByUserId(String userId);
     
-    // 프로필 수정 -나연-
+  
     String updateProfileImage(String userId, MultipartFile profileImage) throws IOException;
     void updateNickname(String userId, String nickname);
     void updatePhone(String userId, String phone);
     void updatePassword(String userId, String password); 
     void updateLocation(String userId, String location);
+	void updateInterests(String userId, List<String> interests);
 }
 
 

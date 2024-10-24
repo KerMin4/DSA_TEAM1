@@ -19,8 +19,6 @@
             <h2>그룹 게시판</h2>
             
             <br>
-            
-            <h2 th:text="${groupName}"></h2>
 
             <div>가입 멤버</div>
             <ul class="members-list">
@@ -33,6 +31,13 @@
 		
 		<!-- Main Content Section -->
         <div class="main-content">
+        
+        	<nav class="tabs">
+			    <a th:href="@{/groupboard/announcement(groupId=${group.groupId}, type='announcement')}" class="tab">공지사항</a>
+			    <a th:href="@{/groupboard/schedule(groupId=${group.groupId}, type='schedule')}" class="tab">일정</a>
+			    <a th:href="@{/groupboard/album(groupId=${group.groupId}, type='album')}" class="tab">앨범</a>
+			    <a th:href="@{/groupboard/settings(groupId=${group.groupId}, type='settings')}" class="tab">설정</a>
+			</nav>
 		
 		    <div class="album-container">
 		        <!-- 포스트 업로드 모달을 열기 위한 버튼 -->
@@ -41,6 +46,11 @@
 		        <!-- 앨범 그리드 -->
 		        <div id="uploadedPhotos" class="album-grid">
 		            <!-- 서버에서 가져온 업로드된 사진들이 여기에 추가됩니다 -->
+		            <th:block th:each="photo : ${photos}">
+				        <div class="photo-item album-photo" th:data-photo-id="${photo.postId}">
+				            <img th:src="${photo.imageName}" alt="사진">
+				        </div>
+				    </th:block>
 		        </div>
 		    </div>
 		

@@ -127,6 +127,11 @@ public class DashboardController {
         for (SocialGroupEntity group : createdGroups) {
             int memberCount = socialGroupService.getMemberCountByGroup(group);
             memberCountMap.put(group.getGroupId(), memberCount);
+
+            // 방장(userId)와 그룹 리더(group.groupLeader.userId)의 값을 출력
+            System.out.println("로그인한 사용자: " + userId);
+            System.out.println("그룹 리더: " + group.getGroupLeader().getUserId());
+            System.out.println("생성된 그룹 리더 ID: " + group.getGroupLeader().getUserId());
         }
       
         for (SocialGroupEntity group : joinedGroups) {
@@ -243,22 +248,10 @@ public class DashboardController {
         return "redirect:/dashboard/mypage";
     }
 
-    /* 위치 수정
-    @PostMapping("editLocation")
-    public String editLocation(@AuthenticationPrincipal AuthenticatedUser authenticatedUser,
-                               @RequestParam("location") String location,
-                               RedirectAttributes redirectAttributes) {
-        String userId = authenticatedUser.getUsername();
-        userService.updateLocation(userId, location);
-        redirectAttributes.addFlashAttribute("message", "위치가 변경되었습니다.");
-        return "redirect:/dashboard/mypage";
-    }
-    */
-    
- /* 관심사 수정
+    // 관심사 수정
     @PostMapping("editInterests")
     public String editInterests(@AuthenticationPrincipal AuthenticatedUser authenticatedUser,
-                                @RequestParam("interests") List<String> interests, // 선택된 관심사를 리스트로 받음
+                                @RequestParam("interests") List<String> interests, // 사용자가 선택한 관심사 리스트
                                 RedirectAttributes redirectAttributes) {
         String userId = authenticatedUser.getUsername();
         try {
@@ -269,8 +262,6 @@ public class DashboardController {
         }
         return "redirect:/dashboard/mypage";
     }
-    
-    */
     
     // 위치 수정
     @PostMapping("editLocation")
@@ -284,5 +275,13 @@ public class DashboardController {
         userService.updateLocation(userId, location);
         redirectAttributes.addFlashAttribute("message", "위치가 변경되었습니다.");
         return "redirect:/dashboard/mypage"; 
+    }
+    
+    // 10.18
+    // 예약 기록 페이지 이동
+    @GetMapping("/bookingHistory")
+    public String bookingHistory(Model model) {
+        model.addAttribute("activePage", "booking-history");
+        return "dashboard/bookingHistory";
     }
 }

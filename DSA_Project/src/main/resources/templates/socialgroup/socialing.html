@@ -17,7 +17,7 @@
     <div class="container">
         <!-- Sidebar Section -->
         <div class="sidebar">
-            <h2>검색어로 내게 맞는 그룹 찾기</h2>
+            <h2>내게 맞는 그룹 찾기</h2>
             <div class="search">
 			    <form method="get" th:action="@{/socialgroup/socialing}">
 				    <input type="text" name="query" th:value="${query}" placeholder="검색어를 입력하세요">
@@ -25,71 +25,48 @@
 				</form>
 			</div>
             
-            <br><br>
-            
-            <a href="#" id="allGroupsButton" class="btn view-all-btn">전체 그룹 보기</a>
-
             <!-- 카테고리 필터 -->
 			<div class="category-filters">
+				
+				<div>
+					<h3 id="allGroupsButton" class="view-all-btn" style="cursor: pointer;">전체 그룹 보기</h3>
+					<!-- <h3><a href="#" id="allGroupsButton" class="btn view-all-btn">전체 그룹 보기</a></h3> -->
+				</div>
+				
 			    <h3 id="category-toggle" style="cursor: pointer;">카테고리별</h3>
 			    <div id="category-container" style="display: none;">
 			        <label class="interest-option">
-			            <input type="checkbox" name="interest" value="HOBBY">
-			            <span>취미</span>
+			            <input type="checkbox" name="interest" value="HOBBY"><span>취미</span>
 			        </label>
 			        <label class="interest-option">
-			            <input type="checkbox" name="interest" value="DEVELOPMENT">
-			            <span>자기계발</span>
+			            <input type="checkbox" name="interest" value="DEVELOPMENT"><span>자기계발</span>
 			        </label>
 			        <label class="interest-option">
-			            <input type="checkbox" name="interest" value="FOOD">
-			            <span>푸드</span>
+			            <input type="checkbox" name="interest" value="FOOD"><span>푸드</span>
 			        </label>
 			        <label class="interest-option">
-			            <input type="checkbox" name="interest" value="ACTIVITY">
-			            <span>액티비티</span>
+			            <input type="checkbox" name="interest" value="ACTIVITY"><span>액티비티</span>
 			        </label>
 			        <label class="interest-option">
-			            <input type="checkbox" name="interest" value="PETS">
-			            <span>반려동물</span>
+			            <input type="checkbox" name="interest" value="PETS"><span>반려동물</span>
 			        </label>
 			        <label class="interest-option">
-			            <input type="checkbox" name="interest" value="CULTURE">
-			            <span>문화</span>
+			            <input type="checkbox" name="interest" value="CULTURE"><span>문화</span>
 			        </label>
 			        <label class="interest-option">
-			            <input type="checkbox" name="interest" value="MONEY">
-			            <span>재테크</span>
+			            <input type="checkbox" name="interest" value="MONEY"><span>재테크</span>
 			        </label>
 			        <label class="interest-option">
-			            <input type="checkbox" name="interest" value="LOVE">
-			            <span>연애</span>
+			            <input type="checkbox" name="interest" value="LOVE"><span>연애</span>
 			        </label>
 			        <label class="interest-option">
-			            <input type="checkbox" name="interest" value="GAME">
-			            <span>게임</span>
+			            <input type="checkbox" name="interest" value="GAME"><span>게임</span>
 			        </label>
 			        <label class="interest-option">
-			            <input type="checkbox" name="interest" value="TRAVEL">
-			            <span>여행</span>
+			            <input type="checkbox" name="interest" value="TRAVEL"><span>여행</span>
 			        </label>
 			    </div>
 			</div>
-            <!-- <div class="category-filters">
-                <h3 id="category-toggle" style="cursor: pointer;">카테고리별</h3>
-                <div id="category-container" style="display: none;">
-                    <label><input type="radio" name="interest" value="HOBBY"> 취미</label>
-                    <label><input type="radio" name="interest" value="DEVELOPMENT"> 자기계발</label>
-                    <label><input type="radio" name="interest" value="FOOD"> 푸드</label>
-                    <label><input type="radio" name="interest" value="ACTIVITY"> 액티비티</label>
-                    <label><input type="radio" name="interest" value="PETS"> 반려동물</label>
-                    <label><input type="radio" name="interest" value="CULTURE"> 문화</label>
-                    <label><input type="radio" name="interest" value="MONEY"> 재테크</label>
-                    <label><input type="radio" name="interest" value="LOVE"> 연애</label>
-                    <label><input type="radio" name="interest" value="GAME"> 게임</label>
-                    <label><input type="radio" name="interest" value="TRAVEL"> 여행</label>
-                </div>
-            </div> -->
             
             <!-- 지역별 필터 -->
             <div class="location-filters">
@@ -104,14 +81,14 @@
 			    <h3 id="sort-toggle" style="cursor: pointer;">정렬 기준</h3>
 			    <div id="sort-options" class="hidden">
 			        <table>
-			            <tr>
-			                <td><input type="radio" class="sort-btn" name="sort" value="popular"> 인기 순 (북마크 많은 수)</td>
+			        	<tr>
+			                <td><input type="radio" class="sort-btn" name="sort" value="mostViewed"> 조회순</td>
 			            </tr>
 			            <tr>
-			                <td><input type="radio" class="sort-btn" name="sort" value="eventDate"> 이벤트 날짜 순</td>
+			                <td><input type="radio" class="sort-btn" name="sort" value="mostBookmarked"> 북마크순</td>
 			            </tr>
 			            <tr>
-			                <td><input type="radio" class="sort-btn" name="sort" value="latest"> 최신 순</td>
+			                <td><input type="radio" class="sort-btn" name="sort" value="upcomingEvents"> 다가오는 이벤트순</td>
 			            </tr>
 			        </table>
 			    </div>
@@ -122,17 +99,19 @@
         <div class="main-content">
         	<!-- Hashtag filter buttons -->
 		    <div class="hashtags" id="hashtag-container">
-		        <div>
-		        	<!-- 해시태그가 없을 때 기본적으로 출력 -->
-			        <div th:if="${#lists.isEmpty(allHashtags)}">
-			            <span>#아직 등록된 해시태그가 없습니다. 해시태그를 추가해보세요.</span>
-			        </div>
-			        <!-- 해시태그가 있을 때 출력 (중복 제거된 해시태그만 출력) -->
-					<div th:each="hashtag : ${allHashtags}">
-					    <a th:href="@{/socialgroup/filter(query=${hashtag})}">
-					         <span th:text="'#' + ${hashtag}"></span>
-					    </a>
-					</div>
+		    	<div class="hashtag-wrapper">
+			        <div>
+			        	<!-- 해시태그가 없을 때 기본적으로 출력 -->
+				        <div th:if="${#lists.isEmpty(allHashtags)}">
+				            <span>#아직 등록된 해시태그가 없습니다. 해시태그를 추가해보세요.</span>
+				        </div>
+				        <!-- 해시태그가 있을 때 출력 (중복 제거된 해시태그만 출력) -->
+						<div th:each="hashtag : ${allHashtags}">
+						    <a th:href="@{/socialgroup/filter(query=${hashtag})}">
+						         <span th:text="'#' + ${hashtag}"></span>
+						    </a>
+						</div>
+				    </div>
 			    </div>
 		    </div>
 
@@ -151,34 +130,37 @@
 			    
 				<!-- 검색 결과가 있을 경우 출력 -->
 				<div th:unless="${#lists.isEmpty(groups)}">
-			    <div th:each="group : ${groups}">
-			        <div class="group-card" data-group-id="${group.groupId}">
-			            <div class="group-info">
-			                <table>
-			                    <tr>
-			                        <td>
-			                        	<img th:src="@{${group.profileImage != null} ? '/upload/' + ${group.profileImage} : '/images/noImage_icon.png'}" alt="Profile Image" class="group-image">
-			                        </td>
-			                        <td>
-			                            <h3><a th:href="@{/groupboard/main(groupId=${group.groupId})}" th:text="${group.groupName}">그룹 이름</a></h3>
-			                            <p th:text="'위치: ' + ${group.location}">위치</p>
-			                            <p th:text="${#temporals.format(group.eventDate, 'yyyy-MM-dd')}">날짜</p>
-			                            <p th:text="'인원: ' + (${memberCountMap != null ? memberCountMap[group.groupId] : 0}) + '/' + ${group.memberLimit} + '명'">인원</p>
-			                            <p th:text="'조회수: ' + ${group.viewCount}">조회수</p>
-			                            <p th:text="'북마크: ' + ${group.bookmarkCount}" class="bookmark-count">북마크 수</p>
-			                        <td>
-			                            <a th:href="@{/socialgroup/joinGroupInvitation(groupId=${group.groupId})}" class="join-btn">그룹 참여</a>
-			                           
-										<button type="button" class="bookmark-btn" th:data-group-id="${group.groupId}">
-										    <span th:text="${bookmarkedMap != null && bookmarkedMap[group.groupId] != null ? (bookmarkedMap[group.groupId] ? '북마크 제거' : '북마크 추가') : '북마크 추가'}"></span>
-										</button>
-			                        </td>
-			                    </tr>
-			                </table>
-			            </div>
-			        </div>
-			    </div>
-			</div>
+				    <div th:each="group : ${groups}">
+				    	<div class="group-card-wrapper" style="position: relative;">
+					    	<div class="group-card" data-group-id="${group.groupId}" th:onclick="'location.href=\'/kkirikkiri/groupboard/main?groupId=' + ${group.groupId} + '\';'">
+							    <div class="group-info">
+							        <table>
+							            <tr>
+							                <td>
+							                    <img th:src="@{${group.profileImage != null} ? '/upload/' + ${group.profileImage} : '/images/noImage_icon.png'}" alt="Profile Image" class="group-image">
+							                </td>
+							                <td>
+							                    <h3 th:text="${group.groupName}">그룹 이름</h3>
+							                    <p th:text="'위치: ' + ${group.location}">위치</p>
+							                    <p th:text="${#temporals.format(group.eventDate, 'yyyy-MM-dd')}">날짜</p>
+							                    <p th:text="'인원: ' + (${memberCountMap != null ? memberCountMap[group.groupId] : 0}) + '/' + ${group.memberLimit} + '명'">인원</p>
+							                    <p th:text="'조회수: ' + ${group.viewCount}">조회수</p>
+							                    <p th:text="'북마크: ' + ${group.bookmarkCount}" class="bookmark-count">북마크 수</p>
+							                </td>
+							                <td>
+							                    <a th:href="@{/socialgroup/joinGroupInvitation(groupId=${group.groupId})}" class="join-btn">그룹 참여</a>
+							                </td>
+							            </tr>
+							        </table>
+							    </div>
+							</div>
+							<button type="button" class="bookmark-btn" th:data-group-id="${group.groupId}">
+						        <img th:src="@{${bookmarkedMap != null && bookmarkedMap[group.groupId] != null && bookmarkedMap[group.groupId] ? '/images/bookmarked.png' : '/images/bookmarks.png'}}"
+						             alt="Bookmark Icon" class="bookmark-icon" />
+						    </button>
+						</div>
+				    </div>
+				</div>
                 
 	            <!-- 검색 결과가 없을 때 출력할 메시지 -->
 				<div id="no-result-message" style="display: none;">

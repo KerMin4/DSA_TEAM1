@@ -20,8 +20,6 @@
             
             <br>
             
-            <h2 th:text="${groupName}"></h2>
-
             <div>가입 멤버</div>
             <ul class="members-list">
 			    <li th:each="member : ${members}">
@@ -33,6 +31,13 @@
 		
 		<!-- Main Content Section -->
         <div class="main-content">
+        
+        	<nav class="tabs">
+			    <a th:href="@{/groupboard/announcement(groupId=${group.groupId}, type='announcement')}" class="tab">공지사항</a>
+			    <a th:href="@{/groupboard/schedule(groupId=${group.groupId}, type='schedule')}" class="tab">일정</a>
+			    <a th:href="@{/groupboard/album(groupId=${group.groupId}, type='album')}" class="tab">앨범</a>
+			    <a th:href="@{/groupboard/settings(groupId=${group.groupId}, type='settings')}" class="tab">설정</a>
+			</nav>
 	
 		    <!-- 그룹 정보 수정 폼 -->
 		    <form id="settingsForm" th:action="@{/groupboard/update}" method="post" enctype="multipart/form-data">
@@ -75,16 +80,6 @@
 	                </tr>
 	
 	                <tr>
-	                    <td><label for="eventDate">이벤트 날짜:</label></td>
-	                    <td><input type="text" id="eventDate" name="eventDate" th:value="${eventDateFormatted}"></td>
-	                </tr>
-	
-	                <tr>
-	                    <td><label for="location">위치:</label></td>
-	                    <td><input type="text" id="location" name="location" th:value="${group.location}"></td>
-	                </tr>
-	
-	                <tr>
 	                    <td><label for="memberLimit">인원 제한:</label></td>
 	                    <td>
 	                        <div class="person-counter">
@@ -98,7 +93,16 @@
 	                
 	                <tr>
 	                	<td>멤버 관리:</td>
-	                	<td></td>
+	                	<td>
+					        <div class="member-management">
+					            <div class="member-list" style="max-height: 200px; overflow-y: auto;">
+					                <div th:each="member : ${members}">
+					                    <span th:text="${member.userId}"></span>
+					                    <button type="button" class="remove-member" th:data-user-id="${member.userId}">삭제</button>
+					                </div>
+					            </div>
+					        </div>
+					    </td>
 	                </tr>
 	                
 	                <tr>
