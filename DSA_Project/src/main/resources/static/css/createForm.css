@@ -73,7 +73,6 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    overflow: hidden; /* 스크롤바 제거 */
 }
 
 /* ======================= 메인 콘텐츠 스타일 ======================= */
@@ -178,7 +177,7 @@ body {
 }
 
 #removeImage:hover {
-	transform: scale(1.1);
+	transform: scale(1.2);
 }
 
 /* ======================= 인원 수 카운터 스타일 ======================= */
@@ -237,6 +236,7 @@ body {
 #hashtagContainer {
     display: flex;
     align-items: center;
+    max-width: 100%; /* 최대 너비 설정 */
     flex-wrap: wrap; /* 넘칠 경우 줄바꿈 */
 }
 

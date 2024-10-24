@@ -3,6 +3,13 @@ $(function() {
     var hashtags = []; // 추가된 해시태그 배열
     var removedHashtags = []; // 삭제된 해시태그 배열
     var uploadedImageFile = null;  // 모달에서 선택한 이미지 파일 저장용 변수
+    
+    $(document).on('click', '.interest-label', function() {
+	    $('.interest-label').removeClass('selected'); // 기존 선택 제거
+	    $(this).addClass('selected');
+	    var radioId = $(this).attr('for'); // 클릭된 라벨의 'for' 속성 값으로 라디오 버튼 ID 가져오기
+	    $('#' + radioId).prop('checked', true); // 해당 라디오 버튼 선택
+	});
 
     // 인원 수 감소
     $('#decreaseCount').on('click', function() {
