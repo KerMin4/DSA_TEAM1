@@ -1,13 +1,19 @@
 package com.dsa.team1.controller;
 
-import java.io.IOException;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.List;
 
-import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+
+import com.dsa.team1.entity.NotificationEntity;
+import com.dsa.team1.repository.NotificationRepository;
+import com.dsa.team1.security.AuthenticatedUser;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +23,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class NotificationController {
 	
+	private final NotificationRepository notificationRepository;
+	/*
 	@GetMapping("/notify")
 	public SseEmitter sendNotification() {
 		SseEmitter emitter = new SseEmitter(60000L);
@@ -31,4 +39,22 @@ public class NotificationController {
 	
 		return emitter;
 	}
+	*/
+	
+	@GetMapping("/notifications/check")
+	@ResponseBody
+	public boolean checkUnreadNotifications(@AuthenticationPrincipal AuthenticatedUser user) {
+		return notificationRepository.existsByUser_UserIdAndReadStatusFalse(user.getId());
+	}
+	
+	@PostMapping("/notifications/markAsRead")
+    public ResponseEntity<Void> markAllAsRead(@RequestParam("userId") String userId) {
+        List<NotificationEntity> notifications = 
+            notificationRepository.findByUser_UserIdAndReadStatusFalse(userId);
+
+        notifications.forEach(notification -> notification.setReadStatus(true));
+        notificationRepository.saveAll(notifications);
+        
+        return ResponseEntity.ok().build();
+    }
 }
