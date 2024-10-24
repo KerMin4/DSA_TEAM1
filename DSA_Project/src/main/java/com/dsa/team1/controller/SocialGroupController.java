@@ -379,7 +379,7 @@ public class SocialGroupController {
         }
 
         UserEntity groupLeader = group.getGroupLeader();
-        String message = user.getUsername() + "님이 그룹에 가입하였습니다.";
+        String message = user.getUsername() + "님이 '"+ group.getGroupName() +"' 그룹에 가입하였습니다.";
         
         // 바로 가입(AUTO)에 따른 로직 처리
         if (group.getGroupJoinMethod() == GroupJoinMethod.AUTO) {

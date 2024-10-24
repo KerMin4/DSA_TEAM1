@@ -8,4 +8,6 @@ public interface NotificationService {
 	public boolean hasUnreadNotification(String id);
 
 	public void markNotificationsAsRead(String userId);
+
+	public void notificationDelete(Integer notificationId);
 }

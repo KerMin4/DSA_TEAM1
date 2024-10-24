@@ -9,6 +9,7 @@ import com.dsa.team1.entity.NotificationEntity;
 import com.dsa.team1.entity.UserEntity;
 import com.dsa.team1.repository.NotificationRepository;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +43,11 @@ public class NotificationServiceImpl implements NotificationService{
 			notification.setReadStatus(true);
 		}
 		notificationRepository.saveAll(notifications);
+	}
+	@Override
+	public void notificationDelete(Integer notificationId) {
+		NotificationEntity entity = notificationRepository.findById(notificationId).orElseThrow(()-> new EntityNotFoundException("알림이 없습니다."));
+		notificationRepository.delete(entity);
 	}
 
 }
