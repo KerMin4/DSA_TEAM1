@@ -32,6 +32,17 @@ $(function() {
         var eventDate = $('#eventDateInput').val();
         var location = $('#location').val();
         var groupId = $('#groupId').val();
+        
+        // 오전/오후 형식을 변환해서 사용자가 볼 수 있게 처리
+	    var parsedDate = new Date(eventDate);
+	    var formattedDate = parsedDate.toLocaleString('ko-KR', {
+	        year: 'numeric',
+	        month: '2-digit',
+	        day: '2-digit',
+	        hour: '2-digit',
+	        minute: '2-digit',
+	        hour12: true
+	    });
 
         $.ajax({
             url: '/kkirikkiri/groupboard/schedule/update',
@@ -43,7 +54,8 @@ $(function() {
             },
             success: function(response) {
                 alert('일정이 성공적으로 업데이트되었습니다.');
-                $('#eventDateDisplay').text(eventDate).show();
+                $('#eventDateDisplay').text(formattedDate).show();  // 업데이트된 시간 표시
+                /*$('#eventDateDisplay').text(eventDate).show();*/
                 $('#locationDisplay').text(location).show();
                 $('#eventDateInput').hide();
                 $('#findPlace').hide();
