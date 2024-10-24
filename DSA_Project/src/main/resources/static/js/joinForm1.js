@@ -194,6 +194,10 @@ $(document).ready(function(){
 
     $('#duplicateCheck').click(function(){
         let userid = {userid : $('#userid').val()};
+        if($('#userid').val().length <3 || $('#userid').val().length > 10){
+			alert("아이디는 3~10글자로 해주세요.");
+			return;
+		}
         if($('#userid').val()){
             $.ajax({
                 url: '/kkirikkiri/member/idCheck',
