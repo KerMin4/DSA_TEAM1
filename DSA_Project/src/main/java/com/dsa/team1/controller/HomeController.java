@@ -9,10 +9,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
+import com.dsa.team1.dto.NotificationDTO;
 import com.dsa.team1.entity.NotificationEntity;
 import com.dsa.team1.repository.NotificationRepository;
 import com.dsa.team1.security.AuthenticatedUser;
+import com.dsa.team1.service.NotificationService;
 import com.dsa.team1.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -25,6 +28,7 @@ public class HomeController {
 
     private final UserService userService;
     private final NotificationRepository notificationRepository;
+    private final NotificationService notificationService;
     @GetMapping({"", "/"})
     public String home(Model model) {
     
@@ -50,6 +54,13 @@ public class HomeController {
 		model.addAttribute("notifications", notifications);
 		return "notifications";
 	}
+    
+    @GetMapping("/notifications/notificationDelete")
+    public String notificationDelete(@ModelAttribute NotificationDTO notificationDTO) {
+    	log.debug("진입 성공");
+    	notificationService.notificationDelete(notificationDTO.getNotificationId());
+    	return "redirect:/notifications";
+    }
 }
 
 

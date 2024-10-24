@@ -16,6 +16,9 @@
 			<span th:text = "${notification.message}"></span>
 			<!-- <small th:text = "${#dates.format(notification.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></small> -->
 			<small th:text="${notification.createdAt}"></small>
+			<a th:href= "@{/notifications/notificationDelete(notificationId=${notification.notificationId})}">
+				<img th:src= "@{/images/icon_delete.png}" alt = "삭제">
+			</a>
 		</li>
 	</ul>
 	
