@@ -44,7 +44,7 @@
     border-radius: 15px; 
     padding: 0; 
     border: 1px solid rgba(0, 0, 0, 0.5); 
-    margin-top: 20px; 
+    margin-top: 35px; 
     
 }
 
@@ -104,14 +104,12 @@
     font-family: 'S-CoreDream-5Medium', sans-serif; 
     font-size: 14px;
     cursor: pointer; 
-    margin-top: 20px; 
+    margin-top: 40px; 
 }
 
 /* 버튼 포커스 스타일 */
 .login-button:focus {
-    border-color: #81BBF6; 
     background-color: #FFFFFF; 
-    color: #81BBF6; 
 }
 
 /* 클릭할 수 있는 버튼에 마우스 올리면 커서 변경 */

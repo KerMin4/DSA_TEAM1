@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Notification</title>
+<!-- <link rel = "stylesheet" th:href = "@{/css/notification.css}"> -->
+</head>
+<body>
+	 <h1>알림 목록</h1>
+	<div th:if="${notifications.isEmpty()}">
+		<p>새로운 알림이 없습니다.</p>
+	</div>
+	
+	<ul th:if="${!notifications.isEmpty()}">
+		<li th:each="notification : ${notifications}">
+			<span th:text = "${notification.message}"></span>
+			<!-- <small th:text = "${#dates.format(notification.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></small> -->
+			<small th:text="${notification.createdAt}"></small>
+		</li>
+	</ul>
+	
+	<a th:href = "@{/}">메인 페이지로 돌아가기</a>
+</body>
+</html>

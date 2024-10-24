@@ -94,3 +94,14 @@ nav ul li a:hover {
     display: block;
 }
 
+#notification-badge {
+	 background-color: red;
+    color: white;
+    border-radius: 80%;
+    padding: 2px 8px;
+    font-size: 0.8rem;
+    position: absolute;
+    top: -5px;
+    right: -10px;
+    display:none;
+}

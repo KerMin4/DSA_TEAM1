@@ -6,16 +6,24 @@
     <title>Header</title>
     <link th:href="@{/css/header.css}" rel="stylesheet">
     <script th:src="@{/js/dropdown.js}"></script>
+    <script th:src="@{/js/notification.js}"></script>
     <script>
-    	const eventSource = new EventSource('/notify');
-    	
-    	eventSource.onmessage = function(event){
-    		alert('알림 :' + event.data);
-    	};
-    	
-    	eventSource.onerror = function(){
-    		console.error('알림 연결이 끊어졌습니다.');
-    	};
+
+    	document.getElementById('notification-btn').addEventListener('click', () => {
+        const userId = document.getElementById('notification-btn').getAttribute('data-user-id');
+        console.log('알림 버튼 클릭됨:', userId);
+
+        fetch(`/notifications/markAsRead?userId=${userId}`, { method: 'POST' })
+            .then(response => {
+                if (response.ok) {
+                    document.getElementById('notification-badge').style.display = 'none';
+                } else {
+                    console.error('알림 읽음 처리 실패');
+                }
+            })
+            .catch(error => console.error('에러 발생:', error));
+    });
+
     </script>
 </head>
 <body>
@@ -28,8 +36,8 @@
 
                 <div class="center-menu">
                     <li><a th:href="@{/socialgroup/socialing}">소셜링</a></li>
-                    <li><a href="#">트렌드</a></li>
-                    <li><a href="#">플레이스</a></li>
+                    <li><a th:href="@{/trend/trend}">트렌드</a></li>
+                    <li><a th:href="@{/place/placeMain}">플레이스</a></li>
                 </div>
 
                 <div class="right-menu">
@@ -39,8 +47,17 @@
                     </th:block>
 
                     <th:block sec:authorize="isAuthenticated()">
+
+                    	<li>
+                    		<a id="notification-btn" th:data-user-id="${#authentication.principal.id}" th:href="@{/notifications}">
+   							 🔔 알림 <span id="notification-badge" style="display: inline;">🔴</span>
+							</a>
+                        <!-- 여기부터 로그인 후 -->
+                        
+
                     
                         <!-- 로그인 후 프로필 이미지 표시 -->
+
                         <li class="dropdown">
                             <!-- 프로필 이미지가 있을 때 -->
                             
