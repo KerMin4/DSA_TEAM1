@@ -13,7 +13,7 @@ $(function() {
                 // 성공 메시지 처리 후 그룹 보드 페이지로 이동
                 if (response.successMessage) {
                     alert(response.successMessage); 
-                    window.location.href = '/kkirikkiri/socialgroup/groupBoard?groupId=' + groupId;
+                    window.location.href = '/kkirikkiri/socialgroup/socialing';
                 }
                 // 인포 메시지 처리 후 소셜링 페이지로 이동
                 else if (response.infoMessage) {
