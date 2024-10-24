@@ -7,6 +7,35 @@
     <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
     <link th:href="@{/css/header.css}" rel="stylesheet"> 
     <link th:href="@{/css/main.css}" rel="stylesheet"> 
+    <script>
+    window.addEventListener('load', () => {
+        const notificationBtn = document.getElementById('notification-btn');
+        const badge = document.getElementById('notification-badge');
+
+        if (notificationBtn) {
+            const userId = notificationBtn.getAttribute('data-user-id');
+
+            fetch(`/notifications/check?userId=${userId}`)
+                .then(response => response.json())
+                .then(hasUnread => {
+                    badge.style.display = hasUnread ? 'inline' : 'none';
+                })
+                .catch(error => console.error('알림 체크 오류:', error));
+
+            notificationBtn.addEventListener('click', () => {
+                fetch(`/notifications/markAsRead?userId=${userId}`, { method: 'POST' })
+                    .then(response => {
+                        if (response.ok) {
+                            badge.style.display = 'none';
+                        } else {
+                            console.error('알림 읽음 처리 실패');
+                        }
+                    })
+                    .catch(error => console.error('에러 발생:', error));
+            });
+        }
+    });
+    </script>
 </head>
 <body>
 
