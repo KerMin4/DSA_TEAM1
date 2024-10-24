@@ -55,7 +55,7 @@
 
 .group-text h2, .group-text p {
     text-align: left; 
-    margin: 5px 0;
+
 }
 
 h2, p {
@@ -167,6 +167,11 @@ h2, p {
     position: relative;
 }
 
+.group-text h2 {
+    font-size: 22px; 
+    color: #000; 
+    margin-bottom: -5px; 
+}
 .group-text h2 a::after {
     content: '';
     position: absolute;
