@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,14 +26,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.dsa.team1.entity.BookmarkEntity;
 import com.dsa.team1.entity.GroupHashtagEntity;
 import com.dsa.team1.entity.SocialGroupEntity;
 import com.dsa.team1.entity.UserEntity;
-import com.dsa.team1.entity.UserGroupEntity;
 import com.dsa.team1.entity.enums.GroupJoinMethod;
 import com.dsa.team1.entity.enums.Interest;
-import com.dsa.team1.entity.enums.UserGroupStatus;
 import com.dsa.team1.repository.BookmarkRepository;
 import com.dsa.team1.repository.GroupHashtagRepository;
 import com.dsa.team1.repository.SocialGroupRepository;
@@ -40,6 +38,7 @@ import com.dsa.team1.repository.UserGroupRepository;
 import com.dsa.team1.repository.UserRepository;
 import com.dsa.team1.security.AuthenticatedUser;
 import com.dsa.team1.service.SocialGroupService;
+import com.dsa.team1.service.NotificationService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -56,6 +55,7 @@ public class SocialGroupController {
     private final GroupHashtagRepository groupHashtagRepository;
     private final UserRepository userRepository;
     private final BookmarkRepository bookmarkRepository;
+    private final NotificationService notificationService;
     
     @Value("${socialgroup.pageSize}")
     int pageSize;
@@ -371,9 +371,13 @@ public class SocialGroupController {
 //            redirectAttributes.addFlashAttribute("error", "이미 그룹의 멤버입니다.");
 //            return "redirect:/socialgroup/socialing";
 //        }
+
+        UserEntity groupLeader = group.getGroupLeader();
+        String message = user.getUsername() + "님이 그룹에 가입하였습니다.";
         
         if (group.getGroupJoinMethod() == GroupJoinMethod.AUTO) {
             socialGroupService.addMemberToGroup(user.getId(), groupId);
+            notificationService.sendNotification(groupLeader, message);	// 알림 추가
             response.put("successMessage", "그룹에 성공적으로 가입되었습니다.");
             return ResponseEntity.ok(response);
         } else if (group.getGroupJoinMethod() == GroupJoinMethod.APPROVAL) {
@@ -381,7 +385,7 @@ public class SocialGroupController {
             response.put("infoMessage", "그룹 리더의 승인이 필요합니다.");
             return ResponseEntity.ok(response);
         }
-
+        
         response.put("errorMessage", "가입할 수 없습니다.");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         

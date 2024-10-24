@@ -45,7 +45,6 @@ public class SocialGroupServiceImpl implements SocialGroupService {
     private final UserGroupRepository userGroupRepository;
     private final BookmarkRepository bookmarkRepository;
     private final FileManager fileManager;                       
-    
     /**
      * 그룹을 생성하는 메서드
      * @param interest 그룹의 관심사 (리스트 형태)
