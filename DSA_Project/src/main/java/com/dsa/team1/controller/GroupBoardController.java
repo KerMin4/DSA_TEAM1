@@ -38,6 +38,7 @@ import com.dsa.team1.entity.enums.PostType;
 import com.dsa.team1.repository.GroupHashtagRepository;
 import com.dsa.team1.repository.PhotoRepository;
 import com.dsa.team1.repository.PostRepository;
+import com.dsa.team1.repository.ReplyRepository;
 import com.dsa.team1.repository.SocialGroupRepository;
 import com.dsa.team1.repository.UserGroupRepository;
 import com.dsa.team1.repository.UserRepository;
@@ -62,6 +63,7 @@ public class GroupBoardController {
     private final PostRepository postRepository;
     private final UserGroupRepository userGroupRepository;
     private final GroupHashtagRepository groupHashtagRepository;
+    private final ReplyRepository replyRepository;
     
     /**
      * 그룹 보드 게시판 페이지로 이동
@@ -76,7 +78,9 @@ public class GroupBoardController {
         // 해당 그룹을 조회
         SocialGroupEntity group = socialGroupRepository.findById(groupId)
                 .orElseThrow(() -> new IllegalArgumentException("잘못된 그룹 ID입니다."));
-        // 그룹 이름 추가
+        
+        // group 객체를 모델에 추가
+        model.addAttribute("group", group);
         model.addAttribute("groupName", group.getGroupName());
         
         // 조회수 증가
@@ -94,15 +98,16 @@ public class GroupBoardController {
         boolean isMember = groupBoardService.isUserMemberOfGroup(user.getId(), groupId);
         model.addAttribute("isMember", isMember);
         
-        // 그룹 멤버일 때와 비회원일 때 페이지 반환
-        if (isMember) {
-            model.addAttribute("group", group);
-            model.addAttribute("groupLeaderId", group.getGroupLeader().getUserId());
-            return "groupboard/main";
-        } else {
-            model.addAttribute("group", group);
-            return "socialgroup/joinGroupInvitation";
-        }
+        return "groupboard/main";
+//        // 그룹 멤버일 때와 비회원일 때 페이지 반환
+//        if (isMember) {
+//            model.addAttribute("group", group);
+//            model.addAttribute("groupLeaderId", group.getGroupLeader().getUserId());
+//            return "groupboard/main";
+//        } else {
+//            model.addAttribute("group", group);
+//            return "socialgroup/joinGroupInvitation";
+//        }
     }
     
     /**
@@ -240,7 +245,7 @@ public class GroupBoardController {
 	    model.addAttribute("members", memberProfiles);
 
 	    // 날짜 포맷 설정
-	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd a hh:mm");
 	    String formattedDateTime = group.getEventDate().format(formatter);
 	    model.addAttribute("eventDateFormatted", formattedDateTime);
 	    
@@ -259,7 +264,7 @@ public class GroupBoardController {
         SocialGroupEntity group = socialGroupRepository.findById(groupId)
                 .orElseThrow(() -> new IllegalArgumentException("잘못된 그룹 ID입니다."));
 
-        // 날짜 포맷 변경
+        // 날짜 포맷 설정
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
         group.setEventDate(LocalDateTime.parse(eventDate, formatter));
         group.setLocation(location);
@@ -485,8 +490,18 @@ public class GroupBoardController {
     @GetMapping("/post/{postId}/replies")
     public ResponseEntity<List<ReplyDTO>> getRepliesByPostId(
         @PathVariable("postId") Integer postId) {
-        List<ReplyDTO> replies = groupBoardService.getRepliesByPostId(postId);
-        return ResponseEntity.ok(replies);  // 댓글 목록만 반환
+    	
+    	List<ReplyDTO> replies = replyRepository.findByPost_PostId(postId).stream()
+    	        .map(reply -> ReplyDTO.builder()
+    	            .replyId(reply.getReplyId())
+    	            .postId(reply.getPost().getPostId())
+    	            .userId(reply.getUser().getUserId())
+    	            .content(reply.getContent())
+    	            .createdAt(reply.getCreatedAt()) // LocalDateTime 그대로 사용
+    	            .build())
+    	        .collect(Collectors.toList());
+
+    	    return ResponseEntity.ok(replies);
     }
     
     /**

@@ -10,7 +10,7 @@ $(function() {
             url: "/kkirikkiri/socialgroup/joinGroup", // 서버로 요청할 URL
             data: { groupId: groupId }, // 서버로 전송할 데이터
             success: function(response) {
-                // 성공 메시지 처리 후 그룹 보드 페이지로 이동
+                // 성공 메시지 처리 후 소셜링 페이지로 이동
                 if (response.successMessage) {
                     alert(response.successMessage); 
                     window.location.href = '/kkirikkiri/socialgroup/socialing';
