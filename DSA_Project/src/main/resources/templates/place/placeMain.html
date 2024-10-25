@@ -3,10 +3,11 @@
 <head>
     <title>플레이스</title>
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
-    <link th:href="@{/css/sidebar.css}" rel="stylesheet">
-    <link th:href="@{/css/placeMain.css}" rel="stylesheet">
-    <link th:href="@{/css/header.css}" rel="stylesheet">
     <script th:src="@{/js/placeMain.js}"></script>
+    <link th:href="@{/css/placeMain.css}" rel="stylesheet">
+    <link th:href="@{/css/main.css}" rel="stylesheet">
+    <link th:href="@{/css/header.css}" rel="stylesheet">
+    <link th:href="@{/css/sidebar.css}" rel="stylesheet">
 </head>
 <body>
     <th:block th:replace="~{fragments/header :: header}"></th:block>
@@ -24,10 +25,13 @@
             
             <br><br>
             
-            <a href="#" id="allGroupsButton" class="btn view-all-btn">전체 그룹 보기</a>
-
             <!-- 카테고리 필터 -->
 			<div class="category-filters">
+			
+				<div>
+				<h3 id="allGroupsButton" class="view-all-btn" style="cursor: pointer;">전체 그룹 보기</h3>
+				</div>
+				
 			    <h3 id="category-toggle" style="cursor: pointer;">카테고리별</h3>
 			    <div id="category-container" style="display: none;">
 			        <label class="activity-option">
@@ -80,6 +84,12 @@
 			</div>
         </div>
 
+		<!-- Main Content Section -->
+		<div class = "main-content">
+			<div>
+				<h2>업체와 함께 활동을 더 전문적으로 즐겨보세요!</h2>
+			</div>
+		
 			<!-- Place Listings -->
             <div class="place-listing" id="place-container">
 			    <!-- 전체 그룹 목록을 처음에 출력 -->
@@ -91,30 +101,38 @@
 				<!-- 검색 결과가 있을 경우 출력 -->
 				<div th:unless="${#lists.isEmpty(places)}">
 			    <div th:each="place : ${places}">
-			        <div class="place-card" data-group-id="${place.placeId}">
-			            <div class="place-info">
-			                <table>
-			                    <tr>
-			                        <td>
-			                        	<img th:src="@{${place.profileImage != null} ? '/upload/' + ${place.profileImage} : '/images/noImage_icon.png'}" alt="Profile Image" class="place-image">
-			                        </td>
-			                        <td>
-			                            <h3><a th:href="@{/place/placeDetail(placeId=${place.placeId})}" th:text="${place.title}">그룹 이름</a></h3>
-			                            <p th:text="'위치: ' + ${place.location}">위치</p>
-			                            <p th:text="${#temporals.format(place.eventDate, 'yyyy-MM-dd')}">날짜</p>
-			                            <p th:text="'인원: ' + (${currentMembersMap != null && currentMembersMap[place.placeId] != null ? currentMembersMap[place.placeId] : 0}) + '/' + ${place.memberLimit} + '명'">인원</p>
-			                            <p th:text="'조회수: ' + ${place.viewCount}">조회수</p>
-			                            <p th:text="'북마크: ' + ${place.bookmarkCount}" class="bookmark-count">북마크 수</p>
-			                        <td>
-			                            <a th:href="@{/place/joinPlace(placeId=${place.placeId})}" class="join-btn">플레이스 참여</a>
-			                           
-										<button type="button" class="bookmark-btn" th:data-group-id="${place.placeId}">
-										    <span th:text="${bookmarkedMap != null && bookmarkedMap[place.placeId] != null ? (bookmarkedMap[place.placeId] ? '북마크 제거' : '북마크 추가') : '북마크 추가'}"></span>
-										</button>
-			                        </td>
-			                    </tr>
-			                </table>
-			            </div>
+			    	<div class="place-card-wrapper" style="position: relative;">
+				        <div class="place-card" data-group-id="${place.placeId}" th:onclick="'location.href=\'/kkirikkiri/place/placeDetail?placeId=' + ${place.placeId} + '\';'">
+				            <div class="place-info">
+				                <table>
+				                    <tr>
+				                        <td>
+				                        	<img th:src="@{${place.profileImage} != null ? '/upload/' + ${place.profileImage} : '/images/noImage_icon.png'}" alt="Profile Image" class="place-image">
+				                        </td>
+				                        <td>
+				                            <h3><a th:text="${place.title}">그룹 이름</a></h3>
+				                            <p th:text="'위치: ' + ${place.location}">위치</p>
+				                            <p th:text="${#temporals.format(place.eventDate, 'yyyy-MM-dd')}">날짜</p>
+				                            <p th:text="'인원: ' + (${currentMembersMap != null && currentMembersMap[place.placeId] != null ? currentMembersMap[place.placeId] : 0}) + '/' + ${place.memberLimit} + '명'">인원</p>
+				                            <p th:text="'조회수: ' + ${place.viewCount}">조회수</p>
+				                            <!-- CSS 해결 전까지 삭제
+				                            <p th:text="'북마크: ' + ${place.bookmarkCount}" class="bookmark-count">북마크 수</p>
+				                             -->
+				                        </td>
+				                        <td>
+				                            <a th:href="@{/place/joinPlace(placeId=${place.placeId})}" class="join-btn">플레이스 참여</a>
+			                           	</td>
+				                           
+				                    </tr>
+				                </table>
+				            </div>
+				        </div>
+				        <!-- CSS 문제 해결될 때까지 지움 
+						<button type="button" class="bookmark-btn" th:data-place-id="${place.placeId}">
+						    <img th:src="${bookmarkedMap != null && bookmarkedMap[place.placeId] != null && bookmarkedMap[place.placeId] ? '/images/bookmarked.png' : '/images/bookmarks.png'}"
+						             alt="Bookmark Icon" class="bookmark-icon" />
+						</button>
+						-->
 			        </div>
 			    </div>
 			</div>
@@ -125,7 +143,7 @@
 	            </div>
 	            
             </div>
-            
-		</div>
+        </div>
+	</div>
 </body>
 </html>

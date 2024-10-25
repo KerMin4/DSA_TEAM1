@@ -270,7 +270,6 @@ public class PlaceServiceImpl implements PlaceService {
     	
     	// if query is not null
     	if (query != null && !query.trim().isEmpty()) {
-    	
     		// Finding Place including query in title or description
     		places = placeRepository.findByTitleContainingOrDescriptionContaining(query, query);
     	} else {
@@ -358,6 +357,42 @@ public class PlaceServiceImpl implements PlaceService {
     	
     	return currentMembers;
     }
+
+//	@Override
+//	public Boolean reservePlace(Integer placeId, String userId) {
+//		try {
+//			PlaceEntity placeEntity = placeRepository.findById(placeId).orElseThrow(() -> new NoSuchElementException("Place not found"));
+//			UserEntity userEntity = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("User not found"));
+//			UserPlaceEntity userPlaceEntity = userPlaceRepository.findByUser_UserIdAndPlace_PlaceId(userId, placeId).orElseThrow(() -> new NoSuchElementException("UserPlace not found"));			
+//		} catch(NoSuchElementException e) {
+//			return false;
+//		}
+//		return true;
+//		
+//	}
+
+	@Override
+	public String paymentPlace(Integer placeId, String userId) {
+		try {
+			PlaceEntity placeEntity = placeRepository.findById(placeId).orElseThrow(() -> new NoSuchElementException("Place not found"));
+			UserEntity userEntity = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("User not found"));
+			UserPlaceEntity userPlaceEntity = userPlaceRepository.findByUser_UserIdAndPlace_PlaceId(userId, placeId).orElseThrow(() -> new NoSuchElementException("UserPlace not found"));
+			
+			if (placeEntity.getCurrentMembers() <= placeEntity.getMemberLimit()) {
+				userPlaceEntity.setStatus(UserPlaceStatus.valueOf("CONFIRMED"));
+				placeEntity.setCurrentMembers(placeEntity.getCurrentMembers() + 1);
+				
+				return "redirect:/place/placeDetail?placeId=" + placeId + "&message=결제가 완료되었습니다.";
+			} else {
+				return "redirect:/place/placeDetail?placeId=" + placeId + "&message=정보를 찾을 수 없습니다.";
+			}
+		} catch(NoSuchElementException e) {
+			return "redirect:/place/placeDetail?placeId=" + placeId + "&message=정보를 찾을 수 없습니다.";
+		}
+		
+		
+		
+	}
     
     
     

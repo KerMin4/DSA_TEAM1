@@ -36,7 +36,7 @@ body {
     min-height: 560px;  /* 최소 높이 설정 */
     width: 100%;        /* 너비를 100%로 설정하여 부모 요소에 맞추기 */
     overflow: hidden; 
-    margin: 0 auto 125px;
+    margin: 50px auto 125px;
     /* padding: 0 10px; */
 }
 
@@ -87,9 +87,9 @@ body {
 
 .place-price {
     margin-top: 20px;
-    font-size: 1.8rem;
+    font-size: 1.3rem;
     font-weight: bold;
-    color: #FF6347;
+    color: black;
     text-align: center;
 }
 

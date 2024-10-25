@@ -11,11 +11,10 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.dsa.team1.dto.PlaceDTO;
 import com.dsa.team1.repository.BookmarkRepository;
@@ -103,18 +102,15 @@ public class PlaceController {
         return "place/placeMain";
     }
     
-    /**
-     * Join in place
-     * @return joinPlace.html
-     */
-    @GetMapping("joinPlace")
-    public ResponseEntity<Map<String, String>> join(
-    		@RequestParam("placeId") Integer placeId,
-            @AuthenticationPrincipal AuthenticatedUser user) {
-    	
-    	return placeService.isMember(placeId, user);
-    }
     
+    /**
+     * Filter places
+     * @param query
+     * @param category
+     * @param location
+     * @param model
+     * @return placeMain.html
+     */
     @GetMapping("filter")
     public String filterPlaces(
     		@RequestParam(value = "query", required = false) String query,
@@ -163,25 +159,61 @@ public class PlaceController {
     	return ResponseEntity.ok(place.getBookmarkCount().toString());  // 변경된 북마크 수를 반환
     }
     
-    @ResponseBody
-    @GetMapping("joinPlace/{placeId}")
-    public ResponseEntity<PlaceDTO> getPlaceById(@PathVariable("placeId") Integer placeId) {
+//    /**
+//     * Join in place
+//     * @return joinPlace.html
+//     */
+//    @GetMapping("joinPlace")
+//    public ResponseEntity<Map<String, String>> join(
+//    		@RequestParam("placeId") Integer placeId,
+//            @AuthenticationPrincipal AuthenticatedUser user) {
+//    	
+//    	return placeService.isMember(placeId, user);
+//    }
+    
+    /**
+     * Join Place
+     * @param placeId
+     * @return joinPlace.html
+     */
+    @GetMapping("joinPlace")
+    public String joinPlace(
+    		@RequestParam("placeId") Integer placeId,
+    		Model model) {
     	
-    	log.info("Fetching place with ID: {}", placeId);
-        
-        if (placeId == null || placeId <= 0) {
-            log.error("Invalid placeId: {}", placeId);
-            return ResponseEntity.badRequest().build();
-        }
-    	
-    	PlaceDTO place = placeService.findPlace(placeId);
-    	log.info("[PlaceController] place: {}", place);
-    	if (place != null) {
-    		return ResponseEntity.ok(place);
-    	} else {
-    		return ResponseEntity.notFound().build();
+    	if (placeId == null) {
+    	    log.error("Place ID is null");
+    	    return "error/400"; // 잘못된 요청에 대한 처리
     	}
+    	
+    	log.info("[PlaceController-joinPlace] placeId: {}", placeId);
+    	PlaceDTO place = placeService.findPlace(placeId);
+    	log.info("[PlaceController-joinPlace] placeDTO: {}", place);
+    	
+    	model.addAttribute("place", place);
+    	
+    	return "place/joinPlace";
     }
+    
+//    @ResponseBody
+//    @GetMapping("joinPlace/{placeId}")
+//    public ResponseEntity<PlaceDTO> getPlaceById(@PathVariable("placeId") Integer placeId) {
+//    	
+//    	log.info("Fetching place with ID: {}", placeId);
+//        
+//        if (placeId == null || placeId <= 0) {
+//            log.error("Invalid placeId: {}", placeId);
+//            return ResponseEntity.badRequest().build();
+//        }
+//    	
+//    	PlaceDTO place = placeService.findPlace(placeId);
+//    	log.info("[PlaceController] place: {}", place);
+//    	if (place != null) {
+//    		return ResponseEntity.ok(place);
+//    	} else {
+//    		return ResponseEntity.notFound().build();
+//    	}
+//    }
     
     @GetMapping("placeDetail")
     public String placeDetail(
@@ -193,7 +225,7 @@ public class PlaceController {
     	    return "error/400"; // 잘못된 요청에 대한 처리
     	}
     	
-    	log.info("testtest [PlaceController - placeDetail] placeId: {}", placeId);
+    	log.info("[PlaceController - placeDetail] placeId: {}", placeId);
     	
     	PlaceDTO place = placeService.findPlace(placeId);
     	log.info("Place eventDate: {}", place.getEventDate());
@@ -202,6 +234,37 @@ public class PlaceController {
     	
     	return "place/placeDetail";
     }
+    
+//    @PostMapping("reserve")
+//    public String reservation(
+//    		@RequestParam("placeId") Integer placeId,
+//    		@AuthenticationPrincipal AuthenticatedUser user,
+//    		Model model) {
+//    	
+//    	Boolean possibleToReserve = placeService.reservePlace(placeId, user.getId());
+//    	if (possibleToReserve) {
+//    		return "redirect:/place/placeDetail?placeId=" + placeId + "&message=예약이 완료되었습니다.";
+//    	} else {
+//    		return "redirect:/place/placeDetail?placeId=" + placeId + "&message=정보를 찾을 수 없습니다.";
+//    	}
+//    }
+    
+    @PostMapping("payment")
+    public String payment(
+            @RequestParam("placeId") Integer placeId,
+            @AuthenticationPrincipal AuthenticatedUser user,
+            RedirectAttributes redirectAttributes,
+            Model model) {
+        
+        // 결제 처리 결과 메시지 가져오기
+        String message = placeService.paymentPlace(placeId, user.getId());
+
+        model.addAttribute("message", message);
+//        redirectAttributes.addFlashAttribute("message", message);
+
+        return "redirect:/place/placeDetail?placeId=" + placeId;
+    }
+    
     
 //    @GetMapping("/placeMain")
 //    public String getPlaceMain(@RequestParam(defaultValue = "최신순") String activity,

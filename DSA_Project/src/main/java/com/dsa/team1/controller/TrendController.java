@@ -36,15 +36,16 @@ public class TrendController {
 		log.info("[TrendController-getTreds] user: {}", user);
 
         // 그룹 및 플레이스 목록 가져오기
-        List<SocialGroupDTO> groupL = trendService.getGroupsByUserDemographics(user.getId());
+		List<SocialGroupDTO> groupL = trendService.getGroupsByUserInterests(user.getId());
+//        List<SocialGroupDTO> groupL = trendService.getGroupsByUserDemographics(user.getId());
         List<SocialGroupDTO> locationGroupL = trendService.getGroupsByUserLocation(user.getId());
         List<PlaceDTO> locationPlaceL = trendService.getPlacesByUserLocation(user.getId());
         List<PlaceDTO> placeL = trendService.getUpcomingPlaces();
         
         log.info("[TrendController-getTrends] groups: {}, locationGroups: {}, places: {}", groupL, locationGroupL, placeL);
 
-        model.addAttribute("groups", groupL);
         model.addAttribute("locationGroups", locationGroupL);
+        model.addAttribute("locationPlaces", locationPlaceL);
         model.addAttribute("places", placeL);
 
         return "trend/trend"; // HTML 파일 이름

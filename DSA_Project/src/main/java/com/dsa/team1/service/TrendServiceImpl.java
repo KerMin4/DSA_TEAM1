@@ -3,6 +3,7 @@ package com.dsa.team1.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -114,12 +115,21 @@ public class TrendServiceImpl implements TrendService {
 		log.info("[TrendService-getGroupsByUserInterests] Interest Entity List: {}", interestEntityList);
 		
 		List<SocialGroupEntity> groupEntityList = groupRepository.findAll();
+		log.info("[TrendService-getGroupsByUserInterests] Social Group List: {}", groupEntityList);
+		if (!(groupEntityList != null && interestEntityList != null)) {
+			return null;
+		}
 		List<SocialGroupDTO> groupDtoList = new ArrayList<>();
 		for (SocialGroupEntity groupEntity : groupEntityList) {
 			for (InterestEntity interestEntity : interestEntityList) {
-				if (interestEntity.toString().equals(groupEntity.getInterest().toString())) {
+				
+				if (groupEntity.getInterest() == null) {
+		            System.out.println("Group ID: " + groupEntity.getGroupId() + " has null interest.");
+		        } else if (interestEntity.toString().equals(groupEntity.getInterest().toString())) {
 					SocialGroupDTO groupDTO = groupConvertEntityToDto(groupEntity);
+					log.info("[TrendService-getGroupsByUserInterests] Social DTO: {}", groupDTO);
 					groupDtoList.add(groupDTO);
+					log.info("[TrendService-getGroupsByUserInterests] Social DTO List: {}", groupDtoList);
 				}
 			}
 		}
@@ -131,9 +141,13 @@ public class TrendServiceImpl implements TrendService {
 		
 		UserEntity userEntity = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("User not found"));
 		List<SocialGroupEntity> groupEntityList = groupRepository.findAll();
+		log.info("[TrendService - getGroupsByUserLocation] User: {}, Group Entity List: {}", userEntity, groupEntityList);
+		
 		List<SocialGroupDTO> groupDtoList = new ArrayList<>();
 		for (SocialGroupEntity groupEntity : groupEntityList) {
-			if (userEntity.getPreferredLocation() == groupEntity.getLocation()) {
+			log.info("TrendService - getGroupsByUserLocation] GroupEntity: {}, location: {}, preferredLocation: {}", groupEntity, groupEntity.getLocation(), userEntity.getPreferredLocation());
+			if (userEntity.getPreferredLocation().contains(groupEntity.getLocation()) || groupEntity.getLocation().contains(userEntity.getPreferredLocation())) {
+				log.info("TrendService - getGroupsByUserLocation] 선호 장소 일치");
 				SocialGroupDTO groupDTO = groupConvertEntityToDto(groupEntity);
 				groupDtoList.add(groupDTO);
 			}
@@ -148,7 +162,7 @@ public class TrendServiceImpl implements TrendService {
 		List<PlaceEntity> placeEntityList = placeRepository.findAll();
 		List<PlaceDTO> placeDtoList = new ArrayList<>();
 		for (PlaceEntity placeEntity : placeEntityList) {
-			if (userEntity.getPreferredLocation() == placeEntity.getLocation()) {
+			if (userEntity.getPreferredLocation().contains(placeEntity.getLocation()) || placeEntity.getLocation().contains(userEntity.getPreferredLocation())) {
 				PlaceDTO placeDTO = placeConvertEntityToDto(placeEntity);
 				placeDtoList.add(placeDTO);
 			}
@@ -159,7 +173,14 @@ public class TrendServiceImpl implements TrendService {
 	@Override
 	public List<PlaceDTO> getUpcomingPlaces() {
 		List<PlaceEntity> placeEntityList = placeRepository.findAll();
-		return null;
+		
+		List<PlaceDTO> upcomingPlaces = placeEntityList.stream()
+		        .filter(place -> place.getEventDate() != null) // eventDate가 null이 아닌 경우만 필터링
+		        .sorted((p1, p2) -> p1.getEventDate().compareTo(p2.getEventDate())) // eventDate 기준으로 정렬
+		        .map(this::placeConvertEntityToDto) // PlaceEntity를 PlaceDTO로 변환
+		        .collect(Collectors.toList()); // 리스트로 수집
+
+		    return upcomingPlaces; // 정렬된 리스트 반환
 	}
 
 	

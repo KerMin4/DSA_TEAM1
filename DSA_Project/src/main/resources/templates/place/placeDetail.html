@@ -10,7 +10,7 @@
 </head>
 <body>
 	<th:block th:replace="~{fragments/header :: header}"></th:block>
-
+	
 	<div class="place-header">
 	    <div class="profile-image">
 	        <img th:src="@{/upload/{profileImage}(profileImage=${place.profileImage})}" alt="Profile Image">
@@ -50,6 +50,7 @@
 	                <th>주최</th>
 	                <td th:text="${place.vendorId}"></td>
 	            </tr>
+	            <!-- 
 	            <tr>
 	                <th>조회수</th>
 	                <td th:text="${place.viewCount}"></td>
@@ -58,16 +59,17 @@
 	                <th>북마크수</th>
 	                <td th:text="${place.bookmarkCount}"></td>
 	            </tr>
+	             -->
 	        </table>
 	
 	        <!-- 가격과 참여하기 버튼을 테이블 아래로 이동 -->
 	        <div class="place-price">
-	            <h2 th:text="'가격: ₩' + ${place.price}"></h2>
+	            <h2 th:text="'가격: ' + ${T(java.lang.String).format('%,d', place.price.intValue())} + '원'"></h2>
 	        </div>
 	
 	        <div class="place-action">
-	            <button class="join-button">플레이스에 참여하기</button>
-	        </div>
+			    <a th:href="@{/place/joinPlace(placeId=${place.placeId})}" class="join-button">플레이스에 참여하기</a>
+			</div>
 	    </div>
 	</div>
 

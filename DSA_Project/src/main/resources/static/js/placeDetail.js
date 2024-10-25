@@ -3,8 +3,19 @@
  */
 
  // DOMContentLoaded 이벤트를 통해 HTML이 완전히 로드된 후 실행
-document.addEventListener('DOMContentLoaded', function () {
+window.onload = function() {
     const joinButton = document.querySelector('.join-button'); // "플레이스에 참여하기" 버튼
+    
+    // 결제 완료 후 메시지 띄우고 placeMain으로 이동
+    // 메시지가 존재하는 경우
+    var message = /*[[${message}]]*/ '';
+    if (message) {
+        alert(message); // 알림 표시
+        // 일정 시간 후 placeMain으로 이동
+        setTimeout(function() {
+            window.location.href = '/place/placeMain';
+        }, 2000); // 2초 후 이동
+    }
 
     // 버튼 클릭 이벤트 리스너 추가
     if (joinButton) {
@@ -14,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // 서버에 참여 요청을 보내기
             fetch(`/place/joinPlace/${placeId}`, {
-                method: 'GET', // 참여 요청은 POST 방식으로
+                method: 'POST', // 참여 요청은 POST 방식으로
                 headers: {
                     'Content-Type': 'application/json' // JSON 형식으로 요청
                 },
@@ -39,4 +50,5 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     }
-});
+    
+};
