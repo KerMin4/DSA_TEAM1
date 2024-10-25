@@ -179,7 +179,6 @@ public class SocialGroupServiceImpl implements SocialGroupService {
 	    if (location != null || interestCategory != null) {
 	        groups = socialGroupRepository.filterGroups(query, null, location, interestCategory, sort);
 	    }
-	    
 	    return groups;
 //	    // 중복 제거
 //	    return groups.stream().distinct().collect(Collectors.toList());

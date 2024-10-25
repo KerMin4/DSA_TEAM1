@@ -8,6 +8,11 @@
 	<link th:href="@{/css/sidebar.css}" rel="stylesheet">
 	<link th:href="@{/css/groupboardSettings.css}" rel="stylesheet">
 	<link th:href="@{/css/header.css}" rel="stylesheet">
+	
+	<script th:inline="javascript">
+	    var existingHashtags = /*[[${hashtags}]]*/ [];
+	</script>
+	
 	<script th:src="@{/js/groupboardSettings.js}"></script>
 </head>
 <body>
@@ -143,10 +148,11 @@
 		                    </div>
 		                </td>
 		            </tr>
+		            
 		            <tr>
 		            	<td colspan="2">
 	                        <div id="hashtagContainer">
-		                        <div th:each="tag : ${hashtags}">
+		                        <div th:each="tag : ${hashtags}" class="hashtag-item-container">
 								    <span class="hashtag-item" th:text="'#' + ${tag.name}"></span>
 								    <button type="button" class="remove-hashtag">
 								        <img src="../images/delete.png" alt="삭제" class="delete-icon">
