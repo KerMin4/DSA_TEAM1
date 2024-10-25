@@ -39,7 +39,7 @@
 .group-image {
     width: 140px; 
     height: 110px; 
-    object-fit: contain; 
+    object-fit: cover; 
     border-radius: 5%;
     margin-right: 20px; 
     align-self: center;    
@@ -56,6 +56,10 @@
 .group-text h2, .group-text p {
     text-align: left; 
 
+}
+
+.group-text p {
+    font-size: 15px;
 }
 
 h2, p {
@@ -168,10 +172,12 @@ h2, p {
 }
 
 .group-text h2 {
-    font-size: 22px; 
+    font-size: 15px; 
     color: #000; 
-    margin-bottom: -5px; 
+    margin-bottom: 1px; 
 }
+
+
 .group-text h2 a::after {
     content: '';
     position: absolute;
@@ -230,3 +236,14 @@ h2, p {
     margin-bottom: 0;
 }
 
+
+.group-members {
+    position: relative !important;
+    top: 8px !important; 
+}
+
+.group-text h2 {
+    font-size: 17px; 
+    color: #000; 
+    margin-bottom: 1px; 
+}
