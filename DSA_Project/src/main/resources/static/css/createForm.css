@@ -80,6 +80,17 @@ body {
     flex-grow: 1; /* 메인 콘텐츠가 가능한 공간을 차지하도록 */
 }
 
+.form-table {
+    width: 70%; /* 전체 너비 설정 */
+    table-layout: fixed; /* 고정 레이아웃으로 균일한 너비 유지 */
+}
+
+.form-table input[type="text"], 
+.form-table input[type="datetime-local"],
+.form-table textarea {
+    width: 100%; /* 입력 필드의 너비를 100%로 설정하여 셀 내에 맞춤 */
+}
+
 .form-section {
     max-width: 100%; /* 폼 섹션의 최대 너비 */
     margin: 0 auto; /* 중앙 정렬 */
@@ -214,14 +225,10 @@ body {
 }
 
 /* ===================== 위치 설정 스타일 ===================== */
-.location-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 10px; /* 버튼과 입력창 사이의 간격 */
-}
-
 #findPlace {
     padding: 5px 5px; /* 버튼 패딩 조절 */
+    border-radius: 5px;
+    border: 1px solid #999;
 }
 
 #location {

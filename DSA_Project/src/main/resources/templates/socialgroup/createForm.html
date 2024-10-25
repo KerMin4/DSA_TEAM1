@@ -49,7 +49,7 @@
 	
 	                <table class="form-table">
 		                <tr>
-		                    <td>
+		                    <td colspan="2">
 		                    	<div style="position: relative; display: inline-block;">
 							        <img id="imagePreview" style="display: block;">
 							        <button id="removeImage"></button>
@@ -63,13 +63,13 @@
                         	</td>
 		                </tr>
 		                <tr>
-		                    <td colspan="1">
+		                    <td>
 		                        <input type="text" name="groupName" id="groupName" placeholder="그룹이름을 입력하세요.">
 		                    </td>
-		                    <td colspan="1">
+		                    <td>
 		                        <input type="datetime-local" name="eventDate" id="eventDate">
 		                    </td>
-		                    <td colspan="1">인원 수
+		                    <td>인원 수
 		                        <div class="person-counter">
 		                            <button type="button" id="decreaseCount"><</button>
 		                            <span id="memberLimit">2</span>
@@ -78,26 +78,38 @@
 		                    </td>
 		                </tr>
 		                <tr>
-		                    <td colspan="4">
+		                    <td colspan="3">
 		                        <textarea name="description" id="description" placeholder="그룹에 대해 소개해보세요! ex. 취미계발 모임입니다."></textarea>
 		                    </td>
 		                </tr>
 		                <tr>
-		                    <td colspan="1">위치 설정</td>
-		                    <td colspan="1">
-						        <div class="location-wrapper">
-						            <input type="button" id="findPlace" value="지역 찾기">
-						            <input type="text" id="location" name="location" placeholder="구 단위만 선택 가능해요">
+						    <td colspan="3">
+						        <div style="display: flex; align-items: center;">
+						            <div style="margin-right: 10px;">
+						                위치 설정
+						                <input type="button" id="findPlace" value="지역 찾기">
+						                <input type="text" id="location" name="location" placeholder="구 단위만 선택 가능해요" style="width: 150px;">
+						            </div>
+						            <div>
+						                가입 권한
+						                <label><input type="radio" name="joinMethod" value="AUTO"> 바로 가입</label>
+						                <label><input type="radio" name="joinMethod" value="APPROVAL"> 승인 후 가입</label>
+						            </div>
 						        </div>
 						    </td>
-						    <td colspan="1">가입 권한</td>
-						    <td colspan="1">
+						</tr>
+		                <!-- <tr>
+		                    <td>위치 설정
+						            <input type="button" id="findPlace" value="지역 찾기">
+						            <input type="text" id="location" name="location" placeholder="구 단위만 선택 가능해요">
+						    </td>
+						    <td>가입 권한
 						        <label><input type="radio" name="joinMethod" value="AUTO"> 바로 가입</label>
 						        <label><input type="radio" name="joinMethod" value="APPROVAL"> 승인 후 가입</label>
 						    </td>
-						</tr>
+						</tr> -->
 		                <tr>
-		                    <td colspan="1">
+		                    <td colspan="3">
 		                        <div class="hashtag-input-wrapper">
 						            <input type="text" name="hashtag" id="hashtag" placeholder="해시태그 입력">
 						            <input type="button" id="addHashtag" value="등록">
@@ -105,14 +117,14 @@
 						    </td>
 		                </tr>
 		                <tr>
-		                	<td colspan="4">
+		                	<td colspan="3">
 		                        <div id="hashtagContainer">
 		                            <!-- 해시태그가 여기에 추가됨 -->
 		                        </div>
 		                    </td>
 		                </tr>
 		                <tr>
-		                    <td colspan="5" style="text-align: center;">
+		                    <td colspan="3" style="text-align: center;">
 		                        <input type="submit" id="submitForm" value="그룹 생성">
 		                    </td>
 		                </tr>

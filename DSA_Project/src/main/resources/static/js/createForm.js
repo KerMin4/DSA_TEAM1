@@ -113,6 +113,13 @@ $(function() {
         var hashtagInput = $('#hashtag');
         var hashtagValue = hashtagInput.val().trim();
         if (!hashtagValue) return;
+        
+        // 해시태그 길이 제한 (예: 20자)
+	    if (hashtagValue.length > 20) {
+	        alert('해시태그는 최대 20자까지 입력 가능합니다.');
+	        return;
+	    }
+        
         if (formData.hashtags && formData.hashtags.includes(hashtagValue)) {
             alert('이미 등록된 해시태그입니다.');
             hashtagInput.val('');

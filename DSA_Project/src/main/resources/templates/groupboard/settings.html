@@ -83,7 +83,10 @@
 					    <td>
 					        <img id="headerImagePreview" th:src="@{/upload/{groupProfileImage}(groupProfileImage=${groupProfileImage})}" alt="헤더 이미지 미리보기" style="width:200px; height:200px;">
 					        <!-- <button type="button" id="removeImage" style="display:block;">이미지 삭제</button> -->
-					        <button type="button" id="openHeaderImageModal">헤더 이미지 관리</button>
+					        <button type="button" id="openHeaderImageModal" class="image-upload-button">
+							    <img src="../images/camera.png" alt="헤더 이미지 업로드" class="image-icon">
+							</button>
+					        <!-- <button type="button" id="openHeaderImageModal">헤더 이미지 관리</button> -->
 					    </td>
 					</tr>
 	
@@ -134,17 +137,30 @@
 	                <tr>
 	                    <td><label for="hashtag">해시태그:</label></td>
 	                    <td>
-	                        <input type="text" id="hashtag" name="hashtags" placeholder="해시태그 입력">
-	                        <input type="button" id="addHashtag" value="등록">
+	                    	<div class="hashtag-input-wrapper">
+		                        <input type="text" id="hashtag" name="hashtags" placeholder="해시태그 입력">
+		                        <input type="button" id="addHashtag" value="등록">
+		                    </div>
+		                </td>
+		            </tr>
+		            <tr>
+		            	<td colspan="2">
 	                        <div id="hashtagContainer">
+		                        <div th:each="tag : ${hashtags}">
+								    <span class="hashtag-item" th:text="'#' + ${tag.name}"></span>
+								    <button type="button" class="remove-hashtag">
+								        <img src="../images/delete.png" alt="삭제" class="delete-icon">
+								    </button>
+								</div>
+							</div>
+						</td>
+	                        <!-- <div id="hashtagContainer">
 					            <div th:each="tag : ${hashtags}">
 					                <span class="hashtag-item" th:text="'#' + ${tag.name}"></span>
 					                <button type="button" class="remove-hashtag">삭제</button>
 					            </div>
-					        </div>
-	                    </td>
+					        </div> -->
 	                </tr>
-	
 	                <tr>
 	                    <td>
 	                        <button type="submit" id="updateGroupBtn">그룹 수정</button>
