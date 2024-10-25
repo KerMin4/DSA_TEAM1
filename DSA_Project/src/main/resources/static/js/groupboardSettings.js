@@ -35,13 +35,22 @@ $(function() {
 	        var formattedHashtag = '#' + hashtagText; // UI에서는 # 기호를 포함하여 보여줌
 			hashtags.push(hashtagText); // DB에 저장할 때는 # 기호를 제거한 값을 사용
 	
-	        // UI에 추가
+			// 해시태그 UI에 추가 (삭제 아이콘과 함께)
+	        $('#hashtagContainer').append(
+	            '<div class="hashtag-item-container">' +
+	                '<span class="hashtag-item">#' + hashtagText + '</span>' +
+	                '<button type="button" class="remove-hashtag">' +
+	                    '<img src="../images/delete.png" alt="삭제" class="delete-icon">' +
+	                '</button>' +
+	            '</div>'
+	        );
+	        /*// UI에 추가
 	        $('#hashtagContainer').append(
 	            '<span class="hashtag-item">' +
 	            formattedHashtag +
 	            ' <button type="button" class="remove-hashtag">삭제</button>' +
 	            '</span>'
-	        );
+	        );*/
 	
 	        $('#hashtag').val(''); // 입력창 비우기
 	    } else {

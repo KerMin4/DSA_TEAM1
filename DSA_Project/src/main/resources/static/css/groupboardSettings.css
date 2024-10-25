@@ -90,6 +90,118 @@ body {
     flex-direction: column;
 }
 
+
+/* ======================= 이미지 버튼 스타일 ======================= */
+.image-upload-button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.image-icon {
+    width: 35px; /* 원하는 크기로 조절 */
+    height: 30px;
+}
+
+/* ======================= 인원 수 카운터 스타일 ======================= */
+
+/* 인원 수 카운터 스타일 */
+.person-counter {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px; /* 버튼 간 간격 */
+}
+
+.person-counter button {
+    background-color: #e0e0e0; /* 버튼의 기본 배경색 */
+    color: #333; /* 텍스트 색상 */
+    border: 1px solid #999; /* 테두리 색상 */
+    border-radius: 50px; /* 모서리 둥글게 */
+    padding: 5px 10px; /* 버튼 패딩 */
+    cursor: pointer; /* 클릭 가능한 포인터 표시 */
+}
+
+.person-counter button:hover {
+    background-color: #e0e0e0; /* 호버 시 색상 변경 */
+    color: #333; /* 호버 시 텍스트 색상 유지 */
+}
+
+.person-counter button:active {
+    transform: translateY(1px); /* 클릭 시 눌리는 효과 */
+}
+
+.person-counter span {
+    margin: 0 5px; /* 숫자와 버튼 사이의 간격 */
+    font-size: 16px; /* 텍스트 크기 */
+    color: #333; /* 텍스트 색상 */
+}
+
+/* ===================== 해시태그 스타일 ===================== */
+#hashtagContainer {
+    display: flex;
+    align-items: center;
+    margin-left: 90px;
+    max-width: 100%; /* 최대 너비 설정 */
+    flex-wrap: wrap; /* 넘칠 경우 줄바꿈 */
+    gap: 5px; /* 해시태그 간의 간격을 더 크게 설정 */
+}
+
+.hashtag-item-container {
+    display: inline-flex; /* flex를 사용하여 해시태그와 삭제 버튼을 같은 줄에 정렬 */
+    align-items: center;
+}
+
+.hashtag-item {
+    display: inline-block;
+    background-color: #ffffff;
+    border-radius: 20px;
+    padding: 6px 8px;
+    border: 2px solid #E48F85 !important; /* !important를 추가하여 우선 적용 */
+    color: #E48F85;
+    font-size: 14px;
+    margin-right: 5px;
+}
+
+.hashtag-input-wrapper {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px; /* 해시태그 입력 필드와 버튼 간 간격 */
+}
+
+.hashtag-wrapper {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 5px;
+    font-size: 12px;
+}
+
+.remove-hashtag {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    opacity: 0.7; /* 아이콘의 초기 투명도 */
+    transition: opacity 0.2s ease; /* 호버 시 부드러운 효과 */
+}
+
+.remove-hashtag:hover {
+    opacity: 1; /* 호버 시 투명도 제거 */
+}
+
+.delete-icon {
+    width: 10px;
+    height: 10px;
+    opacity: 0.7; /* 아이콘의 초기 투명도 */
+    transition: opacity 0.2s ease; /* 호버 시 부드러운 효과 */
+}
+
+.delete-icon:hover {
+    opacity: 1; /* 호버 시 투명도 제거 */
+}
+
 /* ======================= 모달 스타일 ======================= */
 .modal {
     display: none;
