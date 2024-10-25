@@ -27,36 +27,68 @@ $(function() {
         $('#memberLimit').val(memberLimit);  // input 필드의 값을 변경
     });
 
+	// 기존 해시태그 이름만 추출하여 배열로 변환
+    var existingHashtagNames = existingHashtags.map(function(tag) {
+        return tag.name;
+    });
+
     // 해시태그 추가 버튼 클릭 이벤트
 	$('#addHashtag').on('click', function() {
+        var hashtagText = $('#hashtag').val().trim().replace(/^#/, ''); // 입력된 해시태그 앞의 # 기호 제거
+
+        // 입력된 해시태그가 기존 그룹 해시태그에 중복되는지 검사
+        if (hashtagText === '') {
+            alert('유효한 해시태그를 입력하세요.');
+            return;
+        }
+
+        // 중복 검사: 기존 해시태그와 추가된 해시태그 중 중복된 경우
+        if (existingHashtagNames.includes(hashtagText) || hashtags.includes(hashtagText)) {
+            alert('해당 그룹에 이미 등록된 해시태그입니다.');
+            $('#hashtag').val(''); // 입력창 비우기
+            return; // 중복인 경우 추가하지 않고 종료
+        }
+
+        // 중복되지 않는 경우에만 배열에 추가 및 UI에 반영
+        hashtags.push(hashtagText);
+
+        // 해시태그 UI에 바로 추가
+        var hashtagHtml = `
+            <div class="hashtag-item-container">
+                <span class="hashtag-item">#${hashtagText}</span>
+                <button type="button" class="remove-hashtag">
+                    <img src="../images/delete.png" alt="삭제" class="delete-icon">
+                </button>
+            </div>`;
+
+        $('#hashtagContainer').append(hashtagHtml); // 서버에서 불러온 해시태그와 동일한 구조로 추가
+        $('#hashtag').val(''); // 입력창 비우기
+        
+        // 디버깅용 로그 출력
+	    console.log('현재 추가된 해시태그:', hashtags);
+	    console.log('기존 해시태그:', existingHashtags);
+    });
+	/*$('#addHashtag').on('click', function() {
 	    var hashtagText = $('#hashtag').val().trim().replace(/^#/, ''); // 입력된 해시태그 앞의 # 기호 제거
 	    
-	    if (hashtagText !== '' && !hashtags.includes('#' + hashtagText)) { // 빈 값 및 중복 체크
-	        var formattedHashtag = '#' + hashtagText; // UI에서는 # 기호를 포함하여 보여줌
-			hashtags.push(hashtagText); // DB에 저장할 때는 # 기호를 제거한 값을 사용
-	
-			// 해시태그 UI에 추가 (삭제 아이콘과 함께)
-	        $('#hashtagContainer').append(
-	            '<div class="hashtag-item-container">' +
-	                '<span class="hashtag-item">#' + hashtagText + '</span>' +
-	                '<button type="button" class="remove-hashtag">' +
-	                    '<img src="../images/delete.png" alt="삭제" class="delete-icon">' +
-	                '</button>' +
-	            '</div>'
-	        );
-	        /*// UI에 추가
-	        $('#hashtagContainer').append(
-	            '<span class="hashtag-item">' +
-	            formattedHashtag +
-	            ' <button type="button" class="remove-hashtag">삭제</button>' +
-	            '</span>'
-	        );*/
-	
-	        $('#hashtag').val(''); // 입력창 비우기
+	    if (hashtagText !== '' && !hashtags.includes(hashtagText)) { // 빈 값 및 중복 체크
+	        hashtags.push(hashtagText); // DB에 저장할 때는 # 기호를 제거한 값을 사용
+	        
+	        // 해시태그 UI에 추가 (삭제 아이콘과 함께)
+	        var hashtagHtml = `
+                <div class="hashtag-item-container">
+                    <span class="hashtag-item">#${hashtagText}</span>
+                    <button type="button" class="remove-hashtag">
+                        <img src="../images/delete.png" alt="삭제" class="delete-icon">
+                    </button>
+                </div>`;
+            
+            $('#hashtagContainer').append(hashtagHtml); // 서버에서 불러온 해시태그와 동일한 구조로 추가
+            $('#hashtag').val(''); // 입력창 비우기
 	    } else {
 	        alert('유효한 해시태그를 입력하세요.');
 	    }
-	});
+	});*/
 
     // 동적으로 생성된 해시태그 삭제 버튼에 대한 이벤트 바인딩
 	$(document).on('click', '.remove-hashtag', function() {

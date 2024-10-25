@@ -144,12 +144,12 @@ body {
     margin-left: 90px;
     max-width: 100%; /* 최대 너비 설정 */
     flex-wrap: wrap; /* 넘칠 경우 줄바꿈 */
-    gap: 5px; /* 해시태그 간의 간격을 더 크게 설정 */
 }
 
 .hashtag-item-container {
     display: inline-flex; /* flex를 사용하여 해시태그와 삭제 버튼을 같은 줄에 정렬 */
     align-items: center;
+    margin-right: 5px; /* 해시태그 항목 간의 간격을 동일하게 설정 */
 }
 
 .hashtag-item {
@@ -160,20 +160,7 @@ body {
     border: 2px solid #E48F85 !important; /* !important를 추가하여 우선 적용 */
     color: #E48F85;
     font-size: 14px;
-    margin-right: 5px;
-}
-
-.hashtag-input-wrapper {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px; /* 해시태그 입력 필드와 버튼 간 간격 */
-}
-
-.hashtag-wrapper {
-    display: inline-flex;
-    align-items: center;
-    padding: 5px 5px;
-    font-size: 12px;
+    margin-right: 0; /* 삭제 버튼과의 간격을 0으로 통일 */
 }
 
 .remove-hashtag {
@@ -182,7 +169,6 @@ body {
     cursor: pointer;
     padding: 0;
     display: inline-flex;
-    align-items: center;
     opacity: 0.7; /* 아이콘의 초기 투명도 */
     transition: opacity 0.2s ease; /* 호버 시 부드러운 효과 */
 }
@@ -196,11 +182,13 @@ body {
     height: 10px;
     opacity: 0.7; /* 아이콘의 초기 투명도 */
     transition: opacity 0.2s ease; /* 호버 시 부드러운 효과 */
+    margin-left: 5px;
 }
 
 .delete-icon:hover {
     opacity: 1; /* 호버 시 투명도 제거 */
 }
+
 
 /* ======================= 모달 스타일 ======================= */
 .modal {

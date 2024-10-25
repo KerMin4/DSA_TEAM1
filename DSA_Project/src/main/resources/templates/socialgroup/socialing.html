@@ -117,12 +117,10 @@
 
             <!-- Group Listings -->
             <div class="group-listing" id="group-container">
-			    <!-- 전체 그룹 목록을 처음에 출력 -->
 			    <!-- 검색 결과가 없을 경우 출력 -->
 				<div th:if="${#lists.isEmpty(groups)}">
-			        <p>검색 결과가 없습니다. 다른 검색어를 입력해보세요.</p>
+			        <p>해당 조건에 맞는 그룹이 없습니다.</p>
 			    </div>
-			    
 				<!-- 검색 결과가 있을 경우 출력 -->
 				<div th:unless="${#lists.isEmpty(groups)}">
 				    <div th:each="group : ${groups}">
