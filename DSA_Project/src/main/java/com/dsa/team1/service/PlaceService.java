@@ -29,4 +29,8 @@ public interface PlaceService {
 
 	List<PlaceDTO> searchPlaces(String query, String activity, String location);
 
+//	public Boolean reservePlace(Integer placeId, String userId);
+
+	public String paymentPlace(Integer placeId, String userId);
+
 }

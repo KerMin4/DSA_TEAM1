@@ -14,19 +14,7 @@
 
     <div class="container">
         <section class="group-section">
-            <h2>같은 나이와 성별의 그룹</h2>
-            <div class="group-list">
-                <!-- 그룹 목록 아이템 -->
-                <div class="group-item" th:each="group : ${groups}">
-                    <img th:src="${group.profileImage}" alt="Group Image">
-                    <h3 th:text="${group.groupName}"></h3>
-                    <p th:text="${group.description}"></p>
-                </div>
-            </div>
-        </section>
-
-        <section class="group-section">
-            <h2>같은 지역의 그룹</h2>
+            <h2>선호하는 지역에서 활동하는 그룹을 만나보세요</h2>
             <div class="group-list">
                 <!-- 그룹 목록 아이템 -->
                 <div class="group-item" th:each="group : ${locationGroups}">
@@ -37,8 +25,20 @@
             </div>
         </section>
 
+        <section class="group-section">
+            <h2>가까운 지역에서 활동에 참여해보세요</h2>
+            <div class="group-list">
+                <!-- 그룹 목록 아이템 -->
+                <div class="group-item" th:each="group : ${locationPlaces}">
+                    <img th:src="${group.profileImage}" alt="Group Image">
+                    <h3 th:text="${group.title}"></h3>
+                    <p th:text="${group.description}"></p>
+                </div>
+            </div>
+        </section>
+
         <section class="place-section">
-            <h2>가장 빠른 이벤트 날짜의 플레이스</h2>
+            <h2>곧 마감! 가장 빨리 진행되는 활동을 알아보세요</h2>
             <div class="place-list">
                 <!-- 플레이스 목록 아이템 -->
                 <div class="place-item" th:each="place : ${places}">

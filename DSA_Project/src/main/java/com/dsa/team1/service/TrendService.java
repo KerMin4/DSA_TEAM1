@@ -21,4 +21,5 @@ public interface TrendService {
     public List<PlaceDTO> getUpcomingPlaces();
 
 
+
 }
