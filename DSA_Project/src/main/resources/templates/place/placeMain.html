@@ -114,8 +114,8 @@
 				                            <p th:text="'위치: ' + ${place.location}">위치</p>
 				                            <p th:text="${#temporals.format(place.eventDate, 'yyyy-MM-dd')}">날짜</p>
 				                            <p th:text="'인원: ' + (${currentMembersMap != null && currentMembersMap[place.placeId] != null ? currentMembersMap[place.placeId] : 0}) + '/' + ${place.memberLimit} + '명'">인원</p>
-				                            <p th:text="'조회수: ' + ${place.viewCount}">조회수</p>
 				                            <!-- CSS 해결 전까지 삭제
+				                            <p th:text="'조회수: ' + ${place.viewCount}">조회수</p>
 				                            <p th:text="'북마크: ' + ${place.bookmarkCount}" class="bookmark-count">북마크 수</p>
 				                             -->
 				                        </td>

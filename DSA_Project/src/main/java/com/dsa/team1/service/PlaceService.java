@@ -13,6 +13,8 @@ public interface PlaceService {
 	
 	public List<PlaceDTO> getAllPlaces();
 	
+	public List<PlaceDTO> convertEntityToDto(List<PlaceEntity> placeEntityList);
+	
 	public Integer getMemberCountByPlace(PlaceDTO place);
 
     public ResponseEntity<Map<String, String>> isMember(Integer placeId, AuthenticatedUser user);
@@ -32,5 +34,7 @@ public interface PlaceService {
 //	public Boolean reservePlace(Integer placeId, String userId);
 
 	public String paymentPlace(Integer placeId, String userId);
+
+	public int getMemberCountByPlace(PlaceEntity place);
 
 }

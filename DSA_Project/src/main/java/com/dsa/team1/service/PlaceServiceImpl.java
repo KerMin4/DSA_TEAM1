@@ -74,7 +74,7 @@ public class PlaceServiceImpl implements PlaceService {
      * @param placeEntityList
      * @return placeList(List<placeDTO>)
      */
-    private List<PlaceDTO> convertEntityToDto(List<PlaceEntity> placeEntityList) {
+    public List<PlaceDTO> convertEntityToDto(List<PlaceEntity> placeEntityList) {
     	List<PlaceDTO> placeList = new ArrayList<>();
     	for (PlaceEntity placeEntity : placeEntityList) {
     		PlaceDTO placeDTO = PlaceDTO.builder()
@@ -389,10 +389,16 @@ public class PlaceServiceImpl implements PlaceService {
 		} catch(NoSuchElementException e) {
 			return "redirect:/place/placeDetail?placeId=" + placeId + "&message=정보를 찾을 수 없습니다.";
 		}
-		
-		
-		
 	}
+
+	@Override
+	public int getMemberCountByPlace(PlaceEntity place) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
+//	@Override
+//	public int getMemberCountByPlace(PlaceEntity place)
     
     
     

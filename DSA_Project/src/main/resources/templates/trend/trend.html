@@ -6,8 +6,8 @@
     <title>트렌드 페이지</title>
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
     <link th:href="@{/css/trend.css}" rel="stylesheet">
-    <link th:href="@{/css/main.css}" rel="stylesheet">
     <link th:href="@{/css/header.css}" rel="stylesheet">
+    <link th:href="@{/css/main.css}" rel="stylesheet">
 </head>
 <body>
     <th:block th:replace="~{fragments/header :: header}"></th:block>
@@ -18,9 +18,11 @@
             <div class="group-list">
                 <!-- 그룹 목록 아이템 -->
                 <div class="group-item" th:each="group : ${locationGroups}">
-                    <img th:src="${group.profileImage}" alt="Group Image">
+                <div class="group-card" data-group-id="${group.groupId}" th:onclick="'location.href=\'/kkirikkiri/groupboard/main?groupId=' + ${group.groupId} + '\';'">
+                    <img th:src="@{${group.profileImage != null} ? '/upload/' + ${group.profileImage} : '/images/noImage_icon.png'}" alt="Group Image">
                     <h3 th:text="${group.groupName}"></h3>
                     <p th:text="${group.description}"></p>
+                </div>
                 </div>
             </div>
         </section>
@@ -29,10 +31,12 @@
             <h2>가까운 지역에서 활동에 참여해보세요</h2>
             <div class="group-list">
                 <!-- 그룹 목록 아이템 -->
-                <div class="group-item" th:each="group : ${locationPlaces}">
-                    <img th:src="${group.profileImage}" alt="Group Image">
-                    <h3 th:text="${group.title}"></h3>
-                    <p th:text="${group.description}"></p>
+                <div class="group-item" th:each="place : ${locationPlaces}">
+                <div class="group-card" data-group-id="${place.placeId}" th:onclick="'location.href=\'/kkirikkiri/place/placeDetail?placeId=' + ${place.placeId} + '\';'">
+                    <img th:src="@{${place.profileImage != null} ? '/upload/' + ${place.profileImage} : '/images/noImage_icon.png'}" alt="Group Image">
+                    <h3 th:text="${place.title}"></h3>
+                    <p th:text="${place.description}"></p>
+                </div>
                 </div>
             </div>
         </section>
@@ -42,9 +46,11 @@
             <div class="place-list">
                 <!-- 플레이스 목록 아이템 -->
                 <div class="place-item" th:each="place : ${places}">
-                    <img th:src="${place.profileImage}" alt="Place Image">
+                <div class="group-card" data-group-id="${place.placeId}" th:onclick="'location.href=\'/kkirikkiri/place/placeDetail?placeId=' + ${place.placeId} + '\';'">
+                    <img th:src="@{${place.profileImage != null} ? '/upload/' + ${place.profileImage} : '/images/noImage_icon.png'}" alt="Place Image">
                     <h3 th:text="${place.title}"></h3>
                     <p th:text="${place.description}"></p>
+                </div>
                 </div>
             </div>
         </section>
