@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,8 +12,42 @@
 </head>
 <body>
     <th:block th:replace="~{fragments/header :: header}"></th:block>
+    
+    <!-- 로그인 되지 않았을 때 -->
+    <div class="container" sec:authorize="isAnonymous()">
+    
+    	<section class="group-section">
+            <h2>현재 생성되고 있는 그룹을 만나보세요</h2>
+            <div class="group-list">
+                <!-- 그룹 목록 아이템 -->
+                <div class="group-item" th:each="group : ${RecentGroups}">
+                <div class="group-card" data-group-id="${group.groupId}" th:onclick="'location.href=\'/kkirikkiri/groupboard/main?groupId=' + ${group.groupId} + '\';'">
+                    <img th:src="@{${group.profileImage != null} ? '/upload/' + ${group.profileImage} : '/images/noImage_icon.png'}" alt="Group Image">
+                    <h3 th:text="${group.groupName}"></h3>
+                    <p th:text="${group.description}"></p>
+                </div>
+                </div>
+            </div>
+        </section>
 
-    <div class="container">
+        <section class="place-section">
+            <h2>조만간 진행될 행사에 대해 알아보세요</h2>
+            <div class="group-list">
+                <!-- 그룹 목록 아이템 -->
+                <div class="group-item" th:each="place : ${RecentPlaces}">
+                <div class="group-card" data-group-id="${place.placeId}" th:onclick="'location.href=\'/kkirikkiri/place/placeDetail?placeId=' + ${place.placeId} + '\';'">
+                    <img th:src="@{${place.profileImage != null} ? '/upload/' + ${place.profileImage} : '/images/noImage_icon.png'}" alt="Group Image">
+                    <h3 th:text="${place.title}"></h3>
+                    <p th:text="${place.description}"></p>
+                </div>
+                </div>
+            </div>
+        </section>
+    
+    </div>
+
+	<!-- 로그인 되었을 때 -->
+    <div class="container" sec:authorize="isAuthenticated()">
         <section class="group-section">
             <h2>선호하는 지역에서 활동하는 그룹을 만나보세요</h2>
             <div class="group-list">
