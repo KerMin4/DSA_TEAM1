@@ -46,15 +46,20 @@ $(function() {
                 groupId: groupId
             },
             success: function(announcementList) {
-                console.log("Announcement List: ", announcementList); // 응답 데이터 확인
-                
-                if (Array.isArray(announcementList) && announcementList.length > 0) {  // 응답이 배열인지 확인하고 공지사항이 있는지 확인
+                console.log("Announcement List: ", announcementList);
+
+                if (Array.isArray(announcementList) && announcementList.length > 0) {
                     $('#announcementList').empty();
                     announcementList.forEach(function(announcement) {
-						
-						// 작성일 포맷 확인
+                        
+                        // 작성일 포맷 확인
                         let formattedDate = announcement.createdAt ? new Date(announcement.createdAt).toLocaleString() : '작성일 없음';
-						
+                        
+                        // 수정 및 삭제 버튼 조건: 현재 사용자가 그룹 리더일 경우에만 표시
+                        const editButton = (currentUserId === groupLeaderId) ? `<button class="editAnnouncement" data-id="${announcement.postId}">수정</button>` : '';
+                        const deleteButton = (currentUserId === groupLeaderId) ? `<button class="deleteAnnouncement" data-id="${announcement.postId}">삭제</button>` : '';
+                        
+                        // 공지사항 요소 생성
                         $('#announcementList').append(`
                             <div class="announcement" data-id="${announcement.postId}">
                                 <div style="display: flex; align-items: center;">
@@ -64,19 +69,18 @@ $(function() {
                                         <span class="date">작성일: ${formattedDate}</span>
                                     </div>
                                     <button class="saveEdit" data-id="${announcement.postId}" style="display:none;">저장</button>
-                                    <button class="editAnnouncement">수정</button>
-                                    <button class="deleteAnnouncement" data-id="${announcement.postId}">삭제</button>
+                                    ${editButton}
+                                    ${deleteButton}
                                 </div>
                             </div>
                         `);
                     });
                 } else {
-                    $('#announcementList').html('<p>공지사항이 없습니다.</p>');  // 공지사항이 없을 때 표시
+                    $('#announcementList').html('<p>공지사항이 없습니다.</p>');
                 }
-            
             },
             error: function(error) {
-                alert("공지사항 목록을 불러오는데 문제가 발생했습니다.");  // 실제로 오류가 발생했을 때만 경고 메시지를 표시
+                alert("공지사항 목록을 불러오는데 문제가 발생했습니다.");
             }
         });
     }

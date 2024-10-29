@@ -3,12 +3,12 @@
 	  xmlns:sec="http://thymeleaf.org/extra/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>그룹 목록 페이지</title>
+    <title>소셜링</title>
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
     <link th:href="@{/css/sidebar.css}" rel="stylesheet">
     <link th:href="@{/css/socialing.css}" rel="stylesheet">
-    <!-- 여기 아래 코드 위치만 바꿈 위에 있으면 적용안돼서 -나연- -->
     <link th:href="@{/css/header.css}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script th:src="@{/js/socialing.js}"></script>
 </head>
 <body>
@@ -132,12 +132,15 @@
 							                <td>
 							                    <img th:src="@{${group.profileImage != null} ? '/upload/' + ${group.profileImage} : '/images/noImage_icon.png'}" alt="Profile Image" class="group-image">
 							                </td>
-							                <td>
+							                <td style="padding-left: 15px;">
 							                    <h3 th:text="${group.groupName}">그룹 이름</h3>
 							                    <p th:text="'위치: ' + ${group.location}">위치</p>
-							                    <p th:text="${#temporals.format(group.eventDate, 'yyyy-MM-dd')}">날짜</p>
-							                    <p th:text="'인원: ' + (${memberCountMap != null ? memberCountMap[group.groupId] : 0}) + '/' + ${group.memberLimit} + '명'">인원</p>
-							                    <p th:text="'조회수: ' + ${group.viewCount}">조회수</p>
+							                     <p th:text="${#temporals.format(group.eventDate, 'yyyy-MM-dd HH:mm')}">시간</p>
+							                    <p>
+                                                <i class="fas fa-user-friends"></i>
+                                                <span th:text="(${memberCountMap != null ? memberCountMap[group.groupId] : 0}) + '/' + ${group.memberLimit}"></span>
+                                                </p>
+							                      <p th:text="'조회수: ' + ${group.viewCount}">조회수</p>
 							                    <p th:text="'북마크: ' + ${group.bookmarkCount}" class="bookmark-count">북마크 수</p>
 							                </td>
 							                <td>

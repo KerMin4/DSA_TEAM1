@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-	  xmlns:sec="http://thymeleaf.org/extra/spring-security">
+      xmlns:sec="http://thymeleaf.org/extra/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>그룹 게시판</title>
@@ -9,40 +9,47 @@
     <link th:href="@{/css/groupboardMain.css}" rel="stylesheet">
     <link th:href="@{/css/header.css}" rel="stylesheet">
     <script th:src="@{/js/groupboardMain.js}"></script>
+    
+    <script th:inline="javascript">
+    
+        const groupLeaderId = /*[[${group.groupLeader.userId}]]*/ '';
+        const currentUserId = /*[[${#authentication.principal.username}]]*/ '';
+
+        $(document).ready(function() {
+         
+            if (currentUserId !== groupLeaderId) {
+                $('a.tab:contains("설정")').hide();
+            }
+        });
+    </script>
 </head>
 <body>
-	<div th:replace="~{fragments/header :: header}"></div>
-	
+    <div th:replace="~{fragments/header :: header}"></div>
+    
     <div class="container">
         <!-- Sidebar Section -->
         <div class="sidebar">
             <h2>그룹 게시판</h2>
-            
             <br>
-
             <div>가입 멤버</div>
             <ul class="members-list">
-			    <li th:each="member : ${members}">
-			        <img th:src="@{/upload/{profileImage}(profileImage=${member.profileImage})}" alt="프로필 이미지" class="profile-img">
-			        <span th:text="${member.userId}"></span>
-			    </li>
-			</ul>
+                <li th:each="member : ${members}">
+                    <img th:src="@{/upload/{profileImage}(profileImage=${member.profileImage})}" alt="프로필 이미지" class="profile-img">
+                    <span th:text="${member.userId}"></span>
+                </li>
+            </ul>
         </div>
 
         <!-- Main Content Section -->
         <div class="main-content">
         
-		    <div th:if="${isMember}">
-		        <!-- 그룹 게시판 컨텐츠 -->
-		        <nav class="tabs">
-		        	<a th:href="@{/groupboard/announcement(groupId=${group.groupId}, type='announcement')}" class="tab">공지사항</a>
-					<a th:href="@{/groupboard/schedule(groupId=${group.groupId}, type='schedule')}" class="tab">일정</a>
-					<a th:href="@{/groupboard/album(groupId=${group.groupId}, type='album')}" class="tab">앨범</a>
-					<a th:href="@{/groupboard/settings(groupId=${group.groupId}, type='settings')}" class="tab">설정</a>
-                    <!-- <a th:href="@{/groupboard/announcement(groupId=${group.groupId})}" class="tab">공지사항</a>
-					<a th:href="@{/groupboard/schedule(groupId=${group.groupId})}" class="tab">일정</a>
-					<a th:href="@{/groupboard/album(groupId=${group.groupId})}" class="tab">앨범</a>
-					<a th:href="@{/groupboard/settings(groupId=${group.groupId})}" class="tab">설정</a> -->
+            <div th:if="${isMember}">
+                <!-- 그룹 게시판 컨텐츠 -->
+                <nav class="tabs">
+                    <a th:href="@{/groupboard/announcement(groupId=${group.groupId}, type='announcement')}" class="tab">공지사항</a>
+                    <a th:href="@{/groupboard/schedule(groupId=${group.groupId}, type='schedule')}" class="tab">일정</a>
+                    <a th:href="@{/groupboard/album(groupId=${group.groupId}, type='album')}" class="tab">앨범</a>
+                    <a th:href="@{/groupboard/settings(groupId=${group.groupId}, type='settings')}" class="tab">설정</a>
                 </nav>
                 
                 <h2 th:text="${groupName}"></h2>
@@ -50,17 +57,15 @@
                 <div id="content-box" class="content-box">
                     <!-- 이제는 각 탭에 맞는 페이지로 직접 이동합니다. -->
                 </div>
-		    </div>
-		
-		    <div th:if="${!isMember}">
-		        <form th:action="@{/socialgroup/joinGroup}" method="post">
-		            <input type="hidden" name="groupId" th:value="${group.groupId}">
-		            <button type="submit">그룹 가입하기</button>
-		        </form>
-		    </div>
-		</div>
-
+            </div>
+        
+            <div th:if="${!isMember}">
+                <form th:action="@{/socialgroup/joinGroup}" method="post">
+                    <input type="hidden" name="groupId" th:value="${group.groupId}">
+                    <button type="submit">그룹 가입하기</button>
+                </form>
+            </div>
+        </div>
     </div>
-
 </body>
 </html>
