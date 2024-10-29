@@ -38,4 +38,6 @@ public interface PlaceRepository extends JpaRepository<PlaceEntity, Integer> {
            "OR LOWER(p.description) LIKE LOWER(CONCAT('%', :query, '%'))")
 	List<PlaceEntity> searchByGroupNameOrDescription(@Param("query") String query);
 
+//	List<PlaceEntity> findByUser_UserId(String userId);
+
 }

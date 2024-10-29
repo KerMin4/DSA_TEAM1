@@ -80,7 +80,7 @@ public class SocialGroupEntity {
     private LocalDateTime eventDate;
     
     @CreatedDate
-	@Column(name = "create_date", columnDefinition = "timestamp default current_timestamp")
+	@Column(name = "create_at", columnDefinition = "timestamp default current_timestamp")
     private LocalDateTime createdAt;
     
 }
