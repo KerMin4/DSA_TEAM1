@@ -1,6 +1,11 @@
 $(function() {
+    // 그룹 리더가 아닌 경우 수정 버튼 숨기기
+    if (currentUserId !== groupLeaderId) {
+        $('#editButton').hide(); // 리더가 아닌 경우 수정 버튼 숨김
+    }
+
     $('#editButton').on('click', function() {
-		var currentLocation = $('#locationDisplay').text();
+        var currentLocation = $('#locationDisplay').text();
         var currentEventDate = $('#eventDateDisplay').text();
         
         $('#eventDateInput').val(currentEventDate);
@@ -15,7 +20,7 @@ $(function() {
         $('#saveButton').show();
     });
     
-    // 지역찾기 버튼
+    // 지역 찾기 버튼
     $('#findPlace').click(function() {
         console.log('지역 찾기 버튼 클릭됨');
         window.open('/kkirikkiri/member/mapTest', '지역찾기', 'fullscreen');
@@ -55,7 +60,6 @@ $(function() {
             success: function(response) {
                 alert('일정이 성공적으로 업데이트되었습니다.');
                 $('#eventDateDisplay').text(formattedDate).show();  // 업데이트된 시간 표시
-                /*$('#eventDateDisplay').text(eventDate).show();*/
                 $('#locationDisplay').text(location).show();
                 $('#eventDateInput').hide();
                 $('#findPlace').hide();
@@ -68,5 +72,4 @@ $(function() {
             }
         });
     });
-
 });

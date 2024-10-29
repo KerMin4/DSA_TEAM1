@@ -1,48 +1,59 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-	  xmlns:sec="http://thymeleaf.org/extra/spring-security">
+      xmlns:sec="http://thymeleaf.org/extra/spring-security">
 <head>
-	<meta charset="UTF-8">
-	<title>Insert title here</title>
-	<script th:src="@{/js/jquery-3.7.1.min.js}"></script>
-	<link th:href="@{/css/sidebar.css}" rel="stylesheet">
-	<link th:href="@{/css/groupboardSchedule.css}" rel="stylesheet">
-	<link th:href="@{/css/header.css}" rel="stylesheet">
-	<script th:src="@{/js/groupboardSchedule.js}"></script>
+    <meta charset="UTF-8">
+    <title>일정</title>
+    <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+    <link th:href="@{/css/sidebar.css}" rel="stylesheet">
+    <link th:href="@{/css/groupboardSchedule.css}" rel="stylesheet">
+    <link th:href="@{/css/header.css}" rel="stylesheet">
+    <script th:src="@{/js/groupboardSchedule.js}"></script>
+    <script th:inline="javascript">
+        const groupLeaderId = /*[[${group.groupLeader.userId}]]*/ '';
+        const currentUserId = /*[[${#authentication.principal.username}]]*/ '';
+
+        $(document).ready(function() {
+      
+            if (currentUserId !== groupLeaderId) {
+                $('a.tab:contains("설정")').hide(); 
+                $('#editButton').hide(); 
+            }
+        });
+    </script>
 </head>
 <body>
-	<div th:replace="~{fragments/header :: header}"></div>
-	
-	<div class="container">
-		<!-- Sidebar Section -->
-		<div class="sidebar">
+    <div th:replace="~{fragments/header :: header}"></div>
+    
+    <div class="container">
+        <!-- Sidebar Section -->
+        <div class="sidebar">
             <h2>그룹 게시판</h2>
-            
             <br>
             
             <div>가입 멤버</div>
             <ul class="members-list">
-			    <li th:each="member : ${members}">
-			        <img th:src="@{/upload/{profileImage}(profileImage=${member.profileImage})}" alt="프로필 이미지" class="profile-img">
-			        <span th:text="${member.userId}"></span>
-			    </li>
-			</ul>
+                <li th:each="member : ${members}">
+                    <img th:src="@{/upload/{profileImage}(profileImage=${member.profileImage})}" alt="프로필 이미지" class="profile-img">
+                    <span th:text="${member.userId}"></span>
+                </li>
+            </ul>
         </div>
-		
-		<!-- Main Content Section -->
+        
+        <!-- Main Content Section -->
         <div class="main-content">
         
-        	<nav class="tabs">
-			    <a th:href="@{/groupboard/announcement(groupId=${group.groupId}, type='announcement')}" class="tab">공지사항</a>
-			    <a th:href="@{/groupboard/schedule(groupId=${group.groupId}, type='schedule')}" class="tab">일정</a>
-			    <a th:href="@{/groupboard/album(groupId=${group.groupId}, type='album')}" class="tab">앨범</a>
-			    <a th:href="@{/groupboard/settings(groupId=${group.groupId}, type='settings')}" class="tab">설정</a>
-			</nav>
-			
-			<div class="schedule-details">
-				<input type="hidden" id="groupId" th:value="${groupId}">
-			    
-			    <table>
+            <nav class="tabs">
+                <a th:href="@{/groupboard/announcement(groupId=${group.groupId}, type='announcement')}" class="tab">공지사항</a>
+                <a th:href="@{/groupboard/schedule(groupId=${group.groupId}, type='schedule')}" class="tab">일정</a>
+                <a th:href="@{/groupboard/album(groupId=${group.groupId}, type='album')}" class="tab">앨범</a>
+                <a th:href="@{/groupboard/settings(groupId=${group.groupId}, type='settings')}" class="tab">설정</a>
+            </nav>
+            
+            <div class="schedule-details">
+                <input type="hidden" id="groupId" th:value="${groupId}">
+                
+                <table>
                     <tr>
                         <td>날짜시간:</td>
                         <td>
@@ -53,20 +64,19 @@
                     <tr>
                         <td>장소:</td>
                         <td>
-					        <div class="location-wrapper">
-					            <input type="button" id="findPlace" value="지역 찾기" style="display: none;">
-					            <input type="text" id="location" name="location" style="display: none;">
-					            <p id="locationDisplay" th:text="${group.location}"></p>
-					        </div>
-					    </td>
+                            <div class="location-wrapper">
+                                <input type="button" id="findPlace" value="지역 찾기" style="display: none;">
+                                <input type="text" id="location" name="location" style="display: none;">
+                                <p id="locationDisplay" th:text="${group.location}"></p>
+                            </div>
+                        </td>
                     </tr>
                 </table>
-			    
-			    <button id="editButton">수정</button>
-			    <button id="saveButton" style="display: none;">저장하기</button>
-			</div>
+                
+                <button id="editButton">수정</button>
+                <button id="saveButton" style="display: none;">저장하기</button>
+            </div>
         </div>
     </div>
-
 </body>
 </html>

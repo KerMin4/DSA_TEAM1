@@ -20,25 +20,25 @@
                 <li><a th:classappend="${activePage == 'home'} ? 'active'" th:href="@{/dashboard/mypage}" id="home">홈</a></li>
                 <li><a th:classappend="${activePage == 'profile-edit'} ? 'active'" th:href="@{/dashboard/profileedit}" id="profile-edit">프로필 수정</a></li>
                 <li><a th:classappend="${activePage == 'group-management'} ? 'active'" th:href="@{/dashboard/groupManagement}" id="group-management">그룹 관리</a></li>
-                <li><a th:classappend="${activePage == 'payment-management'} ? 'active'" th:href="@{/dashboard/paymentManagement}" id="payment-management">결제 관리</a></li>
+                <!-- <li><a th:classappend="${activePage == 'payment-management'} ? 'active'" th:href="@{/dashboard/paymentManagement}" id="payment-management">결제 관리</a></li> -->   
                 <li><a th:classappend="${activePage == 'booking-history'} ? 'active'" th:href="@{/dashboard/bookingHistory}" id="booking-history">예약 내역</a></li>
             </ul>
 
             <th:block sec:authorize="isAuthenticated()">
     <div class="profile-section">
-           <!-- 프로필 이미지가 있을 때 -->
+        
                     <th:block th:if="${#authentication.principal.profileImage != null}">
                       <img th:src="${#authentication.principal.profileImage != null ? '/kkirikkiri/upload/' + #authentication.principal.profileImage : '/kkirikkiri/upload/default.png'}"
                          alt="프로필 이미지" class="mypage-profile-img" id="profileImg" />
                     </th:block>
 
-        <!-- 프로필 이미지가 없을 때 기본 이미지 표시 -->
+       
         <th:block th:if="${#authentication.principal.profileImage == null}">
             <img th:src="@{/images/default.png}" 
                  alt="기본 프로필 이미지" class="mypage-profile-img" id="profileImg" />
         </th:block>
 
-        <!-- 수정 아이콘과 카메라 아이콘은 항상 표시 -->
+       
         <img th:src="@{/images/pen.png}" alt="수정 아이콘" class="edit-profile-icon" id="editProfileIcon" />
         <img th:src="@{/images/camera.png}" alt="사진 수정" class="camera-icon" id="cameraIcon" />
     </div>
