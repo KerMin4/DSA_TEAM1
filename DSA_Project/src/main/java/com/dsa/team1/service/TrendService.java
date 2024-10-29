@@ -18,7 +18,11 @@ public interface TrendService {
 
     public List<PlaceDTO> getPlacesByUserLocation(String userId);
 
-    public List<PlaceDTO> getUpcomingPlaces();
+	public List<PlaceDTO> getPlacesByEventDate();
+
+	public List<SocialGroupDTO> getGroupsByCreatedAt();
+
+
 
 
 

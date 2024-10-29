@@ -33,20 +33,33 @@ public class TrendController {
         // 유저 정보 가져오기
 //        UserDTO userDTO = trendService.getUserInfo(user.getId());
 		
-		log.info("[TrendController-getTreds] user: {}", user);
-
-        // 그룹 및 플레이스 목록 가져오기
-		List<SocialGroupDTO> groupL = trendService.getGroupsByUserInterests(user.getId());
+		if (user == null) {
+			// 로그인 되지 않았을 때 목록 가져오기
+			List<SocialGroupDTO> recentGroupL = trendService.getGroupsByCreatedAt();
+			List<PlaceDTO> recentPlaceL = trendService.getPlacesByEventDate();
+			
+			model.addAttribute("RecentGroups", recentGroupL);
+			model.addAttribute("RecentPlaces", recentPlaceL);
+			
+			log.info("[TrendController-getTrends] RecentGroups: {}, RecentPlaces: {}", recentGroupL, recentPlaceL);
+			
+		} else {
+			log.info("[TrendController-getTreds] user: {}", user);
+			
+			// 로그인 됐을 때 그룹 및 플레이스 목록 가져오기
+			List<SocialGroupDTO> groupL = trendService.getGroupsByUserInterests(user.getId());
 //        List<SocialGroupDTO> groupL = trendService.getGroupsByUserDemographics(user.getId());
-        List<SocialGroupDTO> locationGroupL = trendService.getGroupsByUserLocation(user.getId());
-        List<PlaceDTO> locationPlaceL = trendService.getPlacesByUserLocation(user.getId());
-        List<PlaceDTO> placeL = trendService.getUpcomingPlaces();
-        
-        log.info("[TrendController-getTrends] groups: {}, locationGroups: {}, places: {}", groupL, locationGroupL, placeL);
+			List<SocialGroupDTO> locationGroupL = trendService.getGroupsByUserLocation(user.getId());
+			List<PlaceDTO> locationPlaceL = trendService.getPlacesByUserLocation(user.getId());
+			List<PlaceDTO> placeL = trendService.getPlacesByEventDate();
 
-        model.addAttribute("locationGroups", locationGroupL);
-        model.addAttribute("locationPlaces", locationPlaceL);
-        model.addAttribute("places", placeL);
+			model.addAttribute("locationGroups", locationGroupL);
+			model.addAttribute("locationPlaces", locationPlaceL);
+			model.addAttribute("places", placeL);
+
+			log.info("[TrendController-getTrends] groups: {}, locationGroups: {}, places: {}", groupL, locationGroupL, placeL);
+		}
+		
 
         return "trend/trend"; // HTML 파일 이름
     }

@@ -171,7 +171,7 @@ public class TrendServiceImpl implements TrendService {
 	}
 	
 	@Override
-	public List<PlaceDTO> getUpcomingPlaces() {
+	public List<PlaceDTO> getPlacesByEventDate() {
 		List<PlaceEntity> placeEntityList = placeRepository.findAll();
 		
 		List<PlaceDTO> upcomingPlaces = placeEntityList.stream()
@@ -183,6 +183,18 @@ public class TrendServiceImpl implements TrendService {
 		    return upcomingPlaces; // 정렬된 리스트 반환
 	}
 
+	@Override
+	public List<SocialGroupDTO> getGroupsByCreatedAt() {
+		List<SocialGroupEntity> groupEntityList = groupRepository.findAll();
+		
+		List<SocialGroupDTO> recentGroupL = groupEntityList.stream()
+		        .filter(place -> place.getCreatedAt() != null) 						// createdAt이 null이 아닌 경우만 필터링
+		        .sorted((p1, p2) -> p1.getEventDate().compareTo(p2.getEventDate())) // createdAt 기준으로 정렬
+		        .map(this::groupConvertEntityToDto) 								// SocialGroupEntity를 PlaceDTO로 변환
+		        .collect(Collectors.toList()); 										// 리스트로 수집
+		
+		return recentGroupL;
+	}
 	
 	
 	
