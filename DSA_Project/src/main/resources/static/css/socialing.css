@@ -48,7 +48,7 @@
     right: 60px;
     width: 90px;
     height: 90px;
-    background-color: #E48F85;
+    background-color: #8ec2f7;
     color: white;
     border: none;
     border-radius: 50%;
@@ -96,7 +96,7 @@
 
 body {
     font-family: 'S-CoreDream-3Light', sans-serif;
-    background-color:  #e0e0e0;;
+    background-color: #f8f8f8;
     margin: 0;
     padding: 0;
     min-height: 100vh;
@@ -111,6 +111,19 @@ body {
     max-width: 1200px; /* 메인 콘텐츠의 최대 너비 제한 */
     margin: 0 auto; /* 가운데 정렬 */
     box-sizing: border-box; /* 패딩과 너비를 포함하여 크기 계산 */
+    overflow: auto; /* 스크롤바를 허용합니다 */
+}
+
+/* 웹킷 기반 브라우저의 스크롤바 스타일을 숨기기 */
+.main-content::-webkit-scrollbar {
+    width: 0; /* 스크롤바 너비를 0으로 설정하여 숨김 */
+    background: transparent; /* 스크롤바 배경을 투명하게 설정 */
+}
+
+/* Firefox에서 스크롤바 숨기기 */
+.main-content {
+    scrollbar-width: thin; /* Firefox에서 스크롤바를 얇게 설정 */
+    scrollbar-color: transparent transparent; /* 스크롤바와 트랙 색상을 투명으로 설정 */
 }
 
 /* ===================== 해시태그 스타일 ===================== */
@@ -153,14 +166,14 @@ body {
 /* 그룹 리스트를 감싸는 컨테이너에 그리드 레이아웃 적용 */
 .group-listing {
     display: grid;
-    grid-template-columns: repeat(1, 1fr); /* 한 줄에 한 개의 그룹 카드로 설정 */
-    gap: 20px 40px; /* 카드들 사이의 간격 */
-    padding: 10px; /* 그룹 리스트의 전체 패딩 */
-    max-width: 100%; /* 최대 너비를 100%로 설정 */
-    margin: 0 auto; /* 가운데 정렬 */
+    grid-template-columns: repeat(2, 1fr); /* 두 열로 그룹 카드를 정렬 */
+    gap: 10px; /* 카드들 사이의 간격 */
+    padding: 10px;
+    margin: 0 auto;
+    max-width: 1200px; /* 컨테이너의 최대 너비 */
 }
 
-/* 그룹 카드 스타일 */
+
 .group-card {
     background-color: #ffffff;
     border: 1px solid #ddd;
@@ -171,11 +184,11 @@ body {
     box-sizing: border-box;
     display: flex;
     align-items: center;
-    gap: 15px;
-    margin-bottom: 15px;
+    gap: 10px;
+    margin-bottom: 10px; /* 카드 간격 */
     width: 100%; /* 카드가 부모 요소의 너비를 가득 채우도록 설정 */
     max-width: 550px; /* 카드의 최대 너비를 설정 */
-    
+    margin-top: 10px; /* 위쪽 간격을 줄입니다. */
 }
 
 .group-image {
@@ -189,6 +202,9 @@ body {
     display: flex; /* 그룹 정보를 가로로 정렬 */
     flex-direction: column; /* 수직 정렬 */
     justify-content: center; /* 중앙 정렬 */
+    
+    
+    
 }
 
 .group-info h3 {
@@ -199,7 +215,7 @@ body {
 
 .group-info p {
     margin: 5px 0; /* **텍스트 간격 줄이기** */
-    color: #666; /* 텍스트 색상 */
+    color: #333; /* 텍스트 색상 */
     font-size: 14px; /* 텍스트 크기 */
     
 }
@@ -329,6 +345,7 @@ a:hover {
     border-radius: 25px;
     margin-bottom: 20px;
     flex-wrap: wrap; /* 사이드바 크기에 따라 줄바꿈 */
+     margin-top: -10px;
 }
 
 .search input[type="text"] {
@@ -337,6 +354,8 @@ a:hover {
     border: 1px solid #c0c0c0; /* 테두리 색상 */
     border-radius: 5px; /* 둥근 모서리 */
     font-size: 14px; /* 텍스트 크기 */
+    margin-left: -5px;
+    font-family: 'S-CoreDream-3Light', sans-serif;
 }
 
 .search input[type="submit"] {
@@ -347,8 +366,15 @@ a:hover {
     border-radius: 5px; /* 둥근 모서리 */
     font-size: 14px; /* 버튼 텍스트 크기 */
     cursor: pointer; /* 클릭 가능한 포인터 표시 */
+    font-family: 'S-CoreDream-3Light', sans-serif;
 }
 
 .search input[type="submit"]:active {
     transform: translateY(1px); /* 클릭 시 약간 눌리는 효과 */
+}
+
+.group-info .fa-eye {
+    color: #333; /* 아이콘 색상 */
+    margin-right: 5px; /* 아이콘과 숫자 간격 */
+    font-size: 16px; /* 아이콘 크기 */
 }

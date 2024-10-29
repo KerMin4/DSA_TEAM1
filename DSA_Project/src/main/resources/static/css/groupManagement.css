@@ -51,6 +51,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    margin-left: -15px; 
 }
 
 .group-text h2, .group-text p {
@@ -232,18 +233,22 @@ h2, p {
 
 .group-location {
     position: relative;
-    top: -5px; 
+    top: -7px; 
     margin-bottom: 0;
 }
 
 
 .group-members {
-    position: relative !important;
-    top: 8px !important; 
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+    position: relative;
+    top: 10px;
 }
 
+
 .group-text h2 {
-    font-size: 17px; 
+    font-size: 19px; 
     color: #000; 
     margin-bottom: 1px; 
 }

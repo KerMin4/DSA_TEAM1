@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class ProfileController {
 
-	// 프로필 정보 가져오고 반환하는거임 -나연-
+	
     private final UserService userService;
 
     @GetMapping("/profile")

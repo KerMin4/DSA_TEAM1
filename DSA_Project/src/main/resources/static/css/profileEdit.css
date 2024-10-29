@@ -98,7 +98,7 @@
     height: 23px; 
     position: relative;
     z-index: 1000; 
-    top: 22px; 
+    top: 13px; 
     right: -65px; 
     cursor: pointer; 
     transition: transform 0.2s; 
@@ -348,3 +348,4 @@
     left: 17px;
     position: relative; 
 }
+

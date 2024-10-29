@@ -21,7 +21,7 @@
                 <li><a th:classappend="${activePage == 'home'} ? 'active'" th:href="@{/dashboard/mypage}" id="home">홈</a></li>
                 <li><a th:classappend="${activePage == 'profile-edit'} ? 'active'" th:href="@{/dashboard/profileedit}" id="profile-edit">프로필 수정</a></li>
                 <li><a th:classappend="${activePage == 'group-management'} ? 'active'" th:href="@{/dashboard/groupManagement}" id="group-management">그룹 관리</a></li>
-                <li><a th:classappend="${activePage == 'payment-management'} ? 'active'" th:href="@{/dashboard/paymentManagement}" id="payment-management">결제 관리</a></li>
+                 <!-- <li><a th:classappend="${activePage == 'payment-management'} ? 'active'" th:href="@{/dashboard/paymentManagement}" id="payment-management">결제 관리</a></li> -->   
                 <li><a th:classappend="${activePage == 'booking-history'} ? 'active'" th:href="@{/dashboard/bookingHistory}" id="booking-history">예약 내역</a></li>
             </ul>
 
@@ -61,14 +61,17 @@
             <img th:src="@{/upload/{imagePath}(imagePath=${group.profileImage})}" alt="그룹 이미지" class="group-image">
             <div class="group-text">
                 <h2 th:text="${group.groupName}"></h2>
-                <p th:text="${group.description}"></p>
+                <!-- 그룹 시간 표시 -->
+                <p th:text="${#temporals.format(group.eventDate, 'yyyy-MM-dd HH:mm')}">시간</p>
+                <!-- 그룹 위치 -->
                 <p class="group-location">위치: <span th:text="${group.location}"></span></p>
-               <p class="group-members">
-    <i class="fas fa-user-friends"></i>
-    <span th:text="${memberCountMap[group.groupId]}"></span>
-    /
-    <span th:text="${group.memberLimit}"></span>
-</p>
+                <!-- 인원 수 표시 -->
+                <p class="group-members">
+                    <i class="fas fa-user-friends"></i>
+                    <span th:text="${memberCountMap[group.groupId]}"></span>
+                    /
+                    <span th:text="${group.memberLimit}"></span>
+                </p>
             </div>
             <div class="dropdown-card">
                 <button class="dropdown-btn">⋮</button>
@@ -99,8 +102,11 @@
                         <img th:src="@{/upload/{imagePath}(imagePath=${group.profileImage})}" alt="그룹 이미지" class="group-image">
                         <div class="group-text">
                             <h2 th:text="${group.groupName}"></h2>
-                            <p th:text="${group.description}"></p>
+                         
+                            <p th:text="${#temporals.format(group.eventDate, 'yyyy-MM-dd HH:mm')}">시간</p>
+                       
                             <p class="group-location">위치: <span th:text="${group.location}"></span></p>
+                         
                             <p>
                                 <i class="fas fa-user-friends"></i> 
                                 <span th:text="${memberCountMap[group.groupId]}"></span>

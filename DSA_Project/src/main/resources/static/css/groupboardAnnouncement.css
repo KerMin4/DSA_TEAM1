@@ -78,8 +78,10 @@ body {
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    font-family: 'S-CoreDream-3Light', sans-serif; 
     position: relative; 
     top: -22px; 
+    margin-left: -63px; 
     
 }
 
@@ -115,7 +117,10 @@ textarea#announcementText {
     padding: 20px;
     font-size: 14px;
     resize: none;
+    padding: 10px; 
+    font-family: 'S-CoreDream-3Light', sans-serif;
     margin-bottom: 10px;
+    margin-top: 20px;        
 }
 
 /* 공지사항이 없을 때 텍스트 스타일 */
