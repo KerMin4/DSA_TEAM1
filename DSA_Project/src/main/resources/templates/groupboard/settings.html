@@ -27,10 +27,15 @@
             
             <div>가입 멤버</div>
             <ul class="members-list">
-			    <li th:each="member : ${members}">
-			        <img th:src="@{/upload/{profileImage}(profileImage=${member.profileImage})}" alt="프로필 이미지" class="profile-img">
-			        <span th:text="${member.userId}"></span>
-			    </li>
+			    <li>
+		            <img th:src="@{${leader != null && leader.profileImage != null ? '/upload/' + leader.profileImage : '/images/default.png'}}" alt="방장 프로필 이미지" class="profile-img">
+		            <span th:text="${leader.userId}"></span>
+		            <img src="../images/groupLeader.png" alt="방장 아이콘" class="leader-icon">
+		        </li>
+		        <li th:each="member : ${members}">
+		            <img th:src="@{/upload/{profileImage}(profileImage=${member.profileImage})}" alt="멤버 프로필 이미지" class="profile-img">
+		            <span th:text="${member.userId}"></span>
+		        </li>
 			</ul>
         </div>
 		
@@ -86,7 +91,7 @@
 	                <tr>
 					    <td><label for="profileImage">헤더 이미지:</label></td>
 					    <td>
-					        <img id="headerImagePreview" th:src="@{/upload/{groupProfileImage}(groupProfileImage=${groupProfileImage})}" alt="헤더 이미지 미리보기" style="width:200px; height:200px;">
+					    	<img th:src="@{${group.profileImage != null} ? '/upload/' + ${group.profileImage} : '/images/noImage_icon.png'}" alt="헤더 이미지 미리보기" style="width:200px; height:200px;">
 					        <!-- <button type="button" id="removeImage" style="display:block;">이미지 삭제</button> -->
 					        <button type="button" id="openHeaderImageModal" class="image-upload-button">
 							    <img src="../images/camera.png" alt="헤더 이미지 업로드" class="image-icon">

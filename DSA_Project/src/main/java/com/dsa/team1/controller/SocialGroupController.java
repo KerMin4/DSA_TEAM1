@@ -344,65 +344,73 @@ public class SocialGroupController {
     }
     
     /**
-     * 그룹 가입 권유 페이지로 이동하는 메서드
-     * 그룹 멤버가 아닌 사용자가 그룹에 가입할 때, 권유 페이지로 리다이렉트됨.
+     * 그룹가입 처리 
      */
-    @GetMapping("/joinGroupInvitation")
-    public String joinGroupInvitation(
-        @RequestParam("groupId") Integer groupId,
-        Model model) {
-        
-        // 그룹 정보 로드
-        SocialGroupEntity group = socialGroupRepository.findById(groupId)
-                .orElseThrow(() -> new IllegalArgumentException("잘못된 그룹 ID입니다."));
-        
-        model.addAttribute("group", group);
-        return "socialgroup/joinGroupInvitation";  // 템플릿 반환
-    }
-
-    /**
-     * 가입 권유 페이지 로직
-     * 바로 가입(AUTO) / 승인 후 가입(APPROVAL)
-     */
-    @PostMapping("/joinGroup")
+    @PostMapping("/socialing/joinGroup")
     public ResponseEntity<Map<String, String>> joinGroup(
             @RequestParam("groupId") Integer groupId,
-            @AuthenticationPrincipal AuthenticatedUser user,
-            RedirectAttributes redirectAttributes) {
-    	
-    	Map<String, String> response = new HashMap<>();
+            @AuthenticationPrincipal AuthenticatedUser user) {
+
+        Map<String, String> response = new HashMap<>();
+        
+        if (user == null) {
+            response.put("errorMessage", "로그인이 필요합니다.");
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }
 
         SocialGroupEntity group = socialGroupRepository.findById(groupId)
                 .orElseThrow(() -> new IllegalArgumentException("잘못된 그룹 ID입니다."));
         
-        // 이미 그룹에 가입된 멤버인지 확인
+        // 멤버 인원수 제한 조건
+        int currentMemberCount = socialGroupService.getMemberCountByGroup(group);
+        if (currentMemberCount >= group.getMemberLimit()) {
+            response.put("errorMessage", "그룹 인원이 이미 가득 찼습니다.");
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }
+
         boolean isMember = socialGroupService.isUserMemberOfGroup(String.valueOf(user.getId()), groupId);
         if (isMember) {
             response.put("errorMessage", "이미 그룹의 멤버입니다.");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
         }
 
         UserEntity groupLeader = group.getGroupLeader();
-        String message = user.getUsername() + "님이 '"+ group.getGroupName() +"' 그룹에 가입하였습니다.";
-        
-        // 바로 가입(AUTO)에 따른 로직 처리
+        String message = user.getUsername() + "님이 '" + group.getGroupName() + "' 그룹에 가입하였습니다.";
+
         if (group.getGroupJoinMethod() == GroupJoinMethod.AUTO) {
             socialGroupService.addMemberToGroup(user.getId(), groupId);
-            notificationService.sendNotification(groupLeader, message);	// 알림 추가
+            notificationService.sendNotification(groupLeader, message);
             response.put("successMessage", "그룹에 성공적으로 가입되었습니다.");
-            return ResponseEntity.ok(response);
-        // 승인 후 가입(APPROVAL)에 따른 로직 처리
         } else if (group.getGroupJoinMethod() == GroupJoinMethod.APPROVAL) {
-        	// 그룹 리더에게 가입 요청 알림
             socialGroupService.requestApprovalToJoinGroup(user.getId(), groupId);
             response.put("infoMessage", "그룹 리더의 승인이 필요합니다.");
-            return ResponseEntity.ok(response);
+        } else {
+            response.put("errorMessage", "가입할 수 없습니다.");
         }
-        response.put("errorMessage", "가입할 수 없습니다.");
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
     
+    /**
+     * 현재 그룹의 인원 수와 제한 인원 수를 반환하는 API 엔드포인트
+     */
+    @GetMapping("/socialing/getGroupStatus")
+    public ResponseEntity<Map<String, Object>> getGroupStatus(
+            @RequestParam("groupId") Integer groupId) {
+
+        SocialGroupEntity group = socialGroupRepository.findById(groupId)
+                .orElseThrow(() -> new IllegalArgumentException("잘못된 그룹 ID입니다."));
+
+        int currentMemberCount = socialGroupService.getMemberCountByGroup(group); // 현재 멤버 수
+        int memberLimit = group.getMemberLimit(); // 인원 제한
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("currentMemberCount", currentMemberCount);
+        response.put("memberLimit", memberLimit);
+
+        return ResponseEntity.ok(response);
+    }
+
     /**
      * 그룹리더의 가입 승인/거절 처리 
      */

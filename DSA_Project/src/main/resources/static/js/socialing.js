@@ -209,6 +209,110 @@ $(function() {
             }
         });
     });
+    
+    // 그룹 참여 버튼 클릭 시 동작
+	$('.group-listing').on('click', '.join-btn', function(event) {
+	    event.preventDefault();
+	    event.stopPropagation();
+	
+	    var groupId = $(this).closest('.group-card-wrapper').find('.group-card').data('group-id');
+	    var joinButton = $(this);
+	
+	    console.log("Extracted groupId:", groupId);
+	    if (!groupId) {
+	        console.error("groupId를 찾을 수 없습니다.");
+	        alert("그룹 ID를 가져오는 데 문제가 발생했습니다.");
+	        return;  // groupId가 없으면 요청을 중단
+	    }
+	
+	    // 서버에 현재 그룹의 상태를 요청하여 인원 제한 여부 확인
+	    $.ajax({
+	        url: '/kkirikkiri/socialgroup/socialing/getGroupStatus',
+	        type: 'GET',
+	        data: { groupId: groupId },
+	        success: function(response) {
+	            var currentMemberCount = response.currentMemberCount;
+	            var memberLimit = response.memberLimit;
+	
+	            // 인원 제한에 도달한 경우 버튼 비활성화 및 경고
+	            if (currentMemberCount >= memberLimit) {
+	                joinButton.prop('disabled', true);  // 버튼 비활성화
+	                alert("이 그룹은 이미 인원 제한에 도달하여 가입할 수 없습니다.");
+	            } else {
+	                // 제한에 도달하지 않은 경우, 가입 요청 실행
+	                $.ajax({
+	                    url: '/kkirikkiri/socialgroup/socialing/joinGroup',
+	                    type: "POST",
+	                    data: { groupId: groupId },
+	                    beforeSend: function(xhr) {
+	                        xhr.setRequestHeader("X-CSRF-TOKEN", $("meta[name='_csrf']").attr("content"));
+	                    },
+	                    success: function(response) {
+	                        console.log("서버 응답:", response); // 서버 응답을 콘솔에 출력하여 구조 확인
+	                        if (response.successMessage) {
+	                            alert(response.successMessage);
+	                        } else if (response.infoMessage) {
+	                            alert(response.infoMessage);
+	                        } else if (response.errorMessage) {
+	                            alert(response.errorMessage);
+	                        } else {
+	                            alert("알 수 없는 응답 형식입니다."); // 예외 처리
+	                        }
+	                    },
+	                    error: function(xhr) {
+	                        console.log("에러 발생 상태 코드:", xhr.status);
+	                        console.log("에러 응답 텍스트:", xhr.responseText);
+	                        alert("그룹 가입 중 오류가 발생했습니다. 다시 시도해 주세요.");
+	                    }
+	                });
+	            }
+	        },
+	        error: function(xhr) {
+	            console.log("에러 발생 상태 코드:", xhr.status);
+	            console.log("에러 응답 텍스트:", xhr.responseText);
+	            alert("그룹 상태를 불러오는 데 실패했습니다. 다시 시도해 주세요.");
+	        }
+	    });
+	});
+    /*$('.group-listing').on('click', '.join-btn', function(event) {
+	    event.preventDefault();
+	    event.stopPropagation();
+	
+	    var groupId = $(this).closest('.group-card-wrapper').find('.group-card').data('group-id');
+    	console.log("Extracted groupId:", groupId);
+	    if (!groupId) {
+	        console.error("groupId를 찾을 수 없습니다.");
+	        alert("그룹 ID를 가져오는 데 문제가 발생했습니다.");
+	        return;  // groupId가 없으면 요청을 중단
+	    }
+	
+	    $.ajax({
+		    url: '/kkirikkiri/socialgroup/socialing/joinGroup',
+		    type: "POST",
+		    data: { groupId: groupId },
+		    beforeSend: function(xhr) {
+		        xhr.setRequestHeader("X-CSRF-TOKEN", $("meta[name='_csrf']").attr("content"));
+		    },
+		    success: function(response) {
+		        console.log("서버 응답:", response); // 서버 응답을 콘솔에 출력하여 구조 확인
+				    if (response.successMessage) {
+	                alert(response.successMessage);
+	            } else if (response.infoMessage) {
+	                alert(response.infoMessage);
+	            } else if (response.errorMessage) {
+	                alert(response.errorMessage);
+	            } else {
+	                alert("알 수 없는 응답 형식입니다."); // 예외 처리
+	            }
+		    },
+		    error: function(xhr) {
+			    console.log("에러 발생 상태 코드:", xhr.status);
+			    console.log("에러 응답 텍스트:", xhr.responseText);
+			    alert("그룹 가입 중 오류가 발생했습니다. 다시 시도해 주세요.");
+			}
+		});
+
+	});*/
 
     // 정렬 기준 토글
     $('#sort-toggle').on('click', function() {
