@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="EUC-KR">
-	<title>플레이스 참가하기</title>
+	<title>�����댁�� 李멸���湲�</title>
 	<script th:src="@{/js/jquery-3.7.1.min.js}"></script>
 	<script th:src="@{/js/placeJoin.js}"></script>
 	<link th:href="@{/css/placeJoin.css}" rel="stylesheet">
@@ -14,55 +14,55 @@
 	<th:block th:replace="~{fragments/header :: header}"></th:block>
 
 	<div class="container">
-        <h1 id="joinPlaceH1">플레이스 참여 안내</h1>
+        <h1 id="joinPlaceH1">�����댁�� 李몄�� ����</h1>
         
         <div class="info-section">
-            <h2>안내 사항</h2>
-            <p>참여하시기 전에 아래의 내용을 숙지해 주시기 바랍니다:</p>
+            <h2>���� �ы��</h2>
+            <p>李몄�ы����湲� ���� ������ �댁�⑹�� ��吏��� 二쇱��湲� 諛�������:</p>
             <ul>
 			    <li>
-			        <p th:text="'참여 인원 수가 ' + ${place.requiredMembers} + '명일 경우, 취소될 수 있습니다.'"></p>
+			        <p th:text="'李몄�� �몄�� ��媛� ' + ${place.requiredMembers} + '紐��� 寃쎌��, 痍⑥���� �� ���듬����.'"></p>
 			    </li>
 			    <li>
-			        <p th:text="'참여 비용은 ' + ${T(java.lang.String).format('%,d', place.price.intValue())} + '원입니다.'"></p>
+			        <p th:text="'李몄�� 鍮��⑹�� ' + ${T(java.lang.String).format('%,d', place.price.intValue())} + '��������.'"></p>
 			    </li>
 			    <li>
-			        <p th:text="'결제가 완료되어야 참여할 수 있으며, 결제가 완료된 순간부터 참여 인원에 포함됩니다.'"></p>
+			        <p th:text="'寃곗��媛� ��猷����댁�� 李몄�ы�� �� ���쇰ŉ, 寃곗��媛� ��猷��� ��媛�遺��� 李몄�� �몄���� �ы�⑤�⑸����.'"></p>
 			    </li>
 			    <li>
-			        <p th:text="'모든 참여자는 개인정보 처리 방침에 동의해야 합니다.'"></p>
+			        <p th:text="'紐⑤�� 李몄�ъ���� 媛��몄��蹂� 泥�由� 諛⑹묠�� �����댁�� �⑸����.'"></p>
 			    </li>
 			</ul>
         </div>
 
         <form action="#" method="post" id="joinForm">
-	        <!-- 히든 필드로 플레이스 아이디 전달 -->
+	        <!-- ���� ����濡� �����댁�� ���대�� ���� -->
 		    <input type="hidden" name="placeId" th:value="${place.placeId}" />
 		    
             <div class="agreement-section">
-                <h2>정보 동의</h2>
+                <h2>��蹂� ����</h2>
                 <div>
                     <input type="checkbox" id="infoAgreement" required>
-                    <label for="infoAgreement">개인정보 처리 방침에 동의합니다.</label>
+                    <label for="infoAgreement">媛��몄��蹂� 泥�由� 諛⑹묠�� �����⑸����.</label>
                 </div>
             </div>
 
             <div class="payment-agreement-section">
-                <h2>결제 동의</h2>
+                <h2>寃곗�� ����</h2>
                 <div>
                     <input type="checkbox" id="paymentAgreement" required>
-                    <label for="paymentAgreement">결제 약관에 동의합니다.</label>
+                    <label for="paymentAgreement">寃곗�� �쎄��� �����⑸����.</label>
                 </div>
             </div>
 
             <div class="form-actions">
-                <!-- 예약하기 버튼 -->
+                <!-- ���쏀��湲� 踰��� -->
             	<!-- 
-                <button type="submit" class="submit-button" th:formaction="@{/place/reserve}">예약하기</button>
+                <button type="submit" class="submit-button" th:formaction="@{/place/reserve}">���쏀��湲�</button>
             	-->
-                <!-- 결제하기 버튼. 시연을 위해 예약하기로 바꿔둠. -->
-                <button type="submit" class="submit-button" th:formaction="@{/place/payment}">예약하기</button>
-                <button type="button" class="cancel-button" onclick="redirectToPlaceMain()">취소</button>
+                <!-- 寃곗����湲� 踰���. ���곗�� ���� ���쏀��湲곕� 諛�轅���. -->
+                <button type="submit" class="submit-button" th:formaction="@{/place/payment}">���쏀��湲�</button>
+                <button type="button" class="cancel-button" onclick="redirectToPlaceMain()">痍⑥��</button>
             </div>
             
         </form>

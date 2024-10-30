@@ -57,7 +57,7 @@
                 </nav>
                 
                 <!-- 그룹 정보 섹션 추가 -->
-                <h2 th:text="${groupName} + ' 메인'"></h2>
+                <h2 th:text="${groupName}"></h2>
                 <img th:src="@{${group.profileImage != null} ? '/upload/' + ${group.profileImage} : '/images/noImage_icon.png'}" alt="Profile Image" class="group-header-img">
                 <p>개설 날짜: <span th:text="${group.createdAt}"></span></p>
                 <p>장소: <span th:text="${group.location}"></span></p>
