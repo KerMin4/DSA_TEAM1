@@ -6,6 +6,7 @@
     <link th:href="@{/css/header.css}" rel="stylesheet">
     <link th:href="@{/css/main.css}" rel="stylesheet"> 
     <link th:href="@{/css/mypage.css}" rel="stylesheet">
+    <link th:href="@{/css/bookingHistory.css}" rel="stylesheet">
     <script src="/kkirikkiri/js/jquery-3.7.1.min.js"></script>
 </head>
 <body>
@@ -43,5 +44,96 @@
             <div class="horizontal-line"></div>
         </nav>
     </div>
+    
+    
+    <div class="place-list-container">
+
+	    <!-- 생성한 플레이스 섹션 -->
+	    <div class="place-list-section">
+	        <h1 class="place-title">예약한 플레이스</h1>
+	
+	        <div th:if="${bookedPlaces.empty}">
+	            <p>예약된 플레이스가 없습니다. 플레이스에 참여해보세요!</p>
+	        </div>
+	
+	        <!-- 생성한 플레이스 목록 -->
+	        <div th:each="place : ${bookedPlaces}">
+	            <div class="place-card" 
+	                 th:data-place-url="@{/place/placeMain(placeId=${place.placeId})}"
+	                 th:data-current-user="${#authentication.principal.username}">
+	                
+	                <img th:src="@{/upload/{imagePath}(imagePath=${place.profileImage})}" 
+	                     alt="플레이스 이미지" class="place-image">
+	                
+	                <div class="place-text">
+	                    <h2 th:text="${place.title}"></h2>
+	                    <p th:text="${#temporals.format(place.eventDate, 'yyyy-MM-dd HH:mm')}">시간</p>
+	                    <p class="place-location">위치: <span th:text="${place.location}"></span></p>
+	                    <p class="place-members">
+	                        <i class="fas fa-user-friends"></i>
+	                        <span th:text="${currentMembersMap[place.placeId]}"></span>
+	                        <span th:text="${place.memberLimit}"></span>
+	                    </p>
+	                </div>
+	                
+	                <div class="dropdown-card">
+	                    <button class="dropdown-btn">⋮</button>
+	                    <div class="dropdown-content">
+	                        <form th:action="@{/dashboard/deletePlace}" method="post">
+	                            <input type="hidden" name="placeId" th:value="${place.placeId}">
+	                            <button type="submit" class="delete-btn">예약취소</button>
+	                        </form>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	
+	    <!-- 결제한 플레이스 섹션 -->
+	    <div class="place-list-section joined-place-section">
+	        <h1 class="place-title joined-place-title">결제 완료된 플레이스</h1>
+	
+	        <div th:if="${joinedPlaces.empty}">
+	            <p class="no-joined-place-message">결제된 플레이스가 없습니다. 플레이스에 참여해보세요!</p>
+	        </div>
+	
+	        <!-- 가입한 플레이스 목록 -->
+	        <div th:each="place : ${joinedPlace}">
+	            <div class="place-card joined-place-card" 
+	                 th:data-place-url="@{/place/placeMain(placeId=${place.placeId})}"
+	                 th:data-payment-status="${userplace.status}"
+	                 th:data-current-user="${#authentication.principal.username}">
+	                
+	                <img th:src="@{/upload/{imagePath}(imagePath=${place.profileImage})}" 
+	                     alt="플레이스 이미지" class="place-image">
+	                
+	                <div class="place-text">
+	                    <h2 th:text="${place.placeName}"></h2>
+	                    <p th:text="${#temporals.format(place.eventDate, 'yyyy-MM-dd HH:mm')}">시간</p>
+	                    <p class="place-location">위치: <span th:text="${place.location}"></span></p>
+	                    <p>
+	                        <i class="fas fa-user-friends"></i>
+	                        <span th:text="${currentMembersMap[place.placeId]}"></span> /
+	                        <span th:text="${place.memberLimit}"></span>
+	                    </p>
+	                </div>
+	                
+	                <div class="dropdown-card">
+	                    <button class="dropdown-btn">⋮</button>
+	                    <div class="dropdown-content">
+	                        <form th:action="@{/dashboard/deletePlace}" method="post">
+	                            <input type="hidden" name="placeId" th:value="${place.placeId}">
+	                            <button type="submit" class="leave-btn">참여취소</button>
+	                        </form>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	
+	</div>
+    
+    
+    
 </body>
 </html>

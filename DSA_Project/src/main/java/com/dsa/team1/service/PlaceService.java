@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import com.dsa.team1.dto.PlaceDTO;
+import com.dsa.team1.dto.UserPlaceDTO;
 import com.dsa.team1.entity.PlaceEntity;
 import com.dsa.team1.entity.enums.PlaceCategory;
 import com.dsa.team1.security.AuthenticatedUser;
@@ -36,5 +37,15 @@ public interface PlaceService {
 	public String paymentPlace(Integer placeId, String userId);
 
 	public int getMemberCountByPlace(PlaceEntity place);
+
+	public List<PlaceDTO> getAllMyPlaces(String string);
+
+	public List<UserPlaceDTO> getAllUserPlaces(String string);
+
+	public void deletePlaceById(Integer placeId, String userId);
+
+	public Boolean checkReservation(Integer placeId, String userId);
+
+	public void reservePlace(Integer placeId, String userId);
 
 }

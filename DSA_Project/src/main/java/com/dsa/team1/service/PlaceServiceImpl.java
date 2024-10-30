@@ -11,19 +11,16 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.dsa.team1.dto.PlaceDTO;
+import com.dsa.team1.dto.UserPlaceDTO;
 import com.dsa.team1.entity.BookmarkEntity;
-import com.dsa.team1.entity.GroupHashtagEntity;
 import com.dsa.team1.entity.PlaceEntity;
-import com.dsa.team1.entity.SocialGroupEntity;
 import com.dsa.team1.entity.UserEntity;
 import com.dsa.team1.entity.UserPlaceEntity;
-import com.dsa.team1.entity.enums.Interest;
 import com.dsa.team1.entity.enums.PlaceCategory;
 import com.dsa.team1.entity.enums.UserPlaceStatus;
 import com.dsa.team1.repository.BookmarkRepository;
@@ -395,6 +392,91 @@ public class PlaceServiceImpl implements PlaceService {
 	public int getMemberCountByPlace(PlaceEntity place) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public List<PlaceDTO> getAllMyPlaces(String userId) {
+		List<UserPlaceEntity> userPlaces = userPlaceRepository.findByUser_UserId(userId);
+		
+		List<PlaceEntity> places = new ArrayList<>();
+		for (UserPlaceEntity userPlace : userPlaces) {
+			PlaceEntity place = placeRepository.findById(userPlace.getPlace().getPlaceId()).orElseThrow(() -> new NoSuchElementException("Place not found"));
+			places.add(place);
+		}
+		log.info("Place Entity List: {}", places);
+		
+		List<PlaceDTO> placeList = convertEntityToDto(places);
+		
+		return placeList;
+	}
+
+	@Override
+	public List<UserPlaceDTO> getAllUserPlaces(String userId) {
+		
+		List<UserPlaceEntity> userPlaces = userPlaceRepository.findByUser_UserId(userId);
+		
+		List<UserPlaceDTO> userPlaceDtoList = new ArrayList<>();
+		for (UserPlaceEntity userPlace : userPlaces) {
+			UserPlaceDTO userPlaceDTO = UserPlaceDTO.builder()
+									.userPlaceId(userPlace.getUserPlaceId())
+									.userId(userPlace.getUser().getUserId())
+									.placeId(userPlace.getPlace().getPlaceId())
+									.joindAt(userPlace.getJoinedAt())
+									.status(userPlace.getStatus())
+									.build();
+			userPlaceDtoList.add(userPlaceDTO);
+		}
+
+		return userPlaceDtoList;
+	}
+
+	@Override
+	public void deletePlaceById(Integer placeId, String userId) {
+		PlaceEntity place = placeRepository.findById(placeId).orElseThrow(() -> new NoSuchElementException("Place not found"));
+		UserPlaceEntity userPlace = userPlaceRepository.findByUser_UserIdAndPlace_PlaceId(userId, placeId).orElseThrow(() -> new NoSuchElementException("UserPlace not found"));
+		bookmarkRepository.deleteByPlace(place);
+		log.info("[PlaceServiceImple - deletePlaceById] Bookmark is deleted");
+		userPlaceRepository.deleteById(userPlace.getUserPlaceId());
+		log.info("[PlaceServiceImple - deletePlaceById] UserPlace is deleted");
+		
+	}
+
+	@Override
+	public Boolean checkReservation(Integer placeId, String userId) {
+		
+		try {
+	        // Find user place entity by userId and placeId
+	        Optional<UserPlaceEntity> userPlaceEntity = userPlaceRepository.findByUser_UserIdAndPlace_PlaceId(userId, placeId);
+	        
+	        // Check if the entity exists and its status
+	        if (userPlaceEntity.isEmpty() || userPlaceEntity.get().getStatus() == UserPlaceStatus.CANCELED) {
+	            return true; // Reservation can be made if it's either not found or canceled
+	        } else if (userPlaceEntity.get().getStatus() == UserPlaceStatus.CONFIRMED || userPlaceEntity.get().getStatus() == UserPlaceStatus.PENDING) {
+	            return false; // Reservation cannot be made if it’s already confirmed or pending
+	        } else {
+	            return false; // Fallback return for any unexpected status
+	        }
+	    } catch (Exception e) {
+	        log.error("Error checking reservation for placeId: {} and userId: {}", placeId, userId, e);
+	        return false; // Return false as a safe default if any exception occurs
+	    }
+		
+	}
+
+	@Override
+	public void reservePlace(Integer placeId, String userId) {
+		
+		UserEntity user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("User not found"));
+		PlaceEntity place = placeRepository.findById(placeId).orElseThrow(() -> new NoSuchElementException("Place not found"));
+		
+        UserPlaceEntity userPlace = UserPlaceEntity.builder()
+            .user(user)
+            .place(place)
+            .status(UserPlaceStatus.PENDING)
+            .build();
+
+        userPlace = userPlaceRepository.save(userPlace);		
+	
 	}
 	
 //	@Override

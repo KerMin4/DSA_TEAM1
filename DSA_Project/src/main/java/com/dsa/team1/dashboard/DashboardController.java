@@ -1,26 +1,34 @@
 package com.dsa.team1.dashboard;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import com.dsa.team1.dto.BookmarkDTO;
+import com.dsa.team1.dto.PlaceDTO;
+import com.dsa.team1.dto.UserPlaceDTO;
 import com.dsa.team1.entity.SocialGroupEntity;
 import com.dsa.team1.entity.enums.Interest;
+import com.dsa.team1.entity.enums.UserPlaceStatus;
+import com.dsa.team1.repository.PlaceRepository;
 import com.dsa.team1.security.AuthenticatedUser;
+import com.dsa.team1.service.PlaceService;
 import com.dsa.team1.service.SocialGroupService;
 import com.dsa.team1.service.UserService;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,7 +40,8 @@ public class DashboardController {
 
     private final UserService userService;
     private final SocialGroupService socialGroupService;
-
+    private final PlaceService placeService;
+    
     @GetMapping("/mypage")
     public String myPage(@AuthenticationPrincipal AuthenticatedUser authenticatedUser, Model model) {
         String userId = authenticatedUser.getUsername();
@@ -183,13 +192,6 @@ public class DashboardController {
         return "redirect:/dashboard/groupManagement"; 
     }
 
-    // 결제 관리 페이지
-    @GetMapping("paymentManagement")
-    public String paymentManagement(Model model) {
-        model.addAttribute("activePage", "payment-management");
-        return "dashboard/paymentManagement";
-    }
-
     // 프로필 수정 페이지
     @GetMapping("profileedit")
     public String editProfile(Model model) {
@@ -277,11 +279,101 @@ public class DashboardController {
         return "redirect:/dashboard/mypage"; 
     }
     
-    // 10.18
-    // 예약 기록 페이지 이동
+
+    // 결제 관리 페이지
+    @GetMapping("paymentManagement")
+    public String paymentManagement(@AuthenticationPrincipal AuthenticatedUser authenticatedUser, Model model) {
+//        String userId = authenticatedUser.getId();
+//
+//        // 유저가 가입한 그룹 가져오기
+//        List<PlaceEntity> joinedPlaces = placeRepository.findByUser_UserId(userId);
+//
+//        // 현재 멤버 수 계산 (생성된 그룹 + 가입한 그룹 모두 처리)
+//        Map<Integer, Integer> currentMembersMap = new HashMap<>();
+//      
+//        List<PlaceDTO> joinedPlacesDTO = placeService.convertEntityToDto(joinedPlaces);
+//        for (PlaceDTO place : joinedPlacesDTO) {
+//            Integer currentMembers = placeService.getMemberCountByPlace(place);
+//            currentMembersMap.put(place.getPlaceId(), currentMembers);
+//        }
+//
+//        model.addAttribute("joinedPlaces", joinedPlacesDTO); 
+        model.addAttribute("activePage", "payment-management");
+//        model.addAttribute("currentMembersMap", currentMembersMap); 
+        
+        return "dashboard/paymentManagement";
+    }
+    
+    /**
+     * 예약 관리 페이지
+     * @param authenticatedUser
+     * @param model
+     * @return bookingHistory.html
+     */
     @GetMapping("/bookingHistory")
-    public String bookingHistory(Model model) {
+    public String bookingHistory(
+    		@AuthenticationPrincipal AuthenticatedUser authenticatedUser, 
+    		Model model) {
+    	
+    	List<PlaceDTO> places = placeService.getAllMyPlaces(authenticatedUser.getUsername());
+    	List<UserPlaceDTO> userPlaces = placeService.getAllUserPlaces(authenticatedUser.getUsername());
+    	
+    	// Calculate currentMembers
+        Map<Integer, Integer> currentMembersMap = placeService.getCurrentMembers(places);
+        
+        // placeId를 키로 하여 PlaceDTO를 빠르게 찾을 수 있는 맵 생성
+        Map<Integer, PlaceDTO> placeMap = places.stream()
+            .collect(Collectors.toMap(PlaceDTO::getPlaceId, place -> place));
+	    List<PlaceDTO> bookedPlaces = new ArrayList<>();
+	    List<PlaceDTO> joinedPlaces = new ArrayList<>();
+	    
+    	// userPlace의 status에 따라 place를 분류
+        for (UserPlaceDTO userPlace : userPlaces) {
+            PlaceDTO place = placeMap.get(userPlace.getPlaceId());
+            if (place != null) {
+                if (userPlace.getStatus() == UserPlaceStatus.PENDING) {
+                    bookedPlaces.add(place);
+                } else if (userPlace.getStatus() == UserPlaceStatus.CONFIRMED) {
+                    joinedPlaces.add(place);
+                }
+            }
+        }
+        
+//        List<PlaceDTO> bookedPlaces = new ArrayList<>();
+//        List<PlaceDTO> joinedPlaces = new ArrayList<>();
+//        for (UserPlaceDTO userPlace : userPlaces) {
+//        	if (userPlace.getStatus() == UserPlaceStatus.valueOf("PENDING")) {
+//        		for (PlaceDTO place : places) {
+//        			(place.getPlaceId() == userPlace.getPlaceId()) ? bookedPlaces.add(place) : continue;
+//        		}
+//        	}
+//        }
+        
+        model.addAttribute("currentMembersMap", currentMembersMap);
+        model.addAttribute("bookedPlaces", bookedPlaces);
+        model.addAttribute("joinedPlaces", joinedPlaces);
         model.addAttribute("activePage", "booking-history");
         return "dashboard/bookingHistory";
     }
+    
+    @PostMapping("/deletePlace")
+    public String deletePlace(
+    		@AuthenticationPrincipal AuthenticatedUser authenticatedUser,
+            @RequestParam("placeId") Integer placeId,
+            RedirectAttributes redirectAttributes) {
+		try {
+		log.info("[DashboardContoller - deletePlace] 삭제하려는 플레이스 ID: {}", placeId);
+		String userId = authenticatedUser.getUsername(); 
+		placeService.deletePlaceById(placeId, userId); 
+		log.info("[DashboardContoller - deletePlace] 플레이스 ID {} 삭제 성공", placeId);
+		redirectAttributes.addFlashAttribute("message", "그룹이 성공적으로 삭제되었습니다.");
+		} catch (SecurityException e) {
+		redirectAttributes.addFlashAttribute("error", "그룹 리더만 삭제할 수 있습니다.");
+		} catch (Exception e) {
+		log.error("[DashboardContoller - deletePlace] 플레이스 삭제 중 오류 발생: 플레이스 ID {}", placeId, e);
+		redirectAttributes.addFlashAttribute("error", "그룹 삭제에 실패했습니다.");
+		}
+		return "redirect:/dashboard/bookingHistory";
+    }
+    
 }

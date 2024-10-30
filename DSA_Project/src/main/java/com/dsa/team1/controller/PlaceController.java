@@ -1,5 +1,7 @@
 package com.dsa.team1.controller;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +24,7 @@ import com.dsa.team1.security.AuthenticatedUser;
 import com.dsa.team1.service.PlaceService;
 import com.dsa.team1.service.UserService;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -235,19 +238,37 @@ public class PlaceController {
     	return "place/placeDetail";
     }
     
-//    @PostMapping("reserve")
-//    public String reservation(
-//    		@RequestParam("placeId") Integer placeId,
-//    		@AuthenticationPrincipal AuthenticatedUser user,
-//    		Model model) {
-//    	
-//    	Boolean possibleToReserve = placeService.reservePlace(placeId, user.getId());
-//    	if (possibleToReserve) {
+    @PostMapping("reserve")
+    public String reservation(
+    		@RequestParam("placeId") Integer placeId,
+    		@AuthenticationPrincipal AuthenticatedUser user,
+    		HttpServletResponse response,
+//    		RedirectAttributes redirectAttributes,
+    		Model model) {
+    	
+    	Boolean possibleToReserve = placeService.checkReservation(placeId, user.getId());
+    	if (possibleToReserve) {
+    		placeService.reservePlace(placeId, user.getId());
+//    		redirectAttributes.addFlashAttribute("message", "예약이 완료되었습니다.");
 //    		return "redirect:/place/placeDetail?placeId=" + placeId + "&message=예약이 완료되었습니다.";
-//    	} else {
-//    		return "redirect:/place/placeDetail?placeId=" + placeId + "&message=정보를 찾을 수 없습니다.";
-//    	}
-//    }
+    		PrintWriter out;
+//			try {
+//				out = response.getWriter();
+//				response.setContentType("text/html; charset=utf-8");
+//				out.println("<script language='javascript'>");
+//				out.println("alert('예약이 완료되었습니다.');");
+//				out.println("</script>");
+//				out.flush();
+				return "redirect:/";
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//				return "redirect:/place/placeDetail?placeId=" + placeId;
+//			}
+    	} else {
+//    		return "redirect:/place/placeDetail?placeId=" + placeId + "&message=정보를 찾을 수 없거나 이미 예약되었습니다.";
+    		return "redirect:/place/placeDetail?placeId=" + placeId;
+    	}
+    }
     
     @PostMapping("payment")
     public String payment(

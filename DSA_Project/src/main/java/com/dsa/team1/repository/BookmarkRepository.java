@@ -26,6 +26,8 @@ public interface BookmarkRepository extends JpaRepository<BookmarkEntity, Intege
 	Boolean existsByUser_UserIdAndPlace_PlaceId(String id, Integer placeId);
 
 	Optional<BookmarkEntity> findByUserAndPlace(UserEntity userEntity, PlaceEntity placeEntity);
+
+	void deleteByPlace(PlaceEntity place);
   
 }
 
