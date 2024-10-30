@@ -18,6 +18,9 @@ public interface UserGroupRepository extends JpaRepository<UserGroupEntity, Inte
 
 	List<UserGroupEntity> findByUser_UserId(String userId);
 	
+	@Query("SELECT COUNT(u) FROM UserGroupEntity u WHERE u.group.groupId = :groupId")
+	int countByGroup_GroupId(@Param("groupId") Integer groupId);
+	
 	@Query("SELECT COUNT(u) FROM UserGroupEntity u WHERE u.group.groupId = :groupId AND u.status = com.dsa.team1.entity.enums.UserGroupStatus.APPROVED")
 	int countActiveMembersByGroupId(@Param("groupId") Integer groupId);
 	
@@ -41,7 +44,7 @@ public interface UserGroupRepository extends JpaRepository<UserGroupEntity, Inte
 	boolean existsByUser_UserIdAndGroup_GroupId(String userId, Integer groupId);
 	
 	void deleteByGroup_GroupIdAndUser_UserId(Integer groupId, String userId);
-
+	
 
 	// 여기부터 내가 씀 -나연-
 	void deleteByGroup(SocialGroupEntity group);

@@ -62,7 +62,6 @@ public class UserEntity {
     @Column(name = "preferred_location")
     private String preferredLocation;
 
-
     @Column(name = "join_method")
     private String joinMethod;
 

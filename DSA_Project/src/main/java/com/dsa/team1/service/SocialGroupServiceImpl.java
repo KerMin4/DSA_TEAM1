@@ -3,6 +3,7 @@ package com.dsa.team1.service;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -148,40 +149,39 @@ public class SocialGroupServiceImpl implements SocialGroupService {
      */
 	@Override
 	public List<SocialGroupEntity> searchGroups(String query, String category, String location, String sort) {
+		// 1. 해시태그나 그룹 이름/설명으로 검색
+       List<SocialGroupEntity> groups = new ArrayList<>();
+       
+       if (query != null && !query.trim().isEmpty()) {
+           // 그룹 이름과 설명에서 검색
+           groups = socialGroupRepository.searchByGroupNameOrDescription(query);
+           
+           // 해시태그에서 검색한 결과를 추가
+           List<SocialGroupEntity> hashtagGroups = groupHashtagRepository
+                   .findByNameContaining(query)
+                   .stream()
+                   .map(GroupHashtagEntity::getGroup)
+                   .collect(Collectors.toList());
+           
+           groups.addAll(hashtagGroups);
+       }
 
-	    // 1. 해시태그나 그룹 이름/설명으로 검색
-	    List<SocialGroupEntity> groups = new ArrayList<>();
-	    
-	    if (query != null && !query.trim().isEmpty()) {
-	        // 그룹 이름과 설명에서 검색
-	        groups = socialGroupRepository.searchByGroupNameOrDescription(query);
-	        
-	        // 해시태그에서 검색한 결과를 추가
-	        List<SocialGroupEntity> hashtagGroups = groupHashtagRepository
-	                .findByNameContaining(query)
-	                .stream()
-	                .map(GroupHashtagEntity::getGroup)
-	                .collect(Collectors.toList());
-	        
-	        groups.addAll(hashtagGroups);
-	    }
+       // 2. 카테고리와 위치 필터링
+       Interest interestCategory = null;
+       if (category != null && !category.isEmpty()) {
+           try {
+               interestCategory = Interest.valueOf(category.toUpperCase());
+           } catch (IllegalArgumentException e) {
+               log.error("유효하지 않은 카테고리 값: {}", category);
+           }
+       }
 
-	    // 2. 카테고리와 위치 필터링
-	    Interest interestCategory = null;
-	    if (category != null && !category.isEmpty()) {
-	        try {
-	            interestCategory = Interest.valueOf(category.toUpperCase());
-	        } catch (IllegalArgumentException e) {
-	            log.error("유효하지 않은 카테고리 값: {}", category);
-	        }
-	    }
 	    // 필터링된 결과 반환 (query가 없을 경우, 필터링만 실행)
-	    if (location != null || interestCategory != null) {
-	        groups = socialGroupRepository.filterGroups(query, null, location, interestCategory, sort);
-	    }
-	    return groups;
-//	    // 중복 제거
-//	    return groups.stream().distinct().collect(Collectors.toList());
+       if (location != null || interestCategory != null) {
+           groups = socialGroupRepository.filterGroups(query, null, location, interestCategory, sort);
+       }
+       // 필터링된 그룹 목록 반환
+       return groups;
 	}
 	
 	/**

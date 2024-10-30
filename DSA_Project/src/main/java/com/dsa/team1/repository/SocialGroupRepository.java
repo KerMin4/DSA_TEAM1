@@ -21,7 +21,7 @@ public interface SocialGroupRepository extends JpaRepository<SocialGroupEntity, 
            "OR LOWER(g.description) LIKE LOWER(CONCAT('%', :query, '%'))")
     List<SocialGroupEntity> searchByGroupNameOrDescription(@Param("query") String query);
 
-    // 필터링(검색어, 카테고리, 지역) + 정렬(조회수, 북마크, 이벤트날짜) 처리하는 쿼리
+ // 필터링(검색어, 카테고리, 지역) + 정렬(조회수, 북마크, 이벤트날짜) 처리하는 쿼리
     @Query("SELECT g FROM SocialGroupEntity g " +
            "WHERE (:query IS NULL OR LOWER(g.groupName) LIKE LOWER(CONCAT('%', :query, '%')) " +
            "OR LOWER(g.description) LIKE LOWER(CONCAT('%', :query, '%')) " +

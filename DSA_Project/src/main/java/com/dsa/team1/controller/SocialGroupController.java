@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -137,7 +138,7 @@ public class SocialGroupController {
     	// 그룹 목록을 저장할 변수 선언
         List<SocialGroupEntity> groups;
     	
-    	// 검색어가 있을 경우 필터링된 결과 조회, 없을 경우 전체 그룹 조회
+        // 검색어가 있을 경우 필터링된 결과 조회, 없을 경우 전체 그룹 조회
         if (query != null && !query.trim().isEmpty()) {
             groups = socialGroupService.searchGroups(query, null, null, sort); // 검색된 그룹 목록
         } else {
@@ -220,6 +221,9 @@ public class SocialGroupController {
         return memberCount;
     }
 
+    /**
+     * 검색, 카테고리, 지역, 해시태그 필터링
+     */    
     /**
      * 검색, 카테고리, 지역, 해시태그 필터링
      */    
