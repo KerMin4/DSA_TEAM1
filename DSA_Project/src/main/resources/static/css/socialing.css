@@ -11,6 +11,7 @@
     cursor: pointer;
     border-radius: 5px;
     font-size: 14px;
+    font-family: 'S-CoreDream-3Light', sans-serif;
 }
 
 /* 하위 지역 버튼 스타일 */
@@ -22,6 +23,7 @@
     cursor: pointer;
     border-radius: 5px;
     font-size: 12px;
+    font-family: 'S-CoreDream-3Light', sans-serif;  
 }
 
 /* 선택된 하위 지역 버튼에 대한 스타일 */
@@ -29,6 +31,7 @@
     background-color: #000; /* 배경색 반전 */
     color: #fff; /* 텍스트 색상 반전 */
     border-color: #000; /* 테두리 색상 변경 */
+    font-family: 'S-CoreDream-3Light', sans-serif; 
 }
 
 /* 하위 지역 버튼 리스트 */
@@ -63,7 +66,6 @@
 }
 
 .create-btn:hover {
-    background-color: #d34838;
     transform: translateY(-1px); /* **호버 시 살짝 위로 올라가는 효과** */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* **호버 시 그림자 진하게** */
 }
@@ -166,7 +168,7 @@ body {
 /* 그룹 리스트를 감싸는 컨테이너에 그리드 레이아웃 적용 */
 .group-listing {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 두 열로 그룹 카드를 정렬 */
+    grid-template-columns: repeat(1, 1fr);
     gap: 10px; /* 카드들 사이의 간격 */
     padding: 10px;
     margin: 0 auto;
@@ -289,8 +291,8 @@ body {
     display: inline-flex;
     align-items: center;
     margin-right: 10px;
-    font-family: 'S-CoreDream-5Medium', sans-serif;
-    font-size: 13px;
+    font-family: 'S-CoreDream-3Light', sans-serif;
+    font-size: 14px;
     cursor: pointer;
     margin-bottom: 10px; /* 버튼 간격 좁게 */
 }
@@ -301,26 +303,26 @@ body {
 
 .interest-option span {
     width: 70px;  /* 버튼 크기 고정 */
-    height: 30px; /* 버튼 높이 고정 */
-    background-color: #ffffff;
-    border: 1px solid #81BBF6;
-    border-radius: 20px;
-    color: #81BBF6;
+    height: 35px; /* 버튼 높이 고정 */
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    color: #333;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: background-color 0.3s;
+    border: 1px solid #ddd; /* 동일한 테두리 색상 */
 }
 
 /* 선택된 경우 색상 변경 */
 .interest-option input[type="checkbox"]:checked + span {
-    background-color: #81BBF6;
+    background-color:  #cccccc;
     color: white;
 }
 
 /* hover 상태에서 색상 변환 */
 .interest-option span:hover {
-    background-color: #81BBF6;
+	background-color:  #cccccc;
     color: white;
 }
 
