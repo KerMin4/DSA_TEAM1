@@ -219,7 +219,7 @@ $(document).ready(function(){
         }
     });    
     
-     let isYearOptionExisted = false;
+    let isYearOptionExisted = false;
     let isMonthOptionExisted = false;
     let isDayOptionExisted = false;
 

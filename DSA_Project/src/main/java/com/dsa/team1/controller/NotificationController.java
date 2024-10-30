@@ -43,14 +43,15 @@ public class NotificationController {
 		return emitter;
 	}
 	*/
-	
+	/*
 	@GetMapping("/check")
 	@ResponseBody
 	public boolean checkUnreadNotifications(@AuthenticationPrincipal AuthenticatedUser user) {
 		log.debug("진입완료");
-		/*notificationRepository.existsByUser_UserIdAndReadStatusFalse(user.getId())*/
+		notificationRepository.existsByUser_UserIdAndReadStatusFalse(user.getId())
 		return notificationService.hasUnreadNotification(user.getId());
 	}
+	
 	
 	@PostMapping("/markAsRead")
     public ResponseEntity<String> markAllAsRead(@RequestParam("userId") String userId) {
@@ -58,10 +59,10 @@ public class NotificationController {
             notificationRepository.findByUser_UserIdAndReadStatusFalse(userId);
 
         notifications.forEach(notification -> notification.setReadStatus(true));
-        */
+        
         notificationService.markNotificationsAsRead(userId);
         //notificationRepository.saveAll(notifications);
         
         return ResponseEntity.ok().build();
-    }
+    }*/
 }
