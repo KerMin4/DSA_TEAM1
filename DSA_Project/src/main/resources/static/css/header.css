@@ -94,6 +94,10 @@ nav ul li a:hover {
     display: block;
 }
 
+.show{
+	display: block;
+}
+
 #notification-badge {
 	background-color: white;
     color: white;
@@ -107,6 +111,7 @@ nav ul li a:hover {
     width : 5%;
     height : 5%;
 }
+
 #notification-btn {
     font-size: 30px;
     position: relative;

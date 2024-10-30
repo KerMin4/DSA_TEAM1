@@ -58,6 +58,7 @@
             });
         });
     </script>-->
+   
 </head>
 <body>
     <header>
@@ -81,13 +82,28 @@
 
                     <th:block sec:authorize="isAuthenticated()">
 
-                    	<li>
-                    		<a id="notification-btn" th:data-user-id="${#authentication.principal.id}" th:href="@{/notifications}" class="notification-icon">
-   							 🔔 <span id="notification-badge" class = "badge" style="display: none;">🔴</span>
-							</a>
-                        <!-- 여기부터 로그인 후 -->
-                        
+                    	<li class="dropdown">
+                    		<div>
+                           		 <a id="notification-btn" 
+                               		th:data-user-id="${#authentication.principal.id}" 
+                              		class="notification-icon" th:href="@{/notifications}">
+                              	  🔔 
+                                <span id="notification-badge" class="badge" style="display: none;">🔴</span>
+                            </a>
 
+                            <!-- <ul id="notification-dropdown" class="dropdown-menu">
+                                <!-- 알림 목록이 여기에 렌더링됩니다 
+                                <li><a th:href="@{/dashboard/mypage}">홈</a></li>
+                                <li><a th:href="@{/dashboard/profileedit}">프로필 수정</a></li>
+                                <li><a th:href="@{/dashboard/groupManagement}">그룹 관리</a></li>
+                                <li><a th:href="@{/dashboard/paymentManagement}">결제 관리</a></li>
+                                <li><a th:href="@{/dashboard/bookingHistory}">예약 내역</a></li>
+                                <li><a th:href="@{/member/logout}">Logout</a></li>
+                            </ul> -->
+                        </div>
+                        </li>
+
+                        <!-- 여기부터 로그인 후 -->
                     
                         <!-- 로그인 후 프로필 이미지 표시 -->
 

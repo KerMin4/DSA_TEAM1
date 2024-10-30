@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dsa.team1.dto.NotificationDTO;
 import com.dsa.team1.entity.NotificationEntity;
@@ -60,6 +61,19 @@ public class HomeController {
     	log.debug("진입 성공");
     	notificationService.notificationDelete(notificationDTO.getNotificationId());
     	return "redirect:/notifications";
+    }
+    
+    
+    @GetMapping("/notifications/api")
+    public @ResponseBody List<NotificationDTO> getNotifications(@AuthenticationPrincipal AuthenticatedUser user){
+    	return notificationRepository.findByUser_UserIdOrderByCreatedAtDesc(user.getId())
+                .stream()
+                .map(notification -> NotificationDTO.builder()
+                		.notificationId(notification.getNotificationId())
+                		.message(notification.getMessage())
+                		.createdAt(notification.getCreatedAt())
+                		.build())
+                .toList();
     }
 }
 
