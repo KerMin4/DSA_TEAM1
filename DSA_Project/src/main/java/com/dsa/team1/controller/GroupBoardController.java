@@ -140,6 +140,7 @@ public class GroupBoardController {
 //            model.addAttribute("group", group);
 //            return "socialgroup/joinGroupInvitation";
 //        }
+        
     }
     
     /**
