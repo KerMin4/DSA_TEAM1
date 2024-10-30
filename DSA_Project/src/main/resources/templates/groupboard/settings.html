@@ -27,10 +27,15 @@
             
             <div>가입 멤버</div>
             <ul class="members-list">
-			    <li th:each="member : ${members}">
-			        <img th:src="@{/upload/{profileImage}(profileImage=${member.profileImage})}" alt="프로필 이미지" class="profile-img">
-			        <span th:text="${member.userId}"></span>
-			    </li>
+			    <li>
+		            <img th:src="@{${leader != null && leader.profileImage != null ? '/upload/' + leader.profileImage : '/images/default.png'}}" alt="방장 프로필 이미지" class="profile-img">
+		            <span th:text="${leader.userId}"></span>
+		            <img src="../images/groupLeader.png" alt="방장 아이콘" class="leader-icon">
+		        </li>
+		        <li th:each="member : ${members}">
+		            <img th:src="@{/upload/{profileImage}(profileImage=${member.profileImage})}" alt="멤버 프로필 이미지" class="profile-img">
+		            <span th:text="${member.userId}"></span>
+		        </li>
 			</ul>
         </div>
 		
