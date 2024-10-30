@@ -125,7 +125,7 @@
 				<div th:unless="${#lists.isEmpty(groups)}">
 				    <div th:each="group : ${groups}">
 				    	<div class="group-card-wrapper" style="position: relative;">
-					    	<div class="group-card" data-group-id="${group.groupId}" th:onclick="'location.href=\'/kkirikkiri/groupboard/main?groupId=' + ${group.groupId} + '\';'">
+					    	<div class="group-card" th:data-group-id="${group.groupId}" th:onclick="'location.href=\'/kkirikkiri/groupboard/main?groupId=' + ${group.groupId} + '\';'">
 							    <div class="group-info">
 							        <table>
 							            <tr>
@@ -144,7 +144,8 @@
 							                    <p th:text="'북마크: ' + ${group.bookmarkCount}" class="bookmark-count">북마크 수</p>
 							                </td>
 							                <td>
-							                    <a th:href="@{/socialgroup/joinGroupInvitation(groupId=${group.groupId})}" class="join-btn">그룹 참여</a>
+							                	<button class="join-btn">그룹 참여</button>
+							                    <!-- <a th:href="@{/socialgroup/joinGroupInvitation(groupId=${group.groupId})}" class="join-btn">그룹 참여</a> -->
 							                </td>
 							            </tr>
 							        </table>
