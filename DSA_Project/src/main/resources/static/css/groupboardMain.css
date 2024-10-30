@@ -76,6 +76,96 @@ body {
     flex-direction: column;
 }
 
+/* ======================= 콘텐츠 섹션 스타일 ======================= */
+.content-section {
+    display: none;
+}
+
+.content-section:not(.hidden) {
+    display: block;
+}
+
+.hidden {
+    display: none;
+}
+
+/* ======================= 메인 콘텐츠 스타일 ======================= */
+.main-content {
+    flex: 3;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.main-content h2 {
+    color: #34495e;
+    margin-top: 0;
+}
+
+.group-header-img {
+    width: 15%;
+    border-radius: 8px;
+    margin-top: 10px;
+}
+
+/* ======================= 댓글 섹션 스타일 ======================= */
+.comments-section {
+    margin-top: 20px;
+}
+
+.comment {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.comment-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+}
+
+.comment p {
+    margin: 0;
+}
+
+/* ======================= 해시태그 섹션 ======================= */
+.hashtags ul {
+    list-style-type: none;
+    padding-left: 0;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.hashtags li {
+    background-color: #e8f0fe;
+    color: #1976d2;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+/* ======================= 리더 및 멤버 소개 섹션 ======================= */
+.leader-info, .member-info {
+    margin-top: 20px;
+}
+
+.leader-info img, .member-info img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-right: 15px;
+    border: 2px solid #e0e0e0;
+}
+
+.leader-info p, .member-info p {
+    font-size: 14px;
+    color: #666;
+    margin: 5px 0;
+}
+
 /* ======================= 모달 스타일 ======================= */
 .modal {
     display: none;

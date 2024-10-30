@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -70,7 +71,7 @@ public class GroupBoardController {
      * 조회수 카운트
      */
     @GetMapping("/main")
-    public String groupBoard(
+    public String main(
     		@RequestParam("groupId") Integer groupId,
     		@AuthenticationPrincipal AuthenticatedUser user,
     		Model model) {
@@ -79,9 +80,26 @@ public class GroupBoardController {
         SocialGroupEntity group = socialGroupRepository.findById(groupId)
                 .orElseThrow(() -> new IllegalArgumentException("잘못된 그룹 ID입니다."));
         
+        // 기본 이미지 설정
+        String headerImage = (group.getProfileImage() != null && !group.getProfileImage().isEmpty()) 
+                ? group.getProfileImage() 
+                : "default.png";
+        
+        // 멤버 수 가져오기
+        int memberCount = groupBoardService.getMemberCount(groupId);
+        model.addAttribute("memberCount", memberCount);
+        
         // group 객체를 모델에 추가
         model.addAttribute("group", group);
         model.addAttribute("groupName", group.getGroupName());
+        model.addAttribute("headerImage", headerImage);
+        
+        // 해시태그 가져오기
+        List<GroupHashtagEntity> hashtags = groupHashtagRepository.findByGroup(group);
+        List<String> hashtagNames = hashtags.stream()
+                .map(GroupHashtagEntity::getName)
+                .collect(Collectors.toList());
+        model.addAttribute("hashtags", hashtagNames);
         
         // 조회수 증가
         if (group.getViewCount() == null) {
@@ -90,9 +108,23 @@ public class GroupBoardController {
         group.setViewCount(group.getViewCount() + 1);
         socialGroupRepository.save(group);
         
-        // 멤버 목록 및 리더 정보 가져오기
-        List<Map<String, String>> memberProfiles = groupBoardService.getMemberProfiles(groupId);
+        // 멤버 목록 가져오기 (리더 제외)
+        List<Map<String, String>> memberProfiles = groupBoardService.getMemberProfiles(groupId).stream()
+            .filter(member -> !member.get("userId").equals(group.getGroupLeader().getUserId()))  // 리더 제외
+            .collect(Collectors.toList());
         model.addAttribute("members", memberProfiles);
+        
+        // 리더 정보 가져오기
+        UserEntity leader = groupBoardService.getGroupLeader(groupId);
+        model.addAttribute("leader", leader);
+
+        // 리더의 나이를 계산하여 모델에 추가
+        int leaderAge = groupBoardService.calculateUserAge(leader);
+        model.addAttribute("leaderAge", leaderAge > 0 ? leaderAge + "세" : "N/A");
+        
+        // 리더 위치 정보 추가 (위치가 없다면 "N/A")
+        String leaderLocation = leader.getPreferredLocation() != null ? leader.getPreferredLocation() : "N/A";
+        model.addAttribute("leaderLocation", leaderLocation);
 
         // 현재 로그인한 유저가 그룹의 멤버인지 확인
         boolean isMember = groupBoardService.isUserMemberOfGroup(user.getId(), groupId);

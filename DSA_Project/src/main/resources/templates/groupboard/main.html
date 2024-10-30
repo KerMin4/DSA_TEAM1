@@ -33,11 +33,16 @@
             <br>
             <div>가입 멤버</div>
             <ul class="members-list">
-                <li th:each="member : ${members}">
-                    <img th:src="@{/upload/{profileImage}(profileImage=${member.profileImage})}" alt="프로필 이미지" class="profile-img">
-                    <span th:text="${member.userId}"></span>
-                </li>
-            </ul>
+		        <li>
+		            <img th:src="@{${leader != null && leader.profileImage != null ? '/upload/' + leader.profileImage : '/images/default.png'}}" alt="방장 프로필 이미지" class="profile-img">
+		            <span th:text="${leader.userId}"></span>
+		            <img src="../images/groupLeader.png" alt="방장 아이콘" class="leader-icon">
+		        </li>
+		        <li th:each="member : ${members}">
+		            <img th:src="@{/upload/{profileImage}(profileImage=${member.profileImage})}" alt="멤버 프로필 이미지" class="profile-img">
+		            <span th:text="${member.userId}"></span>
+		        </li>
+		    </ul>
         </div>
 
         <!-- Main Content Section -->
@@ -52,7 +57,45 @@
                     <a th:href="@{/groupboard/settings(groupId=${group.groupId}, type='settings')}" class="tab">설정</a>
                 </nav>
                 
-                <h2 th:text="${groupName}"></h2>
+                <!-- 그룹 정보 섹션 추가 -->
+                <h2 th:text="${groupName} + ' 메인'"></h2>
+                <img th:src="@{/upload/{headerImage}(headerImage=${headerImage})}" alt="그룹 헤더 이미지" class="group-header-img">
+                <p>개설 날짜: <span th:text="${group.createdAt}"></span></p>
+                <p>장소: <span th:text="${group.location}"></span></p>
+                <p>멤버 수: <span th:text="${memberCount}"></span></p>
+                <p>가입 권한: <span th:text="${group.groupJoinMethod}"></span></p>
+                <p>그룹 설명: <span th:text="${group.description}"></span></p>
+
+                <!-- 해시태그 섹션 추가 -->
+                <div class="hashtags">
+                    <h3>해시태그</h3>
+                    <ul>
+                        <li th:each="hashtag : ${hashtags}">
+                            <span th:text="'#' +${hashtag}"></span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- 모임장 및 멤버 소개 섹션 추가 -->
+                <div class="leader-info">
+                    <h3>모임장 소개</h3>
+                    <img th:src="@{${leader != null && leader.profileImage != null ? '/upload/' + leader.profileImage : '/images/default.png'}}" 
+                         alt="모임장 프로필" class="profile-img">
+                    <p>아이디: <span th:text="${leader != null ? leader.userId : '모임장 정보 없음'}"></span></p>
+                    <p>나이: <span th:text="${leaderAge}"></span> | 위치: <span th:text="${leaderLocation}"></span></p>
+                </div>
+
+                <div class="member-info">
+				    <h3>멤버 소개</h3>
+				    <ul class="members-list">
+				        <li th:each="member : ${members}">
+				            <img th:src="@{/upload/{profileImage}(profileImage=${member.get('profileImage')})}" alt="멤버 프로필 이미지" class="profile-img">
+				            <p>아이디: <span th:text="${member.get('userId')}"></span></p>
+				            <p>나이: <span th:text="${member.get('age')}"></span> | 위치: <span th:text="${member.get('location')}"></span></p>
+				        </li>
+				    </ul>
+				</div>
+            </div>
                 
                 <div id="content-box" class="content-box">
                     <!-- 이제는 각 탭에 맞는 페이지로 직접 이동합니다. -->

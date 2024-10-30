@@ -54,6 +54,17 @@ public class GroupBoardServiceImpl implements GroupBoardService {
     private final FileManager fileManager;
 
     /**
+     * 그룹 리더 정보 가져오기
+     */
+    public UserEntity getGroupLeader(Integer groupId) {
+        SocialGroupEntity group = socialGroupRepository.findById(groupId)
+            .orElseThrow(() -> new IllegalArgumentException("그룹을 찾을 수 없습니다."));
+        
+        // 리더 정보 가져오기
+        return group.getGroupLeader();
+    }
+    
+    /**
      * 그룹 멤버인지 확인 
      */
     @Override
@@ -70,7 +81,7 @@ public class GroupBoardServiceImpl implements GroupBoardService {
     }
     
     /**
-     * 멤버프로필 이미지 가져오기 
+     * 그룹 멤버 정보 가져오기 
      */
     @Override
     public List<Map<String, String>> getMemberProfiles(Integer groupId) {
@@ -81,19 +92,69 @@ public class GroupBoardServiceImpl implements GroupBoardService {
         UserEntity groupLeader = userRepository.findByUserId(groupLeaderId)
             .orElseThrow(() -> new IllegalArgumentException("그룹 리더를 찾을 수 없습니다."));
 
-        List<UserEntity> members = userGroupRepository.findActiveMembersByGroupId(groupId);
-        if (members.stream().noneMatch(member -> member.getUserId().equals(groupLeaderId))) {
-            members.add(groupLeader);
-        }
+        // Filter out the leader and include only regular members
+        List<UserEntity> members = userGroupRepository.findActiveMembersByGroupId(groupId).stream()
+            .filter(member -> !member.getUserId().equals(groupLeaderId))
+            .collect(Collectors.toList());
 
+        // 각 멤버의 나이와 위치를 포함
         return members.stream()
             .map(member -> {
                 Map<String, String> profile = new HashMap<>();
                 profile.put("userId", member.getName());
                 profile.put("profileImage", member.getProfileImage() != null ? member.getProfileImage() : "defaultProfile.png");
+
+                int age = calculateUserAge(member);
+                profile.put("age", age > 0 ? age + "세" : "N/A");  // 나이가 계산되면 표시, 없으면 "N/A" 표시
+
+                profile.put("location", member.getPreferredLocation() != null ? member.getPreferredLocation() : "N/A");
+
                 return profile;
             })
             .collect(Collectors.toList());
+    }
+    
+    /**
+     * 그룹멤버 나이 계산 
+     */
+    public int calculateUserAge(UserEntity user) {
+        if (user.getBirth() == null) {
+            return 0;  // 생일 정보가 없으면 기본값으로 0을 반환
+        }
+
+        String birthStr = user.getBirth().toString(); // 예: "20071114"
+        int year = Integer.parseInt(birthStr.substring(0, 4));
+        int month = Integer.parseInt(birthStr.substring(4, 6));
+        int day = Integer.parseInt(birthStr.substring(6, 8));
+
+        LocalDate birthDate = LocalDate.of(year, month, day);
+        LocalDate today = LocalDate.now();
+        int age = today.getYear() - birthDate.getYear();
+
+        // 아직 생일이 지나지 않았으면 한 살을 뺍니다.
+        if (today.isBefore(birthDate.plusYears(age))) {
+            age--;
+        }
+        return age;
+    }
+
+
+    /**
+     * 그룹의 총 멤버 수를 계산 (리더 포함)
+     */
+    public int getMemberCount(Integer groupId) {
+        // 그룹 조회
+        SocialGroupEntity group = socialGroupRepository.findById(groupId)
+            .orElseThrow(() -> new IllegalArgumentException("해당 그룹을 찾을 수 없습니다."));
+
+        // 리더 1명 추가
+        int leaderCount = 1;
+        
+        // 그룹에 속한 멤버 수 조회
+        int memberCount = userGroupRepository.countByGroup_GroupId(groupId);
+
+        // 리더와 멤버 수 합산
+        return leaderCount + memberCount;
     }
     
     /**
