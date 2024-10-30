@@ -140,6 +140,7 @@ public class GroupBoardController {
 //            model.addAttribute("group", group);
 //            return "socialgroup/joinGroupInvitation";
 //        }
+        
     }
     
     /**
@@ -159,9 +160,15 @@ public class GroupBoardController {
         model.addAttribute("group", group);
 	    model.addAttribute("groupId", groupId);
 	    
-	    // 멤버 목록 및 리더 정보 가져오기
-	    List<Map<String, String>> memberProfiles = groupBoardService.getMemberProfiles(groupId);
-	    model.addAttribute("members", memberProfiles);
+	    // 멤버 목록 가져오기 (리더 제외)
+        List<Map<String, String>> memberProfiles = groupBoardService.getMemberProfiles(groupId).stream()
+            .filter(member -> !member.get("userId").equals(group.getGroupLeader().getUserId()))  // 리더 제외
+            .collect(Collectors.toList());
+        model.addAttribute("members", memberProfiles);
+        
+        // 리더 정보 가져오기
+        UserEntity leader = groupBoardService.getGroupLeader(groupId);
+        model.addAttribute("leader", leader);
 	    
 	    return "groupboard/announcement";
     }
@@ -272,9 +279,15 @@ public class GroupBoardController {
         model.addAttribute("group", group);
 	    model.addAttribute("groupId", groupId);
 	    
-	    // 멤버 목록 및 리더 정보 가져오기
-	    List<Map<String, String>> memberProfiles = groupBoardService.getMemberProfiles(groupId);
-	    model.addAttribute("members", memberProfiles);
+	    // 멤버 목록 가져오기 (리더 제외)
+        List<Map<String, String>> memberProfiles = groupBoardService.getMemberProfiles(groupId).stream()
+            .filter(member -> !member.get("userId").equals(group.getGroupLeader().getUserId()))  // 리더 제외
+            .collect(Collectors.toList());
+        model.addAttribute("members", memberProfiles);
+        
+        // 리더 정보 가져오기
+        UserEntity leader = groupBoardService.getGroupLeader(groupId);
+        model.addAttribute("leader", leader);
 
 	    // 날짜 포맷 설정
 	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd a hh:mm");
@@ -335,9 +348,15 @@ public class GroupBoardController {
         model.addAttribute("photos", photos);
         model.addAttribute("group", group);
         
-        // 멤버 목록 및 리더 정보 가져오기
-	    List<Map<String, String>> memberProfiles = groupBoardService.getMemberProfiles(groupId);
-	    model.addAttribute("members", memberProfiles);
+        // 멤버 목록 가져오기 (리더 제외)
+        List<Map<String, String>> memberProfiles = groupBoardService.getMemberProfiles(groupId).stream()
+            .filter(member -> !member.get("userId").equals(group.getGroupLeader().getUserId()))  // 리더 제외
+            .collect(Collectors.toList());
+        model.addAttribute("members", memberProfiles);
+        
+        // 리더 정보 가져오기
+        UserEntity leader = groupBoardService.getGroupLeader(groupId);
+        model.addAttribute("leader", leader);
     	
         return "groupboard/album";
     }
@@ -561,9 +580,15 @@ public class GroupBoardController {
         model.addAttribute("groupProfileImage", groupProfileImage);
         model.addAttribute("hashtags", hashtags);
         
-        // 멤버 목록 및 리더 정보 가져오기
-	    List<Map<String, String>> memberProfiles = groupBoardService.getMemberProfiles(groupId);
-	    model.addAttribute("members", memberProfiles);
+        // 멤버 목록 가져오기 (리더 제외)
+        List<Map<String, String>> memberProfiles = groupBoardService.getMemberProfiles(groupId).stream()
+            .filter(member -> !member.get("userId").equals(group.getGroupLeader().getUserId()))  // 리더 제외
+            .collect(Collectors.toList());
+        model.addAttribute("members", memberProfiles);
+        
+        // 리더 정보 가져오기
+        UserEntity leader = groupBoardService.getGroupLeader(groupId);
+        model.addAttribute("leader", leader);
 
         return "groupboard/settings";
     }

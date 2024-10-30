@@ -98,7 +98,7 @@
     height: 23px; 
     position: relative;
     z-index: 1000; 
-    top: 13px; 
+    top: 21px; 
     right: -65px; 
     cursor: pointer; 
     transition: transform 0.2s; 
@@ -231,7 +231,7 @@
 .location-box h2 {
     font-family: 'S-CoreDream-3Light', sans-serif; 
     margin-bottom: 20px;     
-    font-size: 15px; 
+    font-size: 18px; 
 }
 
 #locationForm input[type="text"], #findPlace {
@@ -258,7 +258,7 @@
     font-family: 'S-CoreDream-3Light', sans-serif; 
     color: #333; 
     margin-bottom: 20px;  
-    font-size: 15px; 
+    font-size: 18px; 
     text-align: center; 
 }
 
@@ -339,7 +339,7 @@
     width: 80px; 
     height: 40px; 
     position: absolute;
-    top: 590px;
+    top: 570px;
     left: 580px;
     z-index: 10;
 }
